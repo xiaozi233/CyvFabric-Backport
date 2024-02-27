@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "cyvfabric",
+	"version": "${version}",
+	"name": "CyvFabric",
+	"description": "CyvClient parkour features ported to modern FabriMC.",
+	"authors": [
+		"Morpheye"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/cyvfabric/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.cyvfabric.CyvFabric"
+		],
+		"client": [
+			"net.cyvfabric.CyvFabricClient"
+		],
+		"fabric-datagen": [
+			"net.cyvfabric.CyvFabricDataGenerator"
+		]
+	},
+	"mixins": [
+		"cyvfabric.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.7",
+		"minecraft": "~1.20.4",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
