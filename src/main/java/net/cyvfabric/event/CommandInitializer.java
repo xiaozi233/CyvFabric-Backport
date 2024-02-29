@@ -1,6 +1,7 @@
 package net.cyvfabric.event;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.command.CommandHelp;
 import net.cyvfabric.command.CommandTest;
@@ -9,6 +10,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.argument.MessageArgumentType;
 import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -24,15 +26,16 @@ public class CommandInitializer  {
     }
 
     @SuppressWarnings({"unchecked"})
-    public static void initializeCommands() {
+    public static void register() {
         addCommands();
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             //register the base command
-            dispatcher.register((LiteralArgumentBuilder)((LiteralArgumentBuilder)CommandManager.literal("cyv")
+            LiteralCommandNode<ServerCommandSource> baseCommand = dispatcher.register(
+                    (LiteralArgumentBuilder)((LiteralArgumentBuilder)CommandManager.literal("cyv")
                     .requires(source -> source.hasPermissionLevel(2)))
                     .executes(context -> {
-                        CyvFabric.sendMessage("For more info use /mpk help"); //no args
+                        CyvFabric.sendMessage("For more info use /cyv help"); //no args
                         return 1;
                      })
                     .then(CommandManager.argument("message", MessageArgumentType.message()).executes(context -> {
@@ -62,11 +65,18 @@ public class CommandInitializer  {
                     }
 
                     //finished looping through with no matches?
-                    MinecraftClient.getInstance().player.sendMessage(Text.of("Unknown command. For more info use /mpk help"));
+                    CyvFabric.sendMessage("Unknown command. For more info use /cyv help");
 
                 });
+
                 return 1;
             })));
+
+            dispatcher.register((LiteralArgumentBuilder)((LiteralArgumentBuilder)
+                    CommandManager.literal("mpk").redirect(baseCommand)).executes(context -> {
+                CyvFabric.sendMessage("For more info use /cyv help"); //no args
+                return 1;
+            })); //alias for /cyv
 
         });
 

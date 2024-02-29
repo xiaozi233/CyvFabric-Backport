@@ -2,6 +2,9 @@ package net.cyvfabric.command;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
+import net.cyvfabric.event.GuiHandler;
+import net.cyvfabric.gui.CyvGui;
+import net.cyvfabric.gui.GuiSimulate;
 import net.cyvfabric.util.CyvCommand;
 import net.minecraft.server.command.ServerCommandSource;
 
@@ -17,6 +20,7 @@ public class CommandTest extends CyvCommand {
 
     @Override
     public void run(CommandContext<ServerCommandSource> context, String[] args) {
-        CyvFabric.sendMessage("You said: " + Arrays.toString(args));
+        CyvFabric.sendMessage("Opening Gui");
+        GuiHandler.setScreen(new GuiSimulate());
     }
 }
