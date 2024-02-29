@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.command.CommandHelp;
+import net.cyvfabric.command.CommandSimulate;
 import net.cyvfabric.command.CommandTest;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -22,7 +23,7 @@ public class CommandInitializer  {
     //add all commands in
     public static void addCommands() {
         cyvCommands.add(new CommandHelp());
-        cyvCommands.add(new CommandTest());
+        cyvCommands.add(new CommandSimulate());
     }
 
     @SuppressWarnings({"unchecked"})

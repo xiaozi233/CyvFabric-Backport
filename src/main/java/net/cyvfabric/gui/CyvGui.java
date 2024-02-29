@@ -24,14 +24,6 @@ public class CyvGui extends Screen {
     @Override //called each frame, put the drawScreen things here.
     public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
         MinecraftClient mc = MinecraftClient.getInstance();
-
-        this.renderInGameBackground(context); //draw bg
-
-        context.drawCenteredTextWithShadow(textRenderer, Text.of("Gui Screen"), width/2, 10, 0xFFFFFFFF); //draw text
-        int textWidth = textRenderer.getWidth("Gui Screen"); //calculate the width of the Gui Screen text
-
-        //then draw the underline underneath the text
-        context.drawHorizontalLine((width - textWidth)/2, (width + textWidth)/2, 10 + textRenderer.fontHeight, 0xFFFFFFFF);
     }
 
     @Override //called every tick

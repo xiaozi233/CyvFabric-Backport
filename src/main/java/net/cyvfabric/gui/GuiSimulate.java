@@ -3,6 +3,7 @@ package net.cyvfabric.gui;
 import mcpk.Parser;
 import mcpk.Player;
 import net.cyvfabric.CyvFabric;
+import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -11,7 +12,6 @@ import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
-import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -52,13 +52,8 @@ public class GuiSimulate extends CyvGui {
         int y2 = (int) (sr.getScaledHeight() * 0.50);
 
         super.renderInGameBackground(context); //background tint
-        context.fill(x1-2, y1-2, x2+2, y2+2, 0x88000000); //temporarily not rounded
-        context.fill(x1, y1, x2, y2, 0x11000000);
-
-         /*
-        GuiUtils.drawRoundedRect(x1-2, y1-2, x2+2, y2+2, 9, borderColor);
-        GuiUtils.drawRoundedRect(x1, y1, x2, y2, 7, consoleColor); //black box
-         */
+        GuiUtils.drawRoundedRect(context, x1-2, y1-2, x2+2, y2+2, 9, 0x88000000);
+        GuiUtils.drawRoundedRect(context, x1, y1, x2, y2, 7, 0x11000000);
 
         input.render(context, mouseX, mouseY, partialTicks);
         button.render(context, mouseX, mouseY, partialTicks);

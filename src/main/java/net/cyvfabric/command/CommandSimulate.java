@@ -3,23 +3,25 @@ package net.cyvfabric.command;
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.event.GuiHandler;
-import net.cyvfabric.gui.CyvGui;
 import net.cyvfabric.gui.GuiSimulate;
 import net.cyvfabric.util.CyvCommand;
 import net.minecraft.server.command.ServerCommandSource;
 
-import java.util.Arrays;
-
-public class CommandTest extends CyvCommand {
-    public CommandTest() {
-        super("test");
+public class CommandSimulate extends CyvCommand {
+    public CommandSimulate() {
+        super("simulate");
         this.hasArgs = true;
-        this.usage = "[arguments]";
-        this.helpString = "This is simply a test command.";
+        this.usage = "none";
+        this.helpString = "Simulates movement given a string of functions.";
+
+        this.aliases.add("sim");
+        this.aliases.add("s");
+        this.aliases.add("%");
+
     }
 
     @Override
     public void run(CommandContext<ServerCommandSource> context, String[] args) {
-        CyvFabric.sendMessage("You said: " + Arrays.toString(args));
+        GuiHandler.setScreen(new GuiSimulate());
     }
 }
