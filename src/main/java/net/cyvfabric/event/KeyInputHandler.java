@@ -1,0 +1,42 @@
+package net.cyvfabric.event;
+
+import net.cyvfabric.util.CyvKeybinding;
+import net.cyvfabric.keybinding.KeybindingTest;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.option.KeyBinding;
+
+import java.util.ArrayList;
+
+public class KeyInputHandler {
+    public static final String KEY_TEST = "key.cyvfabric.test";
+    public static ArrayList<CyvKeybinding> cyvKeybindings = new ArrayList<CyvKeybinding>();
+
+    /**register all keybindings to Minecraft*/
+    public static void register() {
+        cyvKeybindings.add(new KeybindingTest());
+
+        for (KeyBinding k : cyvKeybindings) { //register each keybinding in the array
+            KeyBindingHelper.registerKeyBinding(k);
+        }
+
+        registerKeyInputs();
+    }
+
+    /**register actions of keys to Minecraft*/
+    public static void registerKeyInputs() {
+        ClientTickEvents.END_CLIENT_TICK.register(client -> { //start of tick
+            for (CyvKeybinding k : cyvKeybindings) {
+                k.onTickStart(k.isPressed());
+            }
+        });
+
+        ClientTickEvents.END_CLIENT_TICK.register(client -> { //end of tick
+            for (CyvKeybinding k : cyvKeybindings) {
+                k.onTickEnd(k.wasPressed());
+            }
+        });
+    }
+
+
+}
