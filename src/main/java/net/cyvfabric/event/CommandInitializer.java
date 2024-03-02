@@ -4,15 +4,12 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.command.CommandHelp;
-import net.cyvfabric.command.CommandSimulate;
-import net.cyvfabric.command.CommandTest;
+import net.cyvfabric.command.calculations.*;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.argument.MessageArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +20,13 @@ public class CommandInitializer  {
     //add all commands in
     public static void addCommands() {
         cyvCommands.add(new CommandHelp());
-        cyvCommands.add(new CommandSimulate());
+
+        CyvCommand[] e = new CyvCommand[] {};
+
+        cyvCommands.addAll(Arrays.asList(new CyvCommand[] {
+                new CommandAirtime(), new CommandSimulate(), new CommandDistance(), new CommandHeight(),
+                new CommandSimulate(), new CommandSetSensitivity(), new CommandOptimizeSensitivity()
+        }));
     }
 
     @SuppressWarnings({"unchecked"})
@@ -80,35 +83,6 @@ public class CommandInitializer  {
             })); //alias for /cyv
 
         });
-
-            /*
-            LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommandManager.literal("mpk")
-                    .requires(source -> source.hasPermissionLevel(0))
-                    .then(ClientCommandManager.argument("args", MessageArgumentType.message()))
-                    .executes(context -> { //hints at a help menu if no args are passed
-                        MinecraftClient.getInstance().player.sendMessage(Text.of("For more info use /mpk help"));
-                        String[] args = context.getArgument("args", MessageArgumentType.MessageFormat.class).getContents().split(" ");
-                        MinecraftClient.getInstance().player.sendMessage(Text.of(Arrays.toString(args)));
-                        return 1;
-                    });
-
-
-            for (CyvCommand cyvCmd : cyvCommands) { //create a subcommand for each cyv command
-                //Note: this method is located inside the CyvCommand class for recursion
-                LiteralArgumentBuilder<FabricClientCommandSource> subCmd = cyvCmd.build();
-                cmd.then(subCmd);
-
-                for (String alias : cyvCmd.aliases) { //add all command aliases as redirects
-                    cmd.then(ClientCommandManager.literal(alias).redirect(subCmd.getRedirect())); //redirect to the subCmd
-                }
-
-            }
-
-            dispatcher.register(cmd); //register the full command after everything's done
-
-
-             */
-
     }
 
 }

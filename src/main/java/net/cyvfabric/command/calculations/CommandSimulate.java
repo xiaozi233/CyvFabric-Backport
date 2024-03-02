@@ -1,4 +1,4 @@
-package net.cyvfabric.command;
+package net.cyvfabric.command.calculations;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
@@ -10,7 +10,6 @@ import net.minecraft.server.command.ServerCommandSource;
 public class CommandSimulate extends CyvCommand {
     public CommandSimulate() {
         super("simulate");
-        this.hasArgs = true;
         this.usage = "none";
         this.helpString = "Simulates movement given a string of functions.";
 
