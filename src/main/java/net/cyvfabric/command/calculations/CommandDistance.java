@@ -4,7 +4,6 @@ import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.server.command.ServerCommandSource;
 
 import java.text.DecimalFormat;
 
@@ -28,7 +27,7 @@ public class CommandDistance extends CyvCommand {
             double z = Double.parseDouble(args[1]);
 
             if ((x < 0) || (z < 0)) {
-                CyvFabric.sendMessage("Please input valid jump dimensions.");
+                CyvFabric.sendChatMessage("Please input valid jump dimensions.");
                 return;
             }
 
@@ -45,13 +44,13 @@ public class CommandDistance extends CyvCommand {
             double rawDistance = Math.sqrt(Math.pow((x - 0.6),2) + Math.pow((z - 0.6),2));
             double angle = Math.atan((z-0.6)/(x-0.6))*180/Math.PI;
 
-            CyvFabric.sendMessage("Distance for jump dimensions " + x + " x " + z + ":"
+            CyvFabric.sendChatMessage("Distance for jump dimensions " + x + " x " + z + ":"
                     + "\nJump length: " + df.format(rawDistance + 0.6) + "b"
                     + "\nRaw distance: " + df.format(rawDistance) + "m"
                     + "\nAngle: " + df.format(angle) + "\u00B0");
 
         } catch(Exception e) {
-            CyvFabric.sendMessage("Please input valid jump dimensions.");
+            CyvFabric.sendChatMessage("Please input valid jump dimensions.");
 
         }
     }

@@ -2,12 +2,9 @@ package net.cyvfabric.command.calculations;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
-import net.cyvfabric.event.GuiHandler;
-import net.cyvfabric.gui.GuiSimulate;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.server.command.ServerCommandSource;
 
 import java.text.DecimalFormat;
 
@@ -35,27 +32,27 @@ public class CommandOptimizeSensitivity extends CyvCommand {
 
             //check
             if (currentSens > 1 || currentSens < 0) {
-                CyvFabric.sendMessage("Sensitivity optimising unavailable for sensitivities above 200% or below 0%.");
+                CyvFabric.sendChatMessage("Sensitivity optimising unavailable for sensitivities above 200% or below 0%.");
                 return;
 
             }
 
             //response
             if (Math.round(currentPx) == 0) {
-                CyvFabric.sendMessage("Angle is too low to optimize for.");
+                CyvFabric.sendChatMessage("Angle is too low to optimize for.");
             } else {
                 MinecraftClient.getInstance().options.getMouseSensitivity().setValue(newSens);
                 MinecraftClient.getInstance().options.write();
 
                 double percentage = 200 * newSens;
                 DecimalFormat df = CyvFabric.df;
-                CyvFabric.sendMessage("Sensitivity optimized to " + df.format(percentage) + "%"
+                CyvFabric.sendChatMessage("Sensitivity optimized to " + df.format(percentage) + "%"
                         + "\nPixels of turning: " + Math.round(currentPx));
 
             }
 
         } catch (Exception e) {
-            CyvFabric.sendMessage("Please input a valid turning angle to optimize for.");
+            CyvFabric.sendChatMessage("Please input a valid turning angle to optimize for.");
 
         }
     }

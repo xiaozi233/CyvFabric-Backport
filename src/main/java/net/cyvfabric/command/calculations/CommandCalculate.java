@@ -4,7 +4,6 @@ import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.server.command.ServerCommandSource;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,7 +26,7 @@ public class CommandCalculate extends CyvCommand {
     @Override
     public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
         if (args.length == 0) {
-            CyvFabric.sendMessage("Please input something to calculate.");
+            CyvFabric.sendChatMessage("Please input something to calculate.");
 
         } else {
             String text = String.join(" ", args);
@@ -48,10 +47,10 @@ public class CommandCalculate extends CyvCommand {
 
                 DecimalFormat df = CyvFabric.df;
 
-                CyvFabric.sendMessage("Calculating " + input + "\n = " + df.format(result));
+                CyvFabric.sendChatMessage("Calculating " + input + "\n = " + df.format(result));
 
             } catch (Exception e) {
-                CyvFabric.sendMessage("Calculation failed.");
+                CyvFabric.sendChatMessage("Calculation failed.");
             }
 
         }

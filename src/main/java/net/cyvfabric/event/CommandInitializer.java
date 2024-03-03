@@ -5,14 +5,12 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.command.CommandHelp;
 import net.cyvfabric.command.calculations.*;
+import net.cyvfabric.command.config.*;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.MessageArgumentType;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,9 +25,13 @@ public class CommandInitializer  {
 
         CyvCommand[] e = new CyvCommand[] {};
 
-        cyvCommands.addAll(Arrays.asList(new CyvCommand[] {
-                new CommandAirtime(), new CommandSimulate(), new CommandDistance(), new CommandHeight(),
-                new CommandSimulate(), new CommandSetSensitivity(), new CommandOptimizeSensitivity()
+        cyvCommands.addAll(Arrays.asList(new CyvCommand[]{ //config commands
+                new CommandColor1(), new CommandColor2(), new CommandColors(), new CommandDf()
+        }));
+
+        cyvCommands.addAll(Arrays.asList(new CyvCommand[] { //mm commands
+                new CommandAirtime(), new CommandCalculate(), new CommandDistance(), new CommandHeight(),
+                new CommandSimulate(), new CommandSetSensitivity(), new CommandOptimizeSensitivity(), new CommandSimulate()
         }));
     }
 
@@ -43,7 +45,7 @@ public class CommandInitializer  {
                     (LiteralArgumentBuilder)((LiteralArgumentBuilder) ClientCommandManager.literal("cyv")
                     .requires(source -> source.hasPermissionLevel(2)))
                     .executes(context -> {
-                        CyvFabric.sendMessage("For more info use /cyv help"); //no args
+                        CyvFabric.sendChatMessage("For more info use /cyv help"); //no args
                         return 1;
                      })
                     .then(ClientCommandManager.argument("message", MessageArgumentType.message()).executes(context -> {
@@ -76,7 +78,7 @@ public class CommandInitializer  {
                         }
 
                         //finished looping through with no matches?
-                        CyvFabric.sendMessage("Unknown command. For more info use /cyv help");
+                        CyvFabric.sendChatMessage("Unknown command. For more info use /cyv help");
 
 
                 return 1;
@@ -84,7 +86,13 @@ public class CommandInitializer  {
 
             dispatcher.register((LiteralArgumentBuilder)((LiteralArgumentBuilder)
                     ClientCommandManager.literal("mpk").redirect(baseCommand)).executes(context -> {
-                CyvFabric.sendMessage("For more info use /cyv help"); //no args
+                CyvFabric.sendChatMessage("For more info use /cyv help"); //no args
+                return 1;
+            })); //alias for /cyv
+
+            dispatcher.register((LiteralArgumentBuilder)((LiteralArgumentBuilder)
+                    ClientCommandManager.literal("mm").redirect(baseCommand)).executes(context -> {
+                CyvFabric.sendChatMessage("For more info use /cyv help"); //no args
                 return 1;
             })); //alias for /cyv
 

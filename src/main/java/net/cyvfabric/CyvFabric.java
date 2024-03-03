@@ -1,6 +1,7 @@
 package net.cyvfabric;
 
 import net.cyvfabric.config.ColorTheme;
+import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.util.ChatFormattingString;
 import net.fabricmc.api.ModInitializer;
@@ -27,10 +28,10 @@ public class CyvFabric implements ModInitializer {
 	}
 
 	/**Send a client-sided message to the player*/
-	public static void sendMessage(Object text) {
+	public static void sendChatMessage(Object text) {
 		try {
 			MinecraftClient.getInstance().player.sendMessage(Text.of(
-				ChatFormattingString.AQUA + "<Cyv> " + ChatFormattingString.WHITE + text.toString()));
+				CyvClientColorHelper.color1.chatColor + "<Cyv> " + CyvClientColorHelper.color2.chatColor + text.toString()));
 		} catch (Exception e) {
 			LOGGER.error(e.toString());
 		}

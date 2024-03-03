@@ -1,6 +1,6 @@
 package net.cyvfabric;
 
-import net.cyvfabric.config.ConfigLoader;
+import net.cyvfabric.event.ConfigLoader;
 import net.cyvfabric.event.CommandInitializer;
 import net.cyvfabric.event.GuiHandler;
 import net.cyvfabric.event.KeyInputHandler;

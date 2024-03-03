@@ -1,6 +1,11 @@
-package net.cyvfabric.config;
+package net.cyvfabric.event;
 
 import net.cyvfabric.CyvFabric;
+import net.cyvfabric.config.ColorTheme;
+import net.cyvfabric.config.CyvClientColorHelper;
+import net.cyvfabric.config.CyvClientConfig;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.minecraft.client.MinecraftClient;
 
 import java.io.*;
 import java.text.DecimalFormatSymbols;
@@ -14,6 +19,10 @@ public class ConfigLoader {
     public static File configFile;
 
     public static void init(CyvClientConfig cfg) {
+        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> { //shutdown hook
+            save(CyvFabric.config, true);
+        });
+
         File dir = new File(PATH);
         if (!dir.exists()) dir.mkdirs();
         dir = new File(PATH);

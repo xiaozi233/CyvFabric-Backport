@@ -145,7 +145,7 @@ public class GuiSimulate extends CyvGui {
             try {
                 parser.parse(player, text);
             } catch (Exception e) {
-                CyvFabric.sendMessage("Parsing failed.");
+                CyvFabric.sendChatMessage("Parsing failed.");
                 return;
             }
 
@@ -157,7 +157,7 @@ public class GuiSimulate extends CyvGui {
             double vector = Math.sqrt(vx*vx + vz*vz);
             double angle = Math.atan2(-vx,vz) * 180d/Math.PI;
 
-            CyvFabric.sendMessage("Simulated parsed string: \247o" + text + "\n\247r"
+            CyvFabric.sendChatMessage("Simulated parsed string: \247o" + text + "\n\247r"
                     + "z: " + df.format(z) + "\n"
                     + "vz: " + df.format(vz) + "\n"
                     + "x: " + df.format(x) + "\n"

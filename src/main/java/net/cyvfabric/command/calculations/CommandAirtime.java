@@ -2,11 +2,8 @@ package net.cyvfabric.command.calculations;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
-import net.cyvfabric.event.GuiHandler;
-import net.cyvfabric.gui.GuiSimulate;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.server.command.ServerCommandSource;
 
 public class CommandAirtime extends CyvCommand {
     public CommandAirtime() {
@@ -32,12 +29,12 @@ public class CommandAirtime extends CyvCommand {
             else ceiling = Double.parseDouble(args[1]);
 
             if (end_y < -1000) {
-                CyvFabric.sendMessage("Please input a jump height above -1000.");
+                CyvFabric.sendChatMessage("Please input a jump height above -1000.");
                 return;
             }
 
             if (ceiling < 1.8) {
-                CyvFabric.sendMessage("Ceiling must be above 1.8 blocks in height.");
+                CyvFabric.sendChatMessage("Ceiling must be above 1.8 blocks in height.");
                 return;
             }
 
@@ -54,10 +51,10 @@ public class CommandAirtime extends CyvCommand {
                 ticks++;
             }
 
-            CyvFabric.sendMessage("Airtime: " + Double.toString(ticks) + " ticks");
+            CyvFabric.sendChatMessage("Airtime: " + Double.toString(ticks) + " ticks");
 
         } catch (Exception e) {
-            CyvFabric.sendMessage("Please input a valid jump.");
+            CyvFabric.sendChatMessage("Please input a valid jump.");
         }
     }
 }

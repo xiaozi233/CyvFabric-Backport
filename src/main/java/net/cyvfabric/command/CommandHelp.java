@@ -2,10 +2,10 @@ package net.cyvfabric.command;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
+import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.event.CommandInitializer;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.server.command.ServerCommandSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,15 +36,15 @@ public class CommandHelp extends CyvCommand {
 
          if (args.length == 0 && !subCommands.isEmpty()) { //no arguments and haven't reached top-level command
              List<String> helpText = new ArrayList<String>();
-             helpText.add("\247b" + commandName +  " help menu:\247r");
+             helpText.add(CyvClientColorHelper.color1.chatColor + commandName +  " help menu:\247r");
 
              for (CyvCommand c : subCommands) {
-                 helpText.add("\247b" + c.name + ": \247r" + c.helpString);
+                 helpText.add(CyvClientColorHelper.color1.chatColor + c.name + ": \247r" + c.helpString);
              }
 
-             helpText.add("\247b\247oNote: Use " + commandPath + " [command] for details");
+             helpText.add(CyvClientColorHelper.color1.chatColor + "\247oNote: Use " + commandPath + " [command] for details");
 
-             CyvFabric.sendMessage(String.join("\n", helpText));
+             CyvFabric.sendChatMessage(String.join("\n", helpText));
 
          } else { //arguments, or reached top-level command in command tree
              CyvCommand targetCommand = null; //target command
@@ -69,7 +69,7 @@ public class CommandHelp extends CyvCommand {
              }
 
              if (targetCommand == null) {
-                 CyvFabric.sendMessage("Command not found. Use " + commandPath + " for a list of commands.");
+                 CyvFabric.sendChatMessage("Command not found. Use " + commandPath + " for a list of commands.");
                  return;
 
              } else {
@@ -77,11 +77,12 @@ public class CommandHelp extends CyvCommand {
                  commandNames.add(targetCommand.name);
                  if (targetCommand.aliases != null) commandNames.addAll(targetCommand.aliases);
 
-                 CyvFabric.sendMessage("Command: /" + args[0] + "\n"
+                 CyvFabric.sendChatMessage("Command: /" + args[0] + "\n"
                          + "Aliases: " + String.join(", ", commandNames) + "\n"
                          + "Usage: " + targetCommand.usage + "\n"
                          + targetCommand.helpString
-                         + "\n\247b\247oNote: Use " + commandPath + " to list subcommands."
+                         + "\n" + CyvClientColorHelper.color1.chatColor +
+                         "\247oNote: Use " + commandPath + " to list subcommands."
                  );
 
                  return;

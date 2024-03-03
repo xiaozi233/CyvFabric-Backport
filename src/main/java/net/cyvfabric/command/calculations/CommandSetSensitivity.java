@@ -5,7 +5,6 @@ import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.server.command.ServerCommandSource;
 
 import java.text.DecimalFormat;
 
@@ -28,7 +27,7 @@ public class CommandSetSensitivity extends CyvCommand {
 
             //check
             if (sensitivity > 1 || sensitivity < 0) {
-                CyvFabric.sendMessage("Sensitivity cannot be greater than 1 (200%) or less than 0.");
+                CyvFabric.sendChatMessage("Sensitivity cannot be greater than 1 (200%) or less than 0.");
                 return;
 
             }
@@ -39,11 +38,11 @@ public class CommandSetSensitivity extends CyvCommand {
             double percentage = 200 * sensitivity;
             DecimalFormat df = CyvFabric.df;
 
-            CyvFabric.sendMessage("Sensitivity set to " + df.format(percentage) + "%");
+            CyvFabric.sendChatMessage("Sensitivity set to " + df.format(percentage) + "%");
 
 
         } catch (Exception e) {
-            CyvFabric.sendMessage("Please input a valid sensitivity constant (100% = 0.5)");
+            CyvFabric.sendChatMessage("Please input a valid sensitivity constant (100% = 0.5)");
             return;
 
         }
