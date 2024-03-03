@@ -5,6 +5,7 @@ import net.cyvfabric.CyvFabric;
 import net.cyvfabric.event.GuiHandler;
 import net.cyvfabric.gui.GuiSimulate;
 import net.cyvfabric.util.CyvCommand;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 
 public class CommandAirtime extends CyvCommand {
@@ -19,7 +20,7 @@ public class CommandAirtime extends CyvCommand {
     }
 
     @Override
-    public void run(CommandContext<ServerCommandSource> context, String[] args) {
+    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
         try {
             double vy = 0.42;
             double y = 0;

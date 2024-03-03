@@ -22,7 +22,7 @@ public class CyvCommand {
     }
 
     /**run the command*/
-    public void run(CommandContext<ServerCommandSource> context, String[] args) {
+    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
 
     }
 

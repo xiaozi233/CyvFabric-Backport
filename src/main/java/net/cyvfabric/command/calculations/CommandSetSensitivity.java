@@ -3,6 +3,7 @@ package net.cyvfabric.command.calculations;
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvCommand;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.command.ServerCommandSource;
 
@@ -21,7 +22,7 @@ public class CommandSetSensitivity extends CyvCommand {
     }
 
     @Override
-    public void run(CommandContext<ServerCommandSource> context, String[] args) {
+    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
         try {
             double sensitivity = Double.parseDouble(args[0]);
 

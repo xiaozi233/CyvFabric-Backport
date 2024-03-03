@@ -5,6 +5,7 @@ import net.cyvfabric.CyvFabric;
 import net.cyvfabric.event.GuiHandler;
 import net.cyvfabric.gui.GuiSimulate;
 import net.cyvfabric.util.CyvCommand;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.command.ServerCommandSource;
 
@@ -23,7 +24,7 @@ public class CommandOptimizeSensitivity extends CyvCommand {
     }
 
     @Override
-    public void run(CommandContext<ServerCommandSource> context, String[] args) {
+    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
         try {
             //calculations
             double angle = Math.abs(Float.parseFloat(args[0]));

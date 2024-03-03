@@ -4,6 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.event.CommandInitializer;
 import net.cyvfabric.util.CyvCommand;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class CommandHelp extends CyvCommand {
      }
 
      @Override
-     public void run(CommandContext<ServerCommandSource> context, String[] args) {
+     public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
          String commandPath;
          String commandName;
          ArrayList<CyvCommand> subCommands;

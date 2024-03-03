@@ -3,6 +3,7 @@ package net.cyvfabric.command.calculations;
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvCommand;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 
 import java.text.DecimalFormat;
@@ -21,7 +22,7 @@ public class CommandDistance extends CyvCommand {
     }
 
     @Override
-    public void run(CommandContext<ServerCommandSource> context, String[] args) {
+    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
         try {
             double x = Double.parseDouble(args[0]);
             double z = Double.parseDouble(args[1]);

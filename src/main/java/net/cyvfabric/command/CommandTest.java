@@ -6,6 +6,7 @@ import net.cyvfabric.event.GuiHandler;
 import net.cyvfabric.gui.CyvGui;
 import net.cyvfabric.gui.GuiSimulate;
 import net.cyvfabric.util.CyvCommand;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 
 import java.util.Arrays;
@@ -19,7 +20,7 @@ public class CommandTest extends CyvCommand {
     }
 
     @Override
-    public void run(CommandContext<ServerCommandSource> context, String[] args) {
+    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
         CyvFabric.sendMessage("You said: " + Arrays.toString(args));
     }
 }
