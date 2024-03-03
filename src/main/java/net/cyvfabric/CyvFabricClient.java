@@ -1,5 +1,6 @@
 package net.cyvfabric;
 
+import net.cyvfabric.config.ConfigLoader;
 import net.cyvfabric.event.CommandInitializer;
 import net.cyvfabric.event.GuiHandler;
 import net.cyvfabric.event.KeyInputHandler;
@@ -9,6 +10,8 @@ import net.fabricmc.api.ClientModInitializer;
 public class CyvFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() { //called when the mod is initialized on the client-side
+        ConfigLoader.init(CyvFabric.config);
+
         KeyInputHandler.register(); //register mod keybinds
         CommandInitializer.register(); //register mod commands
         GuiHandler.register(); //register gui listener

@@ -1,5 +1,7 @@
 package net.cyvfabric;
 
+import net.cyvfabric.config.ColorTheme;
+import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.util.ChatFormattingString;
 import net.fabricmc.api.ModInitializer;
 
@@ -15,7 +17,9 @@ public class CyvFabric implements ModInitializer {
 	public static final String MOD_ID = "cyvfabric";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+	public static  CyvClientConfig config = new CyvClientConfig();
 	public static DecimalFormat df = new DecimalFormat("#");
+	public static ColorTheme theme = ColorTheme.CYVISPIRIA;
 
 	@Override
 	public void onInitialize() {
