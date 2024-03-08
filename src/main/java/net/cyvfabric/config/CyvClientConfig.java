@@ -1,6 +1,8 @@
 package net.cyvfabric.config;
 
 import net.cyvfabric.CyvFabric;
+import net.cyvfabric.hud.HUDManager;
+import net.cyvfabric.hud.structure.DraggableTextLabel;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -8,16 +10,18 @@ import java.util.LinkedHashMap;
 public class CyvClientConfig {
     public HashMap<String,ConfigValue<?>> configFields = new LinkedHashMap<>();
 
-    public CyvClientConfig() {
+    public void init() {
         //special globals
         configFields.put("color1", new ConfigValue<String>("aqua"));
         configFields.put("color2", new ConfigValue<String>("white"));
-
         configFields.put("theme", new ConfigValue<String>("CYVISPIRIA"));
 
-        //parkour
         configFields.put("df", new ConfigValue<Integer>(5));
         configFields.put("trimZeroes", new ConfigValue<Boolean>(true));
+
+        //parkour
+        configFields.put("showMilliseconds", new ConfigValue<Boolean>(true));
+
         configFields.put("sendLbChatOffset", new ConfigValue<Boolean>(false));
         configFields.put("sendMmChatOffset", new ConfigValue<Boolean>(false));
 
@@ -25,17 +29,24 @@ public class CyvClientConfig {
         configFields.put("highlightLandingCond", new ConfigValue<Boolean>(false));
         configFields.put("momentumPbCancelling", new ConfigValue<Boolean>(false));
 
+        //inertia listener
+        configFields.put("inertiaEnabled", new ConfigValue<Boolean>(false));
+        configFields.put("inertiaTick", new ConfigValue<Integer>(4));
+        configFields.put("inertiaMin", new ConfigValue<Double>(-0.02));
+        configFields.put("inertiaMax", new ConfigValue<Double>(0.02));
+        configFields.put("inertiaAxis", new ConfigValue<Character>('x'));
+        configFields.put("inertiaGroundType", new ConfigValue<String>("normal"));
+
+        //macros
         configFields.put("currentMacro", new ConfigValue<String>("macro"));
         configFields.put("smoothMacro", new ConfigValue<Boolean>(false));
 
-        /*
-        for (CyvClientMod mod : ModManager.mods) {
+        for (DraggableTextLabel mod : HUDManager.registeredRenderers) {
             String name = mod.getName();
             mod.getConfigFields().forEach((property, configField) -> {
                 configFields.put(name + "_" + property, configField);
             });
         }
-        */
     }
 
     public static class ConfigValue<T> {

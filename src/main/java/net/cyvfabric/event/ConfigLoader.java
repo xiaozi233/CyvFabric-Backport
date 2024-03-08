@@ -4,8 +4,9 @@ import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.ColorTheme;
 import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
+import net.cyvfabric.hud.HUDManager;
+import net.cyvfabric.hud.structure.DraggableTextLabel;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.minecraft.client.MinecraftClient;
 
 import java.io.*;
 import java.text.DecimalFormatSymbols;
@@ -75,11 +76,9 @@ public class ConfigLoader {
             CyvFabric.theme = ColorTheme.CYVISPIRIA;
         }
 
-        /*
-        for (CyvClientMod mod : ModManager.mods) {
+        for (DraggableTextLabel mod : HUDManager.registeredRenderers) {
             mod.readConfigFields();
         }
-        */
 
         //decimal precision
         CyvFabric.df.setMinimumIntegerDigits(1);
@@ -93,11 +92,9 @@ public class ConfigLoader {
     }
 
     public static void save(CyvClientConfig cfg, boolean isFinal) {
-        /*
-        for (CyvClientMod mod : ModManager.mods) {
+        for (DraggableTextLabel mod : HUDManager.registeredRenderers) {
             mod.saveConfigFields();
         }
-        */
 
         if (!isFinal) {
             return;

@@ -1,7 +1,7 @@
 package net.cyvfabric.event;
 
 import net.cyvfabric.util.CyvKeybinding;
-import net.cyvfabric.keybinding.KeybindingTest;
+import net.cyvfabric.keybinding.KeybindingHUDPositions;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
@@ -15,7 +15,7 @@ public class KeyInputHandler {
 
     /**register all keybindings to Minecraft*/
     public static void register() {
-        cyvKeybindings.add(new KeybindingTest());
+        cyvKeybindings.add(new KeybindingHUDPositions());
 
         for (KeyBinding k : cyvKeybindings) { //register each keybinding in the array
             KeyBindingHelper.registerKeyBinding(k);

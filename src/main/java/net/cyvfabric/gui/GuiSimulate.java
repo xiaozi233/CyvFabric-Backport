@@ -3,6 +3,7 @@ package net.cyvfabric.gui;
 import mcpk.Parser;
 import mcpk.Player;
 import net.cyvfabric.CyvFabric;
+import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;

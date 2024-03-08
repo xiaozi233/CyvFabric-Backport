@@ -26,5 +26,9 @@ public class CyvCommand {
 
     }
 
+    public String getDetailedHelp() {
+        return helpString;
+    }
+
 
 }

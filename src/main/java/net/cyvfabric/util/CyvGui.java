@@ -1,4 +1,4 @@
-package net.cyvfabric.gui;
+package net.cyvfabric.util;
 
 import net.cyvfabric.CyvFabric;
 import net.minecraft.block.StonecutterBlock;
@@ -39,6 +39,11 @@ public class CyvGui extends Screen {
     @Override //called when the mouse is scrolled
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
     @Override //called upon GUI closing

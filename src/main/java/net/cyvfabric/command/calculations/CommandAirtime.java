@@ -47,7 +47,7 @@ public class CommandAirtime extends CyvCommand {
                 }
 
                 vy = (vy - 0.08) * 0.98;
-                if (Math.abs(vy) < (0.003/0.91)) vy = 0;
+                if (Math.abs(vy) < (0.003)) vy = 0;
                 ticks++;
             }
 

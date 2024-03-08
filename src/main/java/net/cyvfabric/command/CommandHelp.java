@@ -39,7 +39,8 @@ public class CommandHelp extends CyvCommand {
              helpText.add(CyvClientColorHelper.color1.chatColor + commandName +  " help menu:\247r");
 
              for (CyvCommand c : subCommands) {
-                 helpText.add(CyvClientColorHelper.color1.chatColor + c.name + ": \247r" + c.helpString);
+                 helpText.add(CyvClientColorHelper.color1.chatColor + c.name + ": "
+                         + CyvClientColorHelper.color2.chatColor + c.helpString);
              }
 
              helpText.add(CyvClientColorHelper.color1.chatColor + "\247oNote: Use " + commandPath + " [command] for details");
@@ -80,7 +81,7 @@ public class CommandHelp extends CyvCommand {
                  CyvFabric.sendChatMessage("Command: /" + args[0] + "\n"
                          + "Aliases: " + String.join(", ", commandNames) + "\n"
                          + "Usage: " + targetCommand.usage + "\n"
-                         + targetCommand.helpString
+                         + targetCommand.getDetailedHelp()
                          + "\n" + CyvClientColorHelper.color1.chatColor +
                          "\247oNote: Use " + commandPath + " to list subcommands."
                  );

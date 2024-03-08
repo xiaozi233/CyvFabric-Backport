@@ -3,9 +3,10 @@ package net.cyvfabric.event;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.cyvfabric.CyvFabric;
-import net.cyvfabric.command.CommandHelp;
+import net.cyvfabric.command.*;
 import net.cyvfabric.command.calculations.*;
 import net.cyvfabric.command.config.*;
+import net.cyvfabric.command.mpk.*;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -21,12 +22,15 @@ public class CommandInitializer  {
 
     //add all commands in
     public static void addCommands() {
-        cyvCommands.add(new CommandHelp());
-
         CyvCommand[] e = new CyvCommand[] {};
 
         cyvCommands.addAll(Arrays.asList(new CyvCommand[]{ //config commands
-                new CommandColor1(), new CommandColor2(), new CommandColors(), new CommandDf()
+                new CommandHelp(), new CommandColor1(), new CommandColor2(), new CommandColors(), new CommandDf(),
+                new CommandConfig(), new CommandGui(), new CommandInertia()
+        }));
+
+        cyvCommands.addAll(Arrays.asList(new CyvCommand[]{ //config commands
+                new CommandSetlb(), new CommandClearlb(), new CommandClearpb(), new CommandSetmm(), new CommandClearmm()
         }));
 
         cyvCommands.addAll(Arrays.asList(new CyvCommand[] { //mm commands

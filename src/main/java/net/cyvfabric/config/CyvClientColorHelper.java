@@ -74,7 +74,7 @@ public class CyvClientColorHelper {
         CyvClientColor(String name, String chatColor, long drawColor) {
             this.name = name;
             this.chatColor = chatColor;
-            this.drawColor = drawColor;
+            this.drawColor = 0xFF000000+drawColor;
         }
     }
 
