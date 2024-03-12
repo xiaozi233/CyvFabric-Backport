@@ -141,7 +141,6 @@ public class GuiSimulate extends CyvGui {
             DecimalFormat df = CyvFabric.df;
             player.df = (byte) df.getMaximumFractionDigits();
             Parser parser = new Parser();
-            player.inertia_threshold = 0.003; //changed from 0.005
 
             try {
                 parser.parse(player, text);

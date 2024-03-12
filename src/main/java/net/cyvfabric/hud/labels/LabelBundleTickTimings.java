@@ -4,7 +4,7 @@ import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
-import net.cyvfabric.hud.structure.DraggableTextLabel;
+import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -12,7 +12,7 @@ import net.minecraft.client.gui.DrawContext;
 public class LabelBundleTickTimings extends LabelBundle {
 
     public LabelBundleTickTimings() {
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelLastTiming";}
             public String getDisplayName() {return "Last Timing";}
             public int getWidth() {
@@ -44,7 +44,7 @@ public class LabelBundleTickTimings extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelAirtime";}
             public String getDisplayName() {return "Airtime";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -74,7 +74,7 @@ public class LabelBundleTickTimings extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelTier";}
             public String getDisplayName() {return "Tier";}
             public int getWidth() {return getLabelWidth(getDisplayName());}

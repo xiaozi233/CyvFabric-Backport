@@ -3,17 +3,15 @@
 	"id": "cyvfabric",
 	"version": "${version}",
 	"name": "CyvFabric",
-	"description": "CyvClient parkour features ported to modern FabriMC.",
+	"description": "CyvClient parkour features ported to modern FabricMC.",
 	"authors": [
 		"Morpheye"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/project/cyvfabric"
 	},
-	"license": "CC0-1.0",
 	"icon": "assets/cyvfabric/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
 		"main": [
 			"net.cyvfabric.CyvFabric"

@@ -4,7 +4,7 @@ import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.ColorTheme;
 import net.cyvfabric.event.ConfigLoader;
 import net.cyvfabric.hud.HUDManager;
-import net.cyvfabric.hud.structure.DraggableTextLabel;
+import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
@@ -103,7 +103,7 @@ public class GuiMPK extends CyvGui {
     public void updateLabels(boolean fromSearch) {
         this.labelLines.clear();
 
-        for (DraggableTextLabel l : HUDManager.registeredRenderers) {
+        for (DraggableHUDElement l : HUDManager.registeredRenderers) {
             if (!fromSearch || l.getDisplayName().toLowerCase().contains(this.searchBar.getText().toLowerCase())
                     || l.getName().toLowerCase().contains(this.searchBar.getText().toLowerCase()))
                 labelLines.add(new LabelLine(l));
@@ -314,12 +314,12 @@ public class GuiMPK extends CyvGui {
     }
 
     class LabelLine {
-        DraggableTextLabel label;
+        DraggableHUDElement label;
         int xStart = sr.getScaledWidth()/2 - sizeX/2 - 5;
         int width = sizeX;
         int height = textRenderer.fontHeight*2;
 
-        public LabelLine(DraggableTextLabel label) {
+        public LabelLine(DraggableHUDElement label) {
             this.label = label;
         }
 

@@ -5,7 +5,7 @@ import net.cyvfabric.config.ColorTheme;
 import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.hud.HUDManager;
-import net.cyvfabric.hud.structure.DraggableTextLabel;
+import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 
 import java.io.*;
@@ -76,7 +76,7 @@ public class ConfigLoader {
             CyvFabric.theme = ColorTheme.CYVISPIRIA;
         }
 
-        for (DraggableTextLabel mod : HUDManager.registeredRenderers) {
+        for (DraggableHUDElement mod : HUDManager.registeredRenderers) {
             mod.readConfigFields();
         }
 
@@ -92,7 +92,7 @@ public class ConfigLoader {
     }
 
     public static void save(CyvClientConfig cfg, boolean isFinal) {
-        for (DraggableTextLabel mod : HUDManager.registeredRenderers) {
+        for (DraggableHUDElement mod : HUDManager.registeredRenderers) {
             mod.saveConfigFields();
         }
 

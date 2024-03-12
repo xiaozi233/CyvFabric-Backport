@@ -3,12 +3,11 @@ package net.cyvfabric.hud.structure;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 
 import java.util.LinkedHashMap;
 
-public abstract class DraggableTextLabel implements IRenderer {
+public abstract class DraggableHUDElement implements IRenderer {
     protected final MinecraftClient mc;
 
     public ScreenPosition position;
@@ -16,7 +15,7 @@ public abstract class DraggableTextLabel implements IRenderer {
     public boolean isDraggable = true;
     public boolean isEnabled = true;
 
-    public DraggableTextLabel() {
+    public DraggableHUDElement() {
         this.mc = MinecraftClient.getInstance();
 
         setEnabled(isEnabled);

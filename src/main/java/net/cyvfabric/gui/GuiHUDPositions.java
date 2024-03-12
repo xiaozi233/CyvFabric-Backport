@@ -2,7 +2,7 @@ package net.cyvfabric.gui;
 
 import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.hud.HUDManager;
-import net.cyvfabric.hud.structure.DraggableTextLabel;
+import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.IRenderer;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.cyvfabric.util.CyvGui;
@@ -17,19 +17,19 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class GuiHUDPositions extends CyvGui {
-    protected final HashMap<DraggableTextLabel, ScreenPosition> renderers = new HashMap<DraggableTextLabel, ScreenPosition>();
-    protected Optional<DraggableTextLabel> selectedRenderer = Optional.empty();
+    protected final HashMap<DraggableHUDElement, ScreenPosition> renderers = new HashMap<DraggableHUDElement, ScreenPosition>();
+    protected Optional<DraggableHUDElement> selectedRenderer = Optional.empty();
     protected double prevX;
     protected double prevY;
     protected final boolean fromLabels;
 
     public GuiHUDPositions(boolean fromLabels) {
         super("HUD Position");
-        Collection<DraggableTextLabel> registeredRenderers = HUDManager.registeredRenderers;
+        Collection<DraggableHUDElement> registeredRenderers = HUDManager.registeredRenderers;
         this.fromLabels = fromLabels;
         //Keyboard.enableRepeatEvents(true);
 
-        for (DraggableTextLabel renderer : registeredRenderers) {
+        for (DraggableHUDElement renderer : registeredRenderers) {
             if (!renderer.isEnabled) continue;
 
             ScreenPosition pos = renderer.load();
@@ -49,7 +49,7 @@ public class GuiHUDPositions extends CyvGui {
 
         context.drawBorder(0, 0, this.width - 1, this.height - 1, ((Long) CyvClientColorHelper.color1.drawColor).intValue()); //GUI Border
 
-        for (DraggableTextLabel renderer : renderers.keySet()) {
+        for (DraggableHUDElement renderer : renderers.keySet()) {
             ScreenPosition pos = renderers.get(renderer);
             if (!renderer.isDraggable) pos = renderer.getDefaultPosition();
 
@@ -134,7 +134,7 @@ public class GuiHUDPositions extends CyvGui {
 
         if (mouseButton == 1) { //right-clicked
             if (!this.selectedRenderer.isPresent()) return false;
-            DraggableTextLabel modRender = this.selectedRenderer.get();
+            DraggableHUDElement modRender = this.selectedRenderer.get();
             if (modRender.isVisible) {
                 modRender.isVisible = false;
             } else {

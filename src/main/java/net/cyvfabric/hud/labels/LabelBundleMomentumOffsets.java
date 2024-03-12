@@ -5,7 +5,7 @@ import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
-import net.cyvfabric.hud.structure.DraggableTextLabel;
+import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 public class LabelBundleMomentumOffsets extends LabelBundle {
 
     public LabelBundleMomentumOffsets() {
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelMMXOffset";}
             public String getDisplayName() {return "MM X Offset";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -55,7 +55,7 @@ public class LabelBundleMomentumOffsets extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelMMZOffset";}
             public String getDisplayName() {return "MM Z Offset";}
             public int getWidth() {return getLabelWidth(getDisplayName());}

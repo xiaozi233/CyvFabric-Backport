@@ -1,5 +1,7 @@
 package net.cyvfabric.event;
 
+import net.cyvfabric.keybinding.KeybindingMPKGui;
+import net.cyvfabric.keybinding.KeybindingTogglesprint;
 import net.cyvfabric.util.CyvKeybinding;
 import net.cyvfabric.keybinding.KeybindingHUDPositions;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -10,12 +12,13 @@ import net.minecraft.client.option.KeyBinding;
 import java.util.ArrayList;
 
 public class KeyInputHandler {
-    public static final String KEY_TEST = "key.cyvfabric.test";
     public static ArrayList<CyvKeybinding> cyvKeybindings = new ArrayList<CyvKeybinding>();
 
     /**register all keybindings to Minecraft*/
     public static void register() {
         cyvKeybindings.add(new KeybindingHUDPositions());
+        cyvKeybindings.add(new KeybindingMPKGui());
+        cyvKeybindings.add(new KeybindingTogglesprint());
 
         for (KeyBinding k : cyvKeybindings) { //register each keybinding in the array
             KeyBindingHelper.registerKeyBinding(k);

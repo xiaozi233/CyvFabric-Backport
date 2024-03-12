@@ -5,7 +5,7 @@ import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
-import net.cyvfabric.hud.structure.DraggableTextLabel;
+import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 public class LabelBundleSpeeds extends LabelBundle {
 
     public LabelBundleSpeeds() {
-        labels.add(new DraggableTextLabel() {
+        labels.add(new DraggableHUDElement() {
             public String getName() {return "labelXSpeed";}
             public String getDisplayName() {return "X Speed";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -46,7 +46,7 @@ public class LabelBundleSpeeds extends LabelBundle {
             }
         });
 
-        labels.add(new DraggableTextLabel() {
+        labels.add(new DraggableHUDElement() {
             public String getName() {return "labelYSpeed";}
             public String getDisplayName() {return "Y Speed";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -77,7 +77,7 @@ public class LabelBundleSpeeds extends LabelBundle {
             }
         });
 
-        labels.add(new DraggableTextLabel() {
+        labels.add(new DraggableHUDElement() {
             public String getName() {return "labelZSpeed";}
             public String getDisplayName() {return "Z Speed";}
             public int getWidth() {return getLabelWidth(getDisplayName());}

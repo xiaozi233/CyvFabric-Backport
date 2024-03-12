@@ -34,7 +34,7 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	implementation "mcpk:MCPKSim:1.0.2"
+	// implementation "mcpk:MCPKSim:1.0.2"
 
 	modImplementation "com.ptsmods:devlogin:3.4.1" // For Fabric and Quilt
 

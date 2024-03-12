@@ -5,7 +5,7 @@ import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
-import net.cyvfabric.hud.structure.DraggableTextLabel;
+import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -16,7 +16,7 @@ import java.text.DecimalFormat;
 public class LabelBundleLasts extends LabelBundle {
 
     public LabelBundleLasts() {
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelLast45";}
             public String getDisplayName() {return "Last 45";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -51,7 +51,7 @@ public class LabelBundleLasts extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelLastInput";}
             public String getDisplayName() {return "Last Input";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -86,7 +86,7 @@ public class LabelBundleLasts extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelLastTurningYaw";}
             public String getDisplayName() {return "Last Turning";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -121,7 +121,7 @@ public class LabelBundleLasts extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelLastSidestep";}
             public String getDisplayName() {return "Last Sidestep";}
             public int getWidth() {return getLabelWidth(getDisplayName());}

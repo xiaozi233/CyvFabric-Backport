@@ -5,9 +5,8 @@ import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
-import net.cyvfabric.hud.structure.DraggableTextLabel;
+import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 
@@ -16,7 +15,7 @@ import java.text.DecimalFormat;
 public class LabelBundleCoordinates extends LabelBundle {
 
     public LabelBundleCoordinates() {
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelFPS";}
             public String getDisplayName() {return "FPS";}
             public boolean enabledByDefault() {return true;}
@@ -43,7 +42,7 @@ public class LabelBundleCoordinates extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelX";}
             public String getDisplayName() {return "X Coord";}
             public boolean enabledByDefault() {return true;}
@@ -74,7 +73,7 @@ public class LabelBundleCoordinates extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelY";}
             public String getDisplayName() {return "Y Coord";}
             public boolean enabledByDefault() {return true;}
@@ -105,7 +104,7 @@ public class LabelBundleCoordinates extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelZ";}
             public String getDisplayName() {return "Z Coord";}
             public boolean enabledByDefault() {return true;}
@@ -136,7 +135,7 @@ public class LabelBundleCoordinates extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelYaw";}
             public String getDisplayName() {return "Yaw";}
             public boolean enabledByDefault() {return true;}
@@ -184,7 +183,7 @@ public class LabelBundleCoordinates extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelPitch";}
             public String getDisplayName() {return "Pitch";}
             public boolean enabledByDefault() {return true;}

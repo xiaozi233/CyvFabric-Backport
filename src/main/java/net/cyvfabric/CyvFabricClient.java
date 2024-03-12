@@ -17,6 +17,7 @@ public class CyvFabricClient implements ClientModInitializer {
         GuiHandler.register(); //register gui listener
 
         ParkourTickListener.register();
+        SprintSneakHandler.register();
 
         CyvFabric.LOGGER.info("CyvFabric client initialized!");
     }

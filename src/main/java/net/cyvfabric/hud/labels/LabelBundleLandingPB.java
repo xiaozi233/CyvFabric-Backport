@@ -5,7 +5,7 @@ import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
-import net.cyvfabric.hud.structure.DraggableTextLabel;
+import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 public class LabelBundleLandingPB extends LabelBundle {
 
     public LabelBundleLandingPB() {
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelPB";}
             public String getDisplayName() {return "PB";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -54,7 +54,7 @@ public class LabelBundleLandingPB extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelXOffset";}
             public String getDisplayName() {return "X Offset";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -93,7 +93,7 @@ public class LabelBundleLandingPB extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelZOffset";}
             public String getDisplayName() {return "Z Offset";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -132,7 +132,7 @@ public class LabelBundleLandingPB extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelTotalOffset";}
             public String getDisplayName() {return "Total Offset";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -172,7 +172,7 @@ public class LabelBundleLandingPB extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelXPB";}
             public String getDisplayName() {return "X PB";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -212,7 +212,7 @@ public class LabelBundleLandingPB extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelZPB";}
             public String getDisplayName() {return "Z PB";}
             public int getWidth() {return getLabelWidth(getDisplayName());}

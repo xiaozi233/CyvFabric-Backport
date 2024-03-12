@@ -2,7 +2,7 @@ package net.cyvfabric.config;
 
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.hud.HUDManager;
-import net.cyvfabric.hud.structure.DraggableTextLabel;
+import net.cyvfabric.hud.structure.DraggableHUDElement;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -41,7 +41,7 @@ public class CyvClientConfig {
         configFields.put("currentMacro", new ConfigValue<String>("macro"));
         configFields.put("smoothMacro", new ConfigValue<Boolean>(false));
 
-        for (DraggableTextLabel mod : HUDManager.registeredRenderers) {
+        for (DraggableHUDElement mod : HUDManager.registeredRenderers) {
             String name = mod.getName();
             mod.getConfigFields().forEach((property, configField) -> {
                 configFields.put(name + "_" + property, configField);

@@ -46,8 +46,8 @@ public class CommandInitializer  {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             //register the base command
             LiteralCommandNode<FabricClientCommandSource> baseCommand = dispatcher.register(
-                    (LiteralArgumentBuilder)((LiteralArgumentBuilder) ClientCommandManager.literal("cyv")
-                    .requires(source -> source.hasPermissionLevel(2)))
+                    (ClientCommandManager.literal("cyv")
+                    .requires(source -> source.hasPermissionLevel(0)))
                     .executes(context -> {
                         CyvFabric.sendChatMessage("For more info use /cyv help"); //no args
                         return 1;
@@ -88,14 +88,12 @@ public class CommandInitializer  {
                 return 1;
             })));
 
-            dispatcher.register((LiteralArgumentBuilder)((LiteralArgumentBuilder)
-                    ClientCommandManager.literal("mpk").redirect(baseCommand)).executes(context -> {
+            dispatcher.register((ClientCommandManager.literal("mpk").redirect(baseCommand)).executes(context -> {
                 CyvFabric.sendChatMessage("For more info use /cyv help"); //no args
                 return 1;
             })); //alias for /cyv
 
-            dispatcher.register((LiteralArgumentBuilder)((LiteralArgumentBuilder)
-                    ClientCommandManager.literal("mm").redirect(baseCommand)).executes(context -> {
+            dispatcher.register((ClientCommandManager.literal("mm").redirect(baseCommand)).executes(context -> {
                 CyvFabric.sendChatMessage("For more info use /cyv help"); //no args
                 return 1;
             })); //alias for /cyv

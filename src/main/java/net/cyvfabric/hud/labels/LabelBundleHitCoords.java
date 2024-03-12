@@ -5,7 +5,7 @@ import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
-import net.cyvfabric.hud.structure.DraggableTextLabel;
+import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 public class LabelBundleHitCoords extends LabelBundle {
 
     public LabelBundleHitCoords() {
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelHitX";}
             public String getDisplayName() {return "Hit X";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -49,7 +49,7 @@ public class LabelBundleHitCoords extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelHitY";}
             public String getDisplayName() {return "Hit Y";}
             public int getWidth() {return getLabelWidth(getDisplayName());}
@@ -83,7 +83,7 @@ public class LabelBundleHitCoords extends LabelBundle {
             }
         });
 
-        this.labels.add(new DraggableTextLabel() {
+        this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelHitZ";}
             public String getDisplayName() {return "Hit Z";}
             public int getWidth() {return getLabelWidth(getDisplayName());}

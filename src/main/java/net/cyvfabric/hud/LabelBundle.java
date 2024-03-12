@@ -1,7 +1,7 @@
 package net.cyvfabric.hud;
 
 import net.cyvfabric.config.CyvClientConfig;
-import net.cyvfabric.hud.structure.DraggableTextLabel;
+import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class LabelBundle {
     TextRenderer font = MinecraftClient.getInstance().textRenderer;
-    public List<DraggableTextLabel> labels = new ArrayList<DraggableTextLabel>();
+    public List<DraggableHUDElement> labels = new ArrayList<DraggableHUDElement>();
 
     public int getLabelWidth(String s) {
         return getLabelWidth(s, false);

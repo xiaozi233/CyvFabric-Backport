@@ -1,0 +1,21 @@
+package net.cyvfabric.keybinding;
+
+import net.cyvfabric.event.GuiHandler;
+import net.cyvfabric.gui.GuiMPK;
+import net.cyvfabric.util.CyvKeybinding;
+import org.lwjgl.glfw.GLFW;
+
+public class KeybindingTogglesprint extends CyvKeybinding {
+    public KeybindingTogglesprint() {
+        super("key.cyvfabric.togglesprint", GLFW.GLFW_KEY_UNKNOWN);
+    }
+
+    public static boolean sprintToggled = false;
+
+    @Override
+    public void onTickEnd(boolean isPressed) {
+        if (isPressed) {
+            sprintToggled = !sprintToggled;
+        }
+    }
+}
