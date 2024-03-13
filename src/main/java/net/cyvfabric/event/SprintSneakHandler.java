@@ -11,7 +11,7 @@ public class SprintSneakHandler {
             try {
                 if (KeybindingTogglesprint.sprintToggled) {
                     if (MinecraftClient.getInstance().player != null) {
-                        MinecraftClient.getInstance().player.setSprinting(MinecraftClient.getInstance().options.forwardKey.isPressed());
+                        MinecraftClient.getInstance().options.sprintKey.setPressed(true);
                     }
                 }
 

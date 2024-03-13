@@ -24,7 +24,9 @@ public class LandingBlock {
     public Double lastOffsetZ;
     public Double lastPb;
 
-    public double xMinCond, xMaxCond, zMinCond, zMaxCond; //detection boxes (for offsets)
+    public double xMaxWall, xMinWall, zMaxWall, zMinWall;
+
+    public Double xMinCond, xMaxCond, zMinCond, zMaxCond; //detection boxes (for offsets)
 
     public LandingBlock(BlockPos pos, LandingMode mode, LandingAxis axis, boolean isBox) {
         this.pos = pos;
@@ -35,6 +37,20 @@ public class LandingBlock {
         calculateBounds(); //calculate the hitbox
 
         //create detection box
+        this.xMinCond = this.smallestX() - 1;
+        this.xMaxCond = this.largestX() + 1;
+        this.zMinCond = this.smallestZ() - 1;
+        this.zMaxCond = this.largestZ() + 1;
+    }
+
+    public LandingBlock(Box bounds) {
+        this.pos = null;
+        this.mode = LandingMode.landing;
+        this.axis = LandingAxis.both;
+        this.isBox = false;
+
+        this.bb = new Box[] {bounds};
+
         this.xMinCond = this.smallestX() - 1;
         this.xMaxCond = this.largestX() + 1;
         this.zMinCond = this.smallestZ() - 1;
@@ -56,8 +72,6 @@ public class LandingBlock {
             bb[i] = new Box(tempB[i].minX + pos.getX(), tempB[i].minY + pos.getY(), tempB[i].minZ + pos.getZ(),
                     tempB[i].maxX + pos.getX(), tempB[i].maxY + pos.getY(), tempB[i].maxZ + pos.getZ());
         }
-
-        System.out.println(bb);
 
     }
 
@@ -128,6 +142,15 @@ public class LandingBlock {
             this.zMinCond = z1;
         }
 
+    }
+
+    public void calculateWalls() {
+        World world = MinecraftClient.getInstance().world;
+        for (Box box : bb) {
+            double height = box.maxY;
+
+
+        }
     }
 
 }

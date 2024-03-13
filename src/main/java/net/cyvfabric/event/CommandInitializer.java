@@ -1,9 +1,10 @@
 package net.cyvfabric.event;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.cyvfabric.CyvFabric;
-import net.cyvfabric.command.*;
+import net.cyvfabric.command.CommandGui;
+import net.cyvfabric.command.CommandHelp;
+import net.cyvfabric.command.CommandInertia;
 import net.cyvfabric.command.calculations.*;
 import net.cyvfabric.command.config.*;
 import net.cyvfabric.command.mpk.*;
@@ -30,7 +31,8 @@ public class CommandInitializer  {
         }));
 
         cyvCommands.addAll(Arrays.asList(new CyvCommand[]{ //config commands
-                new CommandSetlb(), new CommandClearlb(), new CommandClearpb(), new CommandSetmm(), new CommandClearmm()
+                new CommandSetlb(), new CommandClearlb(), new CommandClearpb(), new CommandSetmm(), new CommandClearmm(),
+                new CommandSetbox(), new CommandSetcond()
         }));
 
         cyvCommands.addAll(Arrays.asList(new CyvCommand[] { //mm commands
