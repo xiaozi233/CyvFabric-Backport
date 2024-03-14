@@ -89,8 +89,15 @@ public class LandingBlockOffset {
     }
 
     public static Double checkX(double x, LandingBlock b, int i) {
-        Double left = b.bb[i].maxX - (x) + MinecraftClient.getInstance().player.getBoundingBox().getLengthX()/2;
-        Double right = (x)-b.bb[i].minX + MinecraftClient.getInstance().player.getBoundingBox().getLengthX()/2;
+        double halfPlayerSize = MinecraftClient.getInstance().player.getBoundingBox().getLengthX()/2;
+
+        double rightWallOffset = (b.xMinWall == null) ? 0 : (b.bb[i].minX - b.xMinWall) - halfPlayerSize*2;
+        double leftWallOffset = (b.xMaxWall == null) ? 0 : (b.xMaxWall - b.bb[i].maxX) - halfPlayerSize*2;
+        if (rightWallOffset > 0) rightWallOffset = 0;
+        if (leftWallOffset > 0) leftWallOffset = 0;
+
+        double left = (b.bb[i].maxX + leftWallOffset) - (x) + halfPlayerSize;
+        double right = (x) - (b.bb[i].minX - rightWallOffset) + halfPlayerSize;
 
         if (left > Math.abs(right)) return right;
         if (right > Math.abs(left)) return left;
@@ -99,8 +106,17 @@ public class LandingBlockOffset {
     }
 
     public static Double checkZ(double z, LandingBlock b, int i) {
-        Double front = b.bb[i].maxZ-(z) + MinecraftClient.getInstance().player.getBoundingBox().getLengthZ()/2;
-        Double back = (z)-b.bb[i].minZ + MinecraftClient.getInstance().player.getBoundingBox().getLengthZ()/2;
+        double halfPlayerSize = MinecraftClient.getInstance().player.getBoundingBox().getLengthZ()/2;
+
+        //as max wall gets closer to block, frontwall decreases towards 0
+        double backWallOffset = (b.zMinWall == null) ? 0 : (b.bb[i].minZ - b.zMinWall) - halfPlayerSize*2;
+        double frontWallOffset = (b.zMaxWall == null) ? 0 : (b.zMaxWall - b.bb[i].maxZ) - halfPlayerSize*2;
+
+        if (backWallOffset > 0) backWallOffset = 0;
+        if (frontWallOffset > 0) frontWallOffset = 0;
+
+        double front = (b.bb[i].maxZ + frontWallOffset) - (z) + halfPlayerSize;
+        double back = (z) - (b.bb[i].minZ - backWallOffset) + halfPlayerSize;
 
         if (front > Math.abs(back)) return back;
         if (back > Math.abs(front)) return front;
