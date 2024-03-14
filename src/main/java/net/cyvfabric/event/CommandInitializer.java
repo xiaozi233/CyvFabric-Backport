@@ -32,7 +32,7 @@ public class CommandInitializer  {
 
         cyvCommands.addAll(Arrays.asList(new CyvCommand[]{ //config commands
                 new CommandSetlb(), new CommandClearlb(), new CommandClearpb(), new CommandSetmm(), new CommandClearmm(),
-                new CommandSetbox(), new CommandSetcond()
+                new CommandSetbox(), new CommandSetcond(), new CommandLb(), new CommandMm()
         }));
 
         cyvCommands.addAll(Arrays.asList(new CyvCommand[] { //mm commands
