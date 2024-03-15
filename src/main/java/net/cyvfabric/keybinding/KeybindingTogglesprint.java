@@ -3,6 +3,7 @@ package net.cyvfabric.keybinding;
 import net.cyvfabric.event.GuiHandler;
 import net.cyvfabric.gui.GuiMPK;
 import net.cyvfabric.util.CyvKeybinding;
+import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;
 
 public class KeybindingTogglesprint extends CyvKeybinding {
@@ -16,6 +17,8 @@ public class KeybindingTogglesprint extends CyvKeybinding {
     public void onTickEnd(boolean isPressed) {
         if (isPressed) {
             sprintToggled = !sprintToggled;
+
+            if (!sprintToggled) MinecraftClient.getInstance().options.sprintKey.setPressed(false);
         }
     }
 }
