@@ -29,7 +29,6 @@ public class HUDManager {
         registeredRenderers.add(new TogglesprintHUD());
         registeredRenderers.add(new KeystrokesHUD());
 
-
         registeredRenderers.addAll(new LabelBundleCoordinates().labels);
         registeredRenderers.addAll(new LabelBundleHitCoords().labels);
         registeredRenderers.addAll(new LabelBundleJumpCoords().labels);
@@ -41,6 +40,7 @@ public class HUDManager {
         registeredRenderers.addAll(new LabelBundleSpeeds().labels);
         registeredRenderers.addAll(new LabelBundleTickTimings().labels);
         registeredRenderers.addAll(new LabelBundleTurningAngles().labels);
+        registeredRenderers.addAll(new LabelBundleHitExtras().labels);
 
     }
 

@@ -29,6 +29,8 @@ public class ParkourTickListener {
     public static double lx = 0, ly = 0, lz = 0; //landings
     public static double hx = 0, hy = 0, hz = 0; //hits
     public static double jx = 0, jy = 0, jz = 0; //jump
+    public static float hf = 0; //hit facing
+    public static double hvx = 0, hvz = 0; //hit velocities
 
     public static float jf = 0, jp = 0; //jump angles
     public static float sf = 0, sp = 0; //second turn angles
@@ -166,6 +168,10 @@ public class ParkourTickListener {
             hx = x;
             hy = y;
             hz = z;
+            hf = f;
+            hvx = vx;
+            hvz = vz;
+
         }
 
         if (landingBlock != null) { //must be lower than the landing to check it

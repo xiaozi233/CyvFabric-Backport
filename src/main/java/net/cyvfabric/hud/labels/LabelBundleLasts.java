@@ -9,6 +9,7 @@ import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.input.Input;
 import net.minecraft.client.option.GameOptions;
 
 import java.text.DecimalFormat;
@@ -64,11 +65,11 @@ public class LabelBundleLasts extends LabelBundle {
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
 
-                GameOptions gs = mc.options;
-                String str = (gs.forwardKey.wasPressed() ? "W" : "")
-                        + (gs.leftKey.wasPressed() ? "A" : "")
-                        + (gs.backKey.wasPressed() ? "S" : "")
-                        + (gs.rightKey.wasPressed() ? "D" : "");
+                Input input = mc.player.input;
+                String str = (input.movementForward > 0 ? "W" : "")
+                        + (input.movementSideways < 0 ? "A" : "")
+                        + (input.movementForward < 0 ? "S" : "")
+                        + (input.movementSideways > 0 ? "D" : "");
 
                 drawString(context, "Last Input: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
                 drawString(context, str, pos.getAbsoluteX() + 1 + font.getWidth("Last Input: ")

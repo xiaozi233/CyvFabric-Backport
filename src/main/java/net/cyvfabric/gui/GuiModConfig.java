@@ -128,31 +128,32 @@ public class GuiModConfig extends CyvGui {
         panels.add(new ConfigPanelOptionSwitcher<String>(2, "theme", "Color Theme", ColorTheme.getThemes(), this) {
             public void onValueChange() {CyvFabric.theme = ColorTheme.valueOf(CyvClientConfig.getString("theme", "CYVISPIRIA"));}
         });
-        panels.add(new ConfigPanelIntegerSlider(3, "df", "Decimal Precision", 1, 16, this) {
+        panels.add(new ConfigPanelToggle(3, "whiteChat", "Color2 always white in chat", this));
+        panels.add(new ConfigPanelIntegerSlider(4, "df", "Decimal Precision", 1, 16, this) {
             public void onValueChange() {CyvFabric.df.setMaximumFractionDigits(CyvClientConfig.getInt("df", 5));}});
-        panels.add(new ConfigPanelToggle(4, "trimZeroes", "Trim Zeroes", this) {
+        panels.add(new ConfigPanelToggle(5, "trimZeroes", "Trim Zeroes", this) {
             public void onValueChange() {
                 if (CyvClientConfig.getBoolean("trimZeroes", true)) CyvFabric.df.setMinimumFractionDigits(0);
                 else CyvFabric.df.setMinimumFractionDigits(CyvClientConfig.getInt("df",5));
         }});
-        panels.add(new ConfigPanelEmptySpace(5, this));
+        panels.add(new ConfigPanelEmptySpace(6, this));
 
         //mpk
-        panels.add(new ConfigPanelToggle(6, "showMilliseconds", "Show Millisecond Timings", this));
-        panels.add(new ConfigPanelToggle(7, "sendLbChatOffset", "Send Landing Offset", this));
-        panels.add(new ConfigPanelToggle(8, "sendMmChatOffset", "Send Momentum Offset", this));
-        panels.add(new ConfigPanelToggle(9, "highlightLanding", "Highlight Landing Blocks", this));
-        panels.add(new ConfigPanelToggle(10, "highlightLandingCond", "Highlight Landing Conditions", this));
-        panels.add(new ConfigPanelToggle(11, "momentumPbCancelling", "Momentum PB Cancelling", this));
-        panels.add(new ConfigPanelEmptySpace(12, this));
+        panels.add(new ConfigPanelToggle(7, "showMilliseconds", "Show Millisecond Timings", this));
+        panels.add(new ConfigPanelToggle(8, "sendLbChatOffset", "Send Landing Offset", this));
+        panels.add(new ConfigPanelToggle(9, "sendMmChatOffset", "Send Momentum Offset", this));
+        panels.add(new ConfigPanelToggle(10, "highlightLanding", "Highlight Landing Blocks", this));
+        panels.add(new ConfigPanelToggle(11, "highlightLandingCond", "Highlight Landing Conditions", this));
+        panels.add(new ConfigPanelToggle(12, "momentumPbCancelling", "Momentum PB Cancelling", this));
+        panels.add(new ConfigPanelEmptySpace(13, this));
 
         //inertia
-        panels.add(new ConfigPanelToggle(13, "inertiaEnabled", "Inertia Listener Enabled", this));
-        panels.add(new ConfigPanelIntegerSlider(14, "inertiaTick", "Air tick", 1, 12, this));
-        panels.add(new ConfigPanelDecimalEntry(15, "inertiaMin", "Min Speed", this));
-        panels.add(new ConfigPanelDecimalEntry(16, "inertiaMax", "Max Speed", this));
-        panels.add(new ConfigPanelOptionSwitcher<Character>(17, "inertiaAxis", "Inertia Axis", new Character[] {'x', 'z'}, this));
-        panels.add(new ConfigPanelOptionSwitcher<String>(18, "inertiaGroundType", "Ground Type", new String[] {"normal", "ice", "slime"}, this));
+        panels.add(new ConfigPanelToggle(14, "inertiaEnabled", "Inertia Listener Enabled", this));
+        panels.add(new ConfigPanelIntegerSlider(15, "inertiaTick", "Air tick", 1, 12, this));
+        panels.add(new ConfigPanelDecimalEntry(16, "inertiaMin", "Min Speed", this));
+        panels.add(new ConfigPanelDecimalEntry(17, "inertiaMax", "Max Speed", this));
+        panels.add(new ConfigPanelOptionSwitcher<Character>(18, "inertiaAxis", "Inertia Axis", new Character[] {'x', 'z'}, this));
+        panels.add(new ConfigPanelOptionSwitcher<String>(19, "inertiaGroundType", "Ground Type", new String[] {"normal", "ice", "slime"}, this));
 
         maxScroll = (int) Math.max(0, MinecraftClient.getInstance().textRenderer.fontHeight * 2 * Math.ceil(panels.size()) - (sizeY-20));
         if (scroll > maxScroll) scroll = maxScroll;

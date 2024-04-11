@@ -116,6 +116,8 @@ public class LabelBundleHitCoords extends LabelBundle {
                         , (int) (pos.getAbsoluteY() + 1), color2);
             }
         });
+
+
     }
 
 }

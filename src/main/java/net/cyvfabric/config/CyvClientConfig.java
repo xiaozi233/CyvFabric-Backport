@@ -15,6 +15,7 @@ public class CyvClientConfig {
         configFields.put("color1", new ConfigValue<String>("aqua"));
         configFields.put("color2", new ConfigValue<String>("white"));
         configFields.put("theme", new ConfigValue<String>("CYVISPIRIA"));
+        configFields.put("whiteChat", new ConfigValue<Boolean>(false));
 
         configFields.put("df", new ConfigValue<Integer>(5));
         configFields.put("trimZeroes", new ConfigValue<Boolean>(true));
