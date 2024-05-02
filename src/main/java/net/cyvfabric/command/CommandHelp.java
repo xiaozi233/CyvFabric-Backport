@@ -3,6 +3,7 @@ package net.cyvfabric.command;
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientColorHelper;
+import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.CommandInitializer;
 import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -38,9 +39,12 @@ public class CommandHelp extends CyvCommand {
              List<String> helpText = new ArrayList<String>();
              helpText.add(CyvClientColorHelper.color1.chatColor + commandName +  " help menu:\247r");
 
+             String chatColor2 = CyvClientConfig.getBoolean("whiteChat", false) ? CyvClientColorHelper.colors.get(12).chatColor
+                     : CyvClientColorHelper.color2.chatColor;
+
              for (CyvCommand c : subCommands) {
                  helpText.add(CyvClientColorHelper.color1.chatColor + c.name + ": "
-                         + CyvClientColorHelper.color2.chatColor + c.helpString);
+                         + chatColor2 + c.helpString);
              }
 
              helpText.add(CyvClientColorHelper.color1.chatColor + "\247oNote: Use " + commandPath + " [command] for details");
