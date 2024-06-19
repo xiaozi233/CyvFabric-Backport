@@ -111,7 +111,6 @@ public class LandingBlockOffset {
         //as max wall gets closer to block, frontwall decreases towards 0
         double backWallOffset = (b.zMinWall == null) ? 0 : (b.bb[i].minZ - b.zMinWall) - halfPlayerSize*2;
         double frontWallOffset = (b.zMaxWall == null) ? 0 : (b.zMaxWall - b.bb[i].maxZ) - halfPlayerSize*2;
-
         if (backWallOffset > 0) backWallOffset = 0;
         if (frontWallOffset > 0) frontWallOffset = 0;
 

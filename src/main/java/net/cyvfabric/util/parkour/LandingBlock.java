@@ -1,6 +1,10 @@
 package net.cyvfabric.util.parkour;
 
+import net.cyvfabric.CyvFabric;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.LadderBlock;
+import net.minecraft.block.VineBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -68,6 +72,18 @@ public class LandingBlock {
 
         BlockState blockState = world.getBlockState(pos);
         VoxelShape collisionBox = blockState.getCollisionShape(world, pos);
+        Block block = blockState.getBlock();
+
+        //THIS IS TEMPORARY. I will find a better solution in the future
+        if (isBox && (block instanceof LadderBlock || block instanceof VineBlock)) {
+            double playerX = MinecraftClient.getInstance().player.getBoundingBox().getLengthX();
+            double playerZ = MinecraftClient.getInstance().player.getBoundingBox().getLengthZ();
+            Box box = new Box(playerX/2 + pos.getX(), pos.getY(), playerZ/2 + pos.getZ(),
+                    1-playerX/2 + pos.getX(), 1 + pos.getY(), 1-playerZ/2 + pos.getZ());
+            this.bb = new Box[] {box};
+
+            return;
+        }
 
         Box[] tempB = collisionBox.getBoundingBoxes().toArray(Box[]::new);
         this.bb = new Box[tempB.length];
@@ -151,6 +167,8 @@ public class LandingBlock {
     public void calculateWalls() {
         World world = MinecraftClient.getInstance().world;
         Box playerHitbox = MinecraftClient.getInstance().player.getBoundingBox();
+        BlockPos tempPos = pos; //new variable, because this will be lowered by one if the mode is currently "enter"
+        if (this.mode == LandingMode.enter) tempPos = tempPos.down();
 
         xMinWall = null; xMaxWall = null; zMinWall = null; zMaxWall = null;
 
@@ -160,7 +178,7 @@ public class LandingBlock {
             double offset, currentWall; //temporary variables
 
             //z back
-            currentWallPos = pos.north();
+            currentWallPos = tempPos.north();
             for (double i = 0; i < playerHitbox.getLengthY(); i++) {
                 currentWallPos = currentWallPos.up();
                 wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).getBoundingBoxes());
@@ -177,7 +195,7 @@ public class LandingBlock {
 
             //z front
             wallBoxes.clear();
-            currentWallPos = pos.south();
+            currentWallPos = tempPos.south();
             for (double i = 0; i < playerHitbox.getLengthY(); i++) {
                 currentWallPos = currentWallPos.up();
                 wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).getBoundingBoxes());
@@ -193,7 +211,8 @@ public class LandingBlock {
             }
 
             //x right
-            currentWallPos = pos.west();
+            wallBoxes.clear();
+            currentWallPos = tempPos.west();
             for (double i = 0; i < playerHitbox.getLengthY(); i++) {
                 currentWallPos = currentWallPos.up();
                 wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).getBoundingBoxes());
@@ -210,7 +229,7 @@ public class LandingBlock {
 
             //x left
             wallBoxes.clear();
-            currentWallPos = pos.east();
+            currentWallPos = tempPos.east();
             for (double i = 0; i < playerHitbox.getLengthY(); i++) {
                 currentWallPos = currentWallPos.up();
                 wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).getBoundingBoxes());
