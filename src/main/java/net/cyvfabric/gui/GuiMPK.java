@@ -130,19 +130,19 @@ public class GuiMPK extends CyvGui {
         ColorTheme theme = CyvFabric.theme;
         boolean isHovered = this.searchBar.isFocused() ||
                 (mouseX > searchBar.getX() - 3 &&
-                        mouseX < searchBar.getX() + searchBar.getWidth()  + 3&&
+                        mouseX < searchBar.getX() + searchBar.getWidth() + 3 &&
                         mouseY > searchBar.getY() - 3.5 &&
                         mouseY < searchBar.getY() + searchBar.getHeight() + 2.5);
 
         GuiUtils.drawRoundedRect(context, searchBar.getX() - 3,
-                (int) (searchBar.getY() - 3.5f),
+                (int) (searchBar.getY() - 3f),
                 searchBar.getX() + searchBar.getWidth() + 3,
-                (int) (searchBar.getY() + searchBar.getHeight() + 2.5f),
+                (int) (searchBar.getY() + searchBar.getHeight() + 2f),
                 2, theme.background1);
-        GuiUtils.drawRoundedRect(context, (int) (searchBar.getX() - 1.5f),
-                searchBar.getY() - 2,
-                (int) (searchBar.getX() + searchBar.getWidth() + 1.5f),
-                (int) (searchBar.getY() + searchBar.getHeight() + 1f),
+        GuiUtils.drawRoundedRect(context, (int) (searchBar.getX() - 1f),
+                searchBar.getY() - 1,
+                (int) (searchBar.getX() + searchBar.getWidth() + 1f),
+                (int) (searchBar.getY() + searchBar.getHeight()),
                 2, isHovered ? theme.main2 : theme.secondary1);
         GuiUtils.drawRoundedRect(context, (int) (searchBar.getX() - 1.5f),
                 searchBar.getY() - 2,

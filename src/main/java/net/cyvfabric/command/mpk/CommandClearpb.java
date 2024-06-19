@@ -19,6 +19,6 @@ public class CommandClearpb extends CyvCommand {
             ParkourTickListener.landingBlock.pbX = null;
             ParkourTickListener.landingBlock.pbZ = null;
         }
-        CyvFabric.sendChatMessage("Successfully cleared landing block.");
+        CyvFabric.sendChatMessage("Successfully cleared landing offsets.");
     }
 }
