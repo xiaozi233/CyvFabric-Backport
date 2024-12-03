@@ -1,4 +1,4 @@
-package net.cyvfabric.event;
+package net.cyvfabric.event.events;
 
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
@@ -11,7 +11,6 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 
 public class ParkourTickListener {
     public static int airtime = 0;
@@ -109,7 +108,7 @@ public class ParkourTickListener {
         }
 
         if (airtime == 1) { //jump tick
-            if (mcPlayer.input.jumping && vy >= 0) {
+            if (mcPlayer.getVelocity().y > 0 && vy >= 0) {
                 jx = x;
                 jy = y;
                 jz = z;
