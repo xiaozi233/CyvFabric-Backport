@@ -226,8 +226,12 @@ public class GuiMacro extends CyvGui {
 
         if (this.fileName.mouseClicked(mouseX, mouseY, mouseEvent)) {
             this.fileName.setFocused(true);
+            if (macroLines.get(selectedIndex) != null) {
+                macroLines.get(selectedIndex).yawField.setFocused(false);
+                macroLines.get(selectedIndex).pitchField.setFocused(false);
+            }
             return true;
-        }
+        } else this.fileName.setFocused(false);
 
         int index=0;
         for (MacroLine l : macroLines) {
