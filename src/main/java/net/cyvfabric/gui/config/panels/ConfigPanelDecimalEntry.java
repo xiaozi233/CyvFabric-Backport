@@ -6,13 +6,12 @@ import net.cyvfabric.gui.GuiModConfig;
 import net.cyvfabric.gui.config.ConfigPanel;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
-
-import java.awt.*;
 
 public class ConfigPanelDecimalEntry implements ConfigPanel {
     public TextFieldWidget field;
@@ -21,10 +20,10 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
     public final int index;
     public GuiModConfig screenIn;
 
-    private int xPosition;
-    private int yPosition;
-    private int sizeX;
-    private int sizeY;
+    private final int xPosition;
+    private final int yPosition;
+    private final int sizeX;
+    private final int sizeY;
 
     private double minBound = -Double.MAX_VALUE;
     private double maxBound = Double.MAX_VALUE;
@@ -47,7 +46,7 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
         this.xPosition = sr.getScaledWidth()/2-screenIn.sizeX/2+10;
         this.yPosition = sr.getScaledHeight()/2-screenIn.sizeY/2+10 + (index * MinecraftClient.getInstance().textRenderer.fontHeight * 2);
 
-        this.field = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, this.xPosition+this.sizeX/2+2, this.yPosition+this.sizeY/2-MinecraftClient.getInstance().textRenderer.fontHeight/2+1, this.sizeX/2-4, MinecraftClient.getInstance().textRenderer.fontHeight/2, Text.empty());
+        this.field = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, this.xPosition+this.sizeX/2+2, this.yPosition+this.sizeY/2-MinecraftClient.getInstance().textRenderer.fontHeight/2+1, this.sizeX/2-4, MinecraftClient.getInstance().textRenderer.fontHeight/2, Text.of(""));
         this.field.setText(CyvClientConfig.getDouble(configOption, 0)+"");
         this.field.setDrawsBackground(false);
         this.field.setVisible(true);
@@ -55,14 +54,14 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
     }
 
     @Override
-    public void draw(DrawContext context, int mouseX, int mouseY, int scroll) {
-        context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, this.displayString, this.xPosition, this.yPosition+this.sizeY/2-MinecraftClient.getInstance().textRenderer.fontHeight/2+1-scroll, 0xFFFFFFFF);
+    public void draw(MatrixStack matrices, int mouseX, int mouseY, int scroll) {
+        DrawableHelper.drawTextWithShadow(matrices, MinecraftClient.getInstance().textRenderer, Text.of(this.displayString), this.xPosition, this.yPosition+this.sizeY/2-MinecraftClient.getInstance().textRenderer.fontHeight/2+1-scroll, 0xFFFFFFFF);
         //bg
-        GuiUtils.drawRoundedRect(context, this.xPosition+this.sizeX/2, this.yPosition-scroll, this.xPosition+this.sizeX, this.yPosition+this.sizeY-scroll, 3, this.mouseInBounds(mouseX, mouseY) ? CyvFabric.theme.shade1 : CyvFabric.theme.shade2);
+        GuiUtils.drawRoundedRect(matrices, this.xPosition+this.sizeX/2, this.yPosition-scroll, this.xPosition+this.sizeX, this.yPosition+this.sizeY-scroll, 3, this.mouseInBounds(mouseX, mouseY) ? CyvFabric.theme.shade1 : CyvFabric.theme.shade2);
 
 
-        this.field.setY(this.yPosition+this.sizeY/2-MinecraftClient.getInstance().textRenderer.fontHeight/2+1-scroll);
-        this.field.render(context, mouseX, mouseY, MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(false));
+        this.field.y = this.yPosition+this.sizeY/2-MinecraftClient.getInstance().textRenderer.fontHeight/2+1-scroll;
+        this.field.render(matrices, mouseX, mouseY, MinecraftClient.getInstance().getTickDelta());
     }
 
     @Override
@@ -71,16 +70,15 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
 
     @Override
     public boolean mouseInBounds(double mouseX, double mouseY) {
-        if (mouseX > this.xPosition+this.sizeX/2 && mouseY > this.yPosition
-                && mouseX < this.xPosition+this.sizeX && mouseY < this.yPosition+this.sizeY) return true;
-        return false;
+        return mouseX > this.xPosition + this.sizeX / 2 && mouseY > this.yPosition
+                && mouseX < this.xPosition + this.sizeX && mouseY < this.yPosition + this.sizeY;
     }
 
     @Override
     public void mouseClicked(double mouseX, double mouseY, int mouseButton) {
         this.field.mouseClicked(mouseX, mouseY, mouseButton);
 
-        if (!(mouseX >= field.getX() && mouseX <= field.getX() + field.getWidth() && mouseY >= field.getY() && mouseY <= field.getY() + field.getHeight())) {
+        if (!(mouseX >= field.x && mouseX <= field.x + field.getWidth() && mouseY >= field.y && mouseY <= field.y + field.getHeight())) {
             this.unselect();
         } else {
             this.select();
@@ -101,31 +99,27 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
 
     @Override
     public void save() {
-        double val = 0;
+        double val;
         try {
-            val = MathHelper.clamp(Double.valueOf(this.field.getText()), this.minBound, this.maxBound);
+            val = MathHelper.clamp(Double.parseDouble(this.field.getText()), this.minBound, this.maxBound);
             this.field.setText(val+"");
             CyvClientConfig.set(this.configOption, val);
-        } catch (Exception e) {}
-    }
-
-    @Override
-    public void update() {
+        } catch (Exception ignored) {}
     }
 
     @Override
     public void select() {
-        this.field.setFocused(true);
+        this.field.setTextFieldFocused(true);
     }
 
     @Override
     public void unselect() {
-        this.field.setFocused(false);
+        this.field.setTextFieldFocused(false);
         try {
-            double val = MathHelper.clamp(Double.valueOf(this.field.getText()), this.minBound, this.maxBound);
+            double val = MathHelper.clamp(Double.parseDouble(this.field.getText()), this.minBound, this.maxBound);
             this.field.setText(val+"");
             CyvClientConfig.set(this.configOption, val);
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
         onValueChange();
     }
 

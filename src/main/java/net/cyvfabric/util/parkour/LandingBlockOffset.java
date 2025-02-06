@@ -68,28 +68,24 @@ public class LandingBlockOffset {
             currentPb = pb;
             currentXOffset = xOffset;
             currentZOffset = zOffset;
-            if (((CyvClientConfig.getBoolean("sendLbChatOffset", false) && b == ParkourTickListener.landingBlock) ||
-                    (CyvClientConfig.getBoolean("sendMmChatOffset", false) && b == ParkourTickListener.momentumBlock ))
-                    && (eventX <= b.xMaxCond + playerBB.getLengthX()/2 && eventX >= b.xMinCond - playerBB.getLengthX()/2 &&
-                    eventZ <= b.zMaxCond + playerBB.getLengthZ()/2 && eventZ >= b.zMinCond - playerBB.getLengthZ()/2)) {
-                sendChatOffset = true;
-            } else sendChatOffset = false;
+            sendChatOffset = ((CyvClientConfig.getBoolean("sendLbChatOffset", false) && b == ParkourTickListener.landingBlock) ||
+                    (CyvClientConfig.getBoolean("sendMmChatOffset", false) && b == ParkourTickListener.momentumBlock))
+                    && (eventX <= b.xMaxCond + playerBB.getXLength() / 2 && eventX >= b.xMinCond - playerBB.getXLength() / 2 &&
+                    eventZ <= b.zMaxCond + playerBB.getZLength() / 2 && eventZ >= b.zMinCond - playerBB.getZLength() / 2);
         } else if (pb > currentPb) {
             currentPb = pb;
             currentXOffset = xOffset;
             currentZOffset = zOffset;
-            if (((CyvClientConfig.getBoolean("sendLbChatOffset", false) && b == ParkourTickListener.landingBlock) ||
-                    (CyvClientConfig.getBoolean("sendMmChatOffset", false) && b == ParkourTickListener.momentumBlock ))
-                    && (eventX <= b.xMaxCond + playerBB.getLengthX()/2 && eventX >= b.xMinCond - playerBB.getLengthX()/2 &&
-                    eventZ <= b.zMaxCond + playerBB.getLengthZ()/2 && eventZ >= b.zMinCond - playerBB.getLengthZ()/2)) {
-                sendChatOffset = true;
-            } else sendChatOffset = false;
+            sendChatOffset = ((CyvClientConfig.getBoolean("sendLbChatOffset", false) && b == ParkourTickListener.landingBlock) ||
+                    (CyvClientConfig.getBoolean("sendMmChatOffset", false) && b == ParkourTickListener.momentumBlock))
+                    && (eventX <= b.xMaxCond + playerBB.getXLength() / 2 && eventX >= b.xMinCond - playerBB.getXLength() / 2 &&
+                    eventZ <= b.zMaxCond + playerBB.getZLength() / 2 && eventZ >= b.zMinCond - playerBB.getZLength() / 2);
         }
 
     }
 
     public static Double checkX(double x, LandingBlock b, int i) {
-        double halfPlayerSize = MinecraftClient.getInstance().player.getBoundingBox().getLengthX()/2;
+        double halfPlayerSize = MinecraftClient.getInstance().player.getBoundingBox().getXLength()/2;
 
         double rightWallOffset = (b.xMinWall == null) ? 0 : (b.bb[i].minX - b.xMinWall) - halfPlayerSize*2;
         double leftWallOffset = (b.xMaxWall == null) ? 0 : (b.xMaxWall - b.bb[i].maxX) - halfPlayerSize*2;
@@ -106,7 +102,7 @@ public class LandingBlockOffset {
     }
 
     public static Double checkZ(double z, LandingBlock b, int i) {
-        double halfPlayerSize = MinecraftClient.getInstance().player.getBoundingBox().getLengthZ()/2;
+        double halfPlayerSize = MinecraftClient.getInstance().player.getBoundingBox().getZLength()/2;
 
         //as max wall gets closer to block, frontwall decreases towards 0
         double backWallOffset = (b.zMinWall == null) ? 0 : (b.bb[i].minZ - b.zMinWall) - halfPlayerSize*2;

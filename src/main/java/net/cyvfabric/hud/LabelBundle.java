@@ -10,7 +10,7 @@ import java.util.List;
 
 public class LabelBundle {
     TextRenderer font = MinecraftClient.getInstance().textRenderer;
-    public List<DraggableHUDElement> labels = new ArrayList<DraggableHUDElement>();
+    public List<DraggableHUDElement> labels = new ArrayList<>();
 
     public int getLabelWidth(String s) {
         return getLabelWidth(s, false);
@@ -22,7 +22,7 @@ public class LabelBundle {
         StringBuilder str;
         if (angle) str = new StringBuilder(s + ": 000.");
         else str = new StringBuilder(s + ": 000000.");
-        for (int i = 0; i< CyvClientConfig.getInt("df",5); i++) str.append("0");
+        str.append("0".repeat(Math.max(0, CyvClientConfig.getInt("df", 5))));
         if (angle) str.append("\u00B0");
         return font.getWidth(str.toString());
     }

@@ -7,8 +7,8 @@ import net.cyvfabric.hud.structure.IRenderer;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.cyvfabric.util.CyvGui;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Collection;
@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class GuiHUDPositions extends CyvGui {
-    protected final HashMap<DraggableHUDElement, ScreenPosition> renderers = new HashMap<DraggableHUDElement, ScreenPosition>();
+    protected final HashMap<DraggableHUDElement, ScreenPosition> renderers = new HashMap<>();
     protected Optional<DraggableHUDElement> selectedRenderer = Optional.empty();
     protected double prevX;
     protected double prevY;
@@ -44,21 +44,21 @@ public class GuiHUDPositions extends CyvGui {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
-        this.renderInGameBackground(context);
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float tickDelta) {
+        this.renderBackground(matrices);
 
-        context.drawBorder(0, 0, this.width, this.height, ((Long) CyvClientColorHelper.color1.drawColor).intValue()); //GUI Border
+        CyvGui.drawBorder(matrices,0, 0, this.width, this.height, ((Long) CyvClientColorHelper.color1.drawColor).intValue()); //GUI Border
 
         for (DraggableHUDElement renderer : renderers.keySet()) {
             ScreenPosition pos = renderers.get(renderer);
             if (!renderer.isDraggable) pos = renderer.getDefaultPosition();
 
-            renderer.renderDummy(context, pos);
+            renderer.renderDummy(matrices, pos);
 
             int color = ((Long) CyvClientColorHelper.color1.drawColor).intValue();
             if (!renderer.isVisible) color = 0xFFAAAAAA;
 
-            context.drawBorder(pos.getAbsoluteX(), pos.getAbsoluteY(),
+            CyvGui.drawBorder(matrices, pos.getAbsoluteX(), pos.getAbsoluteY(),
                     renderer.getWidth(), renderer.getHeight(), color);
         }
 
@@ -67,9 +67,7 @@ public class GuiHUDPositions extends CyvGui {
     @Override
     public boolean charTyped(char typedChar, int keyCode) {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
-            renderers.entrySet().forEach((entry) -> {
-                entry.getKey().save(entry.getValue());
-            });
+            renderers.forEach(DraggableHUDElement::save);
 
             if (fromLabels) MinecraftClient.getInstance().setScreen(new GuiMPK());
             else this.close();
@@ -133,13 +131,9 @@ public class GuiHUDPositions extends CyvGui {
         loadMouseOver((int) x, (int) y);
 
         if (mouseButton == 1) { //right-clicked
-            if (!this.selectedRenderer.isPresent()) return false;
+            if (this.selectedRenderer.isEmpty()) return false;
             DraggableHUDElement modRender = this.selectedRenderer.get();
-            if (modRender.isVisible) {
-                modRender.isVisible = false;
-            } else {
-                modRender.isVisible = true;
-            }
+            modRender.isVisible = !modRender.isVisible;
 
             return true;
         }
@@ -181,7 +175,8 @@ public class GuiHUDPositions extends CyvGui {
 
     private class MouseOverFinder implements Predicate<IRenderer> {
 
-        private int mouseX, mouseY;
+        private final int mouseX;
+        private final int mouseY;
 
         public MouseOverFinder(int x, int y) {
             this.mouseX = x; this.mouseY = y;
@@ -194,9 +189,7 @@ public class GuiHUDPositions extends CyvGui {
             int absoluteY = pos.getAbsoluteY();
 
             if (mouseX >= absoluteX && mouseX <= absoluteX + renderer.getWidth()) {
-                if (mouseY >= absoluteY && mouseY <= absoluteY + renderer.getHeight()) {
-                    return true;
-                }
+                return mouseY >= absoluteY && mouseY <= absoluteY + renderer.getHeight();
             }
 
             return false;

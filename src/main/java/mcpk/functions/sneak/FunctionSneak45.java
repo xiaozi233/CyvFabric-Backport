@@ -18,7 +18,7 @@ public class FunctionSneak45 extends Function {
 	public void run(Player player, int duration, float facing, ArrayList<Character> modifiers, HashMap<String, Double> effects) throws InvalidKeypressException {
 		Arguments args = new Arguments();
 		args.replace("duration", Math.abs(duration));
-		args.replace("facing", (float) (facing + 45));
+		args.replace("facing", facing + 45);
 		if (duration > 0) args.replace("forward", 1);
 		else if (duration < 0) args.replace("forward", -1);
 		

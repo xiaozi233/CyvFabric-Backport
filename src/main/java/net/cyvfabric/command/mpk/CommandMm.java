@@ -6,7 +6,7 @@ import net.cyvfabric.event.events.GuiHandler;
 import net.cyvfabric.event.events.ParkourTickListener;
 import net.cyvfabric.gui.GuiLb;
 import net.cyvfabric.util.CyvCommand;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 public class CommandMm extends CyvCommand {
     public CommandMm() {

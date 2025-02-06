@@ -13,23 +13,23 @@ public class Parser {
 	
 	//globals
 	public float default_facing = 0;
-	public HashMap<String,Double> default_effects = new HashMap<String,Double>();
+	public HashMap<String,Double> default_effects = new HashMap<>();
 	
 	@SuppressWarnings("unchecked")
 	public void parse(Player player, String text) throws Exception {
 		//parser variables
 		int state = 0;
-		String current_function = "";
+		StringBuilder current_function = new StringBuilder();
 		String current_argument = "";
 		String current_argument_value = "";
-		ArrayList<Character> modifiers = new ArrayList<Character>();
-		HashMap<String,Double> effects = new HashMap<String,Double>();
+		ArrayList<Character> modifiers = new ArrayList<>();
+		HashMap<String,Double> effects = new HashMap<>();
 		int argument_num = 1;
 		double duration = 1;
 		float facing = default_facing;
 		String variable_name = "";
 		float variable_value = 0;
-		Hashtable<String,Float> variables = new Hashtable<String,Float>();
+		Hashtable<String,Float> variables = new Hashtable<>();
 		
 		//start zOF
 		player.xCoords.add(player.xOf); player.xCoords.add(player.xOf);
@@ -38,9 +38,8 @@ public class Parser {
 		//start scanning
 		for (int i = 0; i < text.length(); i++) {
 			if (state == 0) { //searching for function
-				if (text.charAt(i) == ' ') { //space, skip
-					continue;
-					
+				if (text.charAt(i) == ' ') {
+					//space, skip
 				} else if (text.charAt(i) == '|') { //reset
 					player.x = 0;
 					player.z = 0;
@@ -59,7 +58,7 @@ public class Parser {
 					}
 					
 				} else { //function found
-					current_function = current_function + text.charAt(i);
+					current_function.append(text.charAt(i));
 					state = 1;
 					
 				}
@@ -70,11 +69,11 @@ public class Parser {
 					
 				} else if (text.charAt(i) == ' ') { //execute and end function
 					//run function
-					run_function(player, current_function, duration, facing, modifiers, effects);
-					modifiers = new ArrayList<Character>();
+					run_function(player, current_function.toString(), duration, facing, modifiers, effects);
+					modifiers = new ArrayList<>();
 					effects = (HashMap<String, Double>) default_effects.clone();
 					current_argument = "";
-					current_function = "";
+					current_function = new StringBuilder();
 					argument_num = 1;
 					duration = 1;
 					facing = default_facing;
@@ -84,7 +83,7 @@ public class Parser {
 					state = 3;
 					
 				} else {
-					current_function = current_function + text.charAt(i);
+					current_function.append(text.charAt(i));
 					
 				}
 				
@@ -94,7 +93,7 @@ public class Parser {
 					throw new ParserException("Error: Unexpected (");
 				}
 
-				if (current_function.equals("var") || current_function.equals("variable")) { //special case, defining variable
+				if (current_function.toString().equals("var") || current_function.toString().equals("variable")) { //special case, defining variable
 					if (text.charAt(i) == ' ') {
 						throw new ParserException("Error: Space in variable name");
 						
@@ -119,7 +118,7 @@ public class Parser {
 						try { //make sure variable is not a float
 							float variable = Float.parseFloat(variable_name);
 							throw new ParserException("Error: invalid variable name");
-						} catch (NumberFormatException e) {
+						} catch (NumberFormatException ignored) {
 							
 						}
 						
@@ -131,7 +130,7 @@ public class Parser {
 						}
 						
 						current_argument = "";
-						current_function = "";
+						current_function = new StringBuilder();
 						argument_num = 1;
 						state = 0;
 						
@@ -145,8 +144,6 @@ public class Parser {
 				//otherwise proceed normally
 				
 				if (text.charAt(i) == ' ') {
-					continue;
-					
 				} else if (text.charAt(i) == ',') { //next argument
 					if (argument_num == 1) { //set duration
 						if (variables.containsKey(current_argument)) {
@@ -182,11 +179,11 @@ public class Parser {
 					}
 					
 					//run function
-					run_function(player, current_function, duration, facing, modifiers, effects);
-					modifiers = new ArrayList<Character>();
+					run_function(player, current_function.toString(), duration, facing, modifiers, effects);
+					modifiers = new ArrayList<>();
 					effects = (HashMap<String, Double>) default_effects.clone();
 					current_argument = "";
-					current_function = "";
+					current_function = new StringBuilder();
 					argument_num = 1;
 					duration = 1;
 					facing = default_facing;
@@ -206,11 +203,11 @@ public class Parser {
 					
 				} else if (text.charAt(i) == ' ') { //execute and end function
 					//run function
-					run_function(player, current_function, duration, facing, modifiers, effects);
-					modifiers = new ArrayList<Character>();
+					run_function(player, current_function.toString(), duration, facing, modifiers, effects);
+					modifiers = new ArrayList<>();
 					effects = (HashMap<String, Double>) default_effects.clone();
 					current_argument = "";
-					current_function = "";
+					current_function = new StringBuilder();
 					argument_num = 1;
 					duration = 1;
 					facing = default_facing;
@@ -249,12 +246,12 @@ public class Parser {
 						}
 					
 					//run function
-					run_function(player, current_function, duration, facing, modifiers, effects);
-					modifiers = new ArrayList<Character>();
+					run_function(player, current_function.toString(), duration, facing, modifiers, effects);
+					modifiers = new ArrayList<>();
 					effects = (HashMap<String, Double>) default_effects.clone();
 					current_argument = "";
 					current_argument_value = "";
-					current_function = "";
+					current_function = new StringBuilder();
 					argument_num = 1;
 					duration = 1;
 					facing = default_facing;
@@ -291,11 +288,11 @@ public class Parser {
 		} //end scanning
 
 		if (state == 1 || state == 3) {
-			run_function(player, current_function, duration, facing, modifiers, effects);
-			modifiers = new ArrayList<Character>();
+			run_function(player, current_function.toString(), duration, facing, modifiers, effects);
+			modifiers = new ArrayList<>();
 			effects = (HashMap<String, Double>) default_effects.clone();
 			current_argument = "";
-			current_function = "";
+			current_function = new StringBuilder();
 			argument_num = 1;
 			duration = 1;
 			facing = default_facing;
@@ -304,9 +301,8 @@ public class Parser {
 		
 		player.finalX = player.xOf;
 		player.finalZ = player.zOf;
-		
-		return;
-	}
+
+    }
 	
 	//identify and run command
 	void run_function(Player player, String function, double arg1, float facing, ArrayList<Character> modifiers, HashMap<String,Double> effects) throws Exception {

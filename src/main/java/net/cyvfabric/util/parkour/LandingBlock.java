@@ -1,6 +1,5 @@
 package net.cyvfabric.util.parkour;
 
-import net.cyvfabric.CyvFabric;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LadderBlock;
@@ -8,11 +7,11 @@ import net.minecraft.block.VineBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class LandingBlock {
 
@@ -52,7 +51,7 @@ public class LandingBlock {
     }
 
     public LandingBlock(Box bounds) {
-        this.pos = BlockPos.ofFloored(bounds.minX, bounds.minY, bounds.minZ);
+        this.pos = new BlockPos(MathHelper.floor(bounds.minX), MathHelper.floor(bounds.minY), MathHelper.floor(bounds.minZ));
         this.mode = LandingMode.landing;
         this.axis = LandingAxis.both;
         this.isBox = false;
@@ -76,8 +75,8 @@ public class LandingBlock {
 
         //THIS IS TEMPORARY. I will find a better solution in the future
         if (isBox && (block instanceof LadderBlock || block instanceof VineBlock)) {
-            double playerX = MinecraftClient.getInstance().player.getBoundingBox().getLengthX();
-            double playerZ = MinecraftClient.getInstance().player.getBoundingBox().getLengthZ();
+            double playerX = MinecraftClient.getInstance().player.getBoundingBox().getXLength();
+            double playerZ = MinecraftClient.getInstance().player.getBoundingBox().getZLength();
             Box box = new Box(playerX/2 + pos.getX(), pos.getY(), playerZ/2 + pos.getZ(),
                     1-playerX/2 + pos.getX(), 1 + pos.getY(), 1-playerZ/2 + pos.getZ());
             this.bb = new Box[] {box};
@@ -173,20 +172,20 @@ public class LandingBlock {
         xMinWall = null; xMaxWall = null; zMinWall = null; zMaxWall = null;
 
         for (Box box : bb) {
-            ArrayList<Box> wallBoxes = new ArrayList<Box>();
-            BlockPos currentWallPos = null; //current x/z position of checked wall
+            ArrayList<Box> wallBoxes = new ArrayList<>();
+            BlockPos currentWallPos; //current x/z position of checked wall
             double offset, currentWall; //temporary variables
 
             //z back
             currentWallPos = tempPos.north();
-            for (double i = 0; i < playerHitbox.getLengthY(); i++) {
+            for (double i = 0; i < playerHitbox.getYLength(); i++) {
                 currentWallPos = currentWallPos.up();
                 wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).getBoundingBoxes());
             }
             for (Box wall : wallBoxes) {
-                if (wall.getLengthX() < box.getLengthX()) continue; //skip if not wide enough
+                if (wall.getXLength() < box.getXLength()) continue; //skip if not wide enough
                 currentWall = wall.maxZ + currentWallPos.getZ();
-                offset = box.minZ - currentWall - playerHitbox.getLengthZ();
+                offset = box.minZ - currentWall - playerHitbox.getZLength();
 
                 if (offset < 0) {
                     if (zMinWall == null || currentWall > zMinWall) zMinWall = currentWall;
@@ -196,14 +195,14 @@ public class LandingBlock {
             //z front
             wallBoxes.clear();
             currentWallPos = tempPos.south();
-            for (double i = 0; i < playerHitbox.getLengthY(); i++) {
+            for (double i = 0; i < playerHitbox.getYLength(); i++) {
                 currentWallPos = currentWallPos.up();
                 wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).getBoundingBoxes());
             }
             for (Box wall : wallBoxes) {
-                if (wall.getLengthX() < box.getLengthX()) continue; //skip if not wide enough
+                if (wall.getXLength() < box.getXLength()) continue; //skip if not wide enough
                 currentWall = wall.minZ + currentWallPos.getZ();
-                offset = currentWall - box.maxZ - playerHitbox.getLengthZ();
+                offset = currentWall - box.maxZ - playerHitbox.getZLength();
 
                 if (offset < 0) {
                     if (zMaxWall == null || currentWall > zMaxWall) zMaxWall = currentWall;
@@ -213,14 +212,14 @@ public class LandingBlock {
             //x right
             wallBoxes.clear();
             currentWallPos = tempPos.west();
-            for (double i = 0; i < playerHitbox.getLengthY(); i++) {
+            for (double i = 0; i < playerHitbox.getYLength(); i++) {
                 currentWallPos = currentWallPos.up();
                 wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).getBoundingBoxes());
             }
             for (Box wall : wallBoxes) {
-                if (wall.getLengthZ() < box.getLengthZ()) continue; //skip if not wide enough
+                if (wall.getZLength() < box.getZLength()) continue; //skip if not wide enough
                 currentWall = wall.maxX + currentWallPos.getX();
-                offset = box.minX - currentWall - playerHitbox.getLengthX();
+                offset = box.minX - currentWall - playerHitbox.getXLength();
 
                 if (offset < 0) {
                     if (xMinWall == null || currentWall > xMinWall) xMinWall = currentWall;
@@ -230,14 +229,14 @@ public class LandingBlock {
             //x left
             wallBoxes.clear();
             currentWallPos = tempPos.east();
-            for (double i = 0; i < playerHitbox.getLengthY(); i++) {
+            for (double i = 0; i < playerHitbox.getYLength(); i++) {
                 currentWallPos = currentWallPos.up();
                 wallBoxes.addAll(world.getBlockState(currentWallPos).getCollisionShape(world, currentWallPos).getBoundingBoxes());
             }
             for (Box wall : wallBoxes) {
-                if (wall.getLengthZ() < box.getLengthZ()) continue; //skip if not wide enough
+                if (wall.getZLength() < box.getZLength()) continue; //skip if not wide enough
                 currentWall = wall.minX + currentWallPos.getX();
-                offset = currentWall - box.maxX - playerHitbox.getLengthX();
+                offset = currentWall - box.maxX - playerHitbox.getXLength();
 
                 if (offset < 0) {
                     if (xMaxWall == null || currentWall > xMaxWall) xMaxWall = currentWall;

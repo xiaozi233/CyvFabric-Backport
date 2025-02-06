@@ -7,8 +7,9 @@ import net.cyvfabric.event.events.ParkourTickListener;
 import net.cyvfabric.hud.LabelBundle;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.text.DecimalFormat;
 
@@ -16,90 +17,133 @@ public class LabelBundleCoordinates extends LabelBundle {
 
     public LabelBundleCoordinates() {
         this.labels.add(new DraggableHUDElement() {
-            public String getName() {return "labelFPS";}
-            public String getDisplayName() {return "FPS";}
-            public boolean enabledByDefault() {return true;}
-            public int getWidth() {return getLabelWidth(this.getDisplayName());}
-            public int getHeight() {return getLabelHeight();}
-            public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 1);}
-            public void render(DrawContext context, ScreenPosition pos) {
+            public String getName() {
+                return "labelFPS";
+            }
+
+            public String getDisplayName() {
+                return "FPS";
+            }
+
+            public int getWidth() {return
+                    getLabelWidth(this.getDisplayName());
+            }
+
+            public int getHeight() {
+                return getLabelHeight();
+            }
+            public ScreenPosition getDefaultPosition() {
+                return new ScreenPosition(0, 1);
+            }
+
+            public void render(MatrixStack matrices, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
-                drawString(context, "FPS: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, mc.getCurrentFps(), pos.getAbsoluteX() + 1 + font.getWidth("FPS: ")
+                drawString(matrices, "FPS: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, MinecraftClient.currentFps, pos.getAbsoluteX() + 1 + font.getWidth("FPS: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(DrawContext context, ScreenPosition pos) {
+
+            public void renderDummy(MatrixStack matrices, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
-                drawString(context, "FPS: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, "360", pos.getAbsoluteX() + 1 + font.getWidth("FPS: ")
+                drawString(matrices, "FPS: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, "360", pos.getAbsoluteX() + 1 + font.getWidth("FPS: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
 
         this.labels.add(new DraggableHUDElement() {
-            public String getName() {return "labelX";}
-            public String getDisplayName() {return "X Coord";}
-            public boolean enabledByDefault() {return true;}
-            public int getWidth() {return getLabelWidth(this.getDisplayName());}
-            public int getHeight() {return getLabelHeight();}
-            public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 10);}
-            public void render(DrawContext context, ScreenPosition pos) {
+
+            public String getName() {
+                return "labelX";
+            }
+
+            public String getDisplayName() {
+                return "X Coord";
+            }
+
+            public int getWidth() {
+                return getLabelWidth(this.getDisplayName());
+            }
+
+            public int getHeight() {
+                return getLabelHeight();
+            }
+
+            public ScreenPosition getDefaultPosition() {
+                return new ScreenPosition(0, 10);
+            }
+
+            public void render(MatrixStack matrices, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
                 DecimalFormat df = CyvFabric.df;
                 String x = df.format(ParkourTickListener.x);
-                drawString(context, "X: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, x, pos.getAbsoluteX() + 1 + font.getWidth("X: ")
+                drawString(matrices, "X: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, x, pos.getAbsoluteX() + 1 + font.getWidth("X: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(DrawContext context, ScreenPosition pos) {
+
+            public void renderDummy(MatrixStack matrices, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
-                String str = "0.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
-                drawString(context, "X: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.getWidth("X: ")
+                String str = "0." + "0".repeat(Math.max(0, CyvClientConfig.getInt("df", 5)));
+                drawString(matrices, "X: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, str, pos.getAbsoluteX() + 1 + font.getWidth("X: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
 
         this.labels.add(new DraggableHUDElement() {
-            public String getName() {return "labelY";}
-            public String getDisplayName() {return "Y Coord";}
-            public boolean enabledByDefault() {return true;}
-            public int getWidth() {return getLabelWidth(this.getDisplayName());}
-            public int getHeight() {return getLabelHeight();}
-            public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 19);}
-            public void render(DrawContext context, ScreenPosition pos) {
+            public String getName() {
+                return "labelY";
+            }
+
+            public String getDisplayName() {
+                return "Y Coord";
+            }
+
+            public int getWidth() {return getLabelWidth(
+                    this.getDisplayName());
+            }
+
+            public int getHeight() {
+                return getLabelHeight();
+            }
+
+            public ScreenPosition getDefaultPosition() {
+                return new ScreenPosition(0, 19);
+            }
+
+            public void render(MatrixStack matrices, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
                 DecimalFormat df = CyvFabric.df;
                 String y = df.format(ParkourTickListener.y);
-                drawString(context, "Y: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, y, pos.getAbsoluteX() + 1 + font.getWidth("Y: ")
+                drawString(matrices, "Y: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, y, pos.getAbsoluteX() + 1 + font.getWidth("Y: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(DrawContext context, ScreenPosition pos) {
+
+            public void renderDummy(MatrixStack matrices, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
-                String str = "0.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
-                drawString(context, "Y: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.getWidth("Y: ")
+                String str = "0." + "0".repeat(Math.max(0, CyvClientConfig.getInt("df", 5)));
+                drawString(matrices, "Y: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, str, pos.getAbsoluteX() + 1 + font.getWidth("Y: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
@@ -107,30 +151,28 @@ public class LabelBundleCoordinates extends LabelBundle {
         this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelZ";}
             public String getDisplayName() {return "Z Coord";}
-            public boolean enabledByDefault() {return true;}
             public int getWidth() {return getLabelWidth(this.getDisplayName());}
             public int getHeight() {return getLabelHeight();}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 28);}
-            public void render(DrawContext context, ScreenPosition pos) {
+            public void render(MatrixStack matrices, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
                 DecimalFormat df = CyvFabric.df;
                 String z = df.format(ParkourTickListener.z);
-                drawString(context, "Z: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, z, pos.getAbsoluteX() + 1 + font.getWidth("Z: ")
+                drawString(matrices, "Z: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, z, pos.getAbsoluteX() + 1 + font.getWidth("Z: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(DrawContext context, ScreenPosition pos) {
+            public void renderDummy(MatrixStack matrices, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
-                String str = "0.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
-                drawString(context, "Z: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, str, pos.getAbsoluteX() + 1 + font.getWidth("Z: ")
+                String str = "0." + "0".repeat(Math.max(0, CyvClientConfig.getInt("df", 5)));
+                drawString(matrices, "Z: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, str, pos.getAbsoluteX() + 1 + font.getWidth("Z: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
@@ -138,11 +180,11 @@ public class LabelBundleCoordinates extends LabelBundle {
         this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelYaw";}
             public String getDisplayName() {return "Yaw";}
-            public boolean enabledByDefault() {return true;}
             public int getWidth() {return getLabelWidth(this.getDisplayName());}
             public int getHeight() {return getLabelHeight();}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 37);}
-            public void render(DrawContext context, ScreenPosition pos) {
+
+            public void render(MatrixStack matrices, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -155,30 +197,30 @@ public class LabelBundleCoordinates extends LabelBundle {
                     f = (df.format((ParkourTickListener.lastTick == null) ? 0 : ParkourTickListener.formatYaw(ParkourTickListener.lastTick.f)))+"\u00B0";
                 }
 
-                drawString(context, "F: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, f, pos.getAbsoluteX() + 1 + font.getWidth("F: ")
+                drawString(matrices, "F: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, f, pos.getAbsoluteX() + 1 + font.getWidth("F: ")
                         , pos.getAbsoluteY() + 1, color2);
 
                 if (/*ModCoordinates.this.showAxis*/ false) {
                     float absFacing = Math.abs(ParkourTickListener.formatYaw(ParkourTickListener.lastTick.f));
-                    drawString(context, ((absFacing > 45 && absFacing < 135) ? " X" : " Z")
+                    drawString(matrices, ((absFacing > 45 && absFacing < 135) ? " X" : " Z")
                             ,pos.getAbsoluteX() + 1 + font.getWidth("F: " + f), pos.getAbsoluteY() + 1, color1);
                 }
 
             }
-            public void renderDummy(DrawContext context, ScreenPosition pos) {
+            public void renderDummy(MatrixStack matrices, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
-                String str = "0.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
-                drawString(context, "F: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, str+"\u00B0", pos.getAbsoluteX() + 1 + font.getWidth("F: ")
+                StringBuilder str = new StringBuilder("0.");
+                str.append("0".repeat(Math.max(0, CyvClientConfig.getInt("df", 5))));
+                drawString(matrices, "F: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, str+"\u00B0", pos.getAbsoluteX() + 1 + font.getWidth("F: ")
                         , pos.getAbsoluteY() + 1, color2);
 
                 if (/*ModCoordinates.this.showAxis*/ false) {
-                    drawString(context, " Z",pos.getAbsoluteX() + 1 + font.getWidth("F: " + str+"\u00B0"), pos.getAbsoluteY() + 1, color1);
+                    drawString(matrices, " Z",pos.getAbsoluteX() + 1 + font.getWidth("F: " + str+"\u00B0"), pos.getAbsoluteY() + 1, color1);
                 }
             }
         });
@@ -186,11 +228,11 @@ public class LabelBundleCoordinates extends LabelBundle {
         this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelPitch";}
             public String getDisplayName() {return "Pitch";}
-            public boolean enabledByDefault() {return true;}
             public int getWidth() {return getLabelWidth(this.getDisplayName());}
             public int getHeight() {return getLabelHeight();}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 46);}
-            public void render(DrawContext context, ScreenPosition pos) {
+
+            public void render(MatrixStack matrices, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -202,20 +244,19 @@ public class LabelBundleCoordinates extends LabelBundle {
                 } else {
                     p = df.format((ParkourTickListener.lastTick == null) ? 0 : ParkourTickListener.lastTick.p)+"\u00B0";
                 }
-                drawString(context, "Pitch: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, p, pos.getAbsoluteX() + 1 + font.getWidth("Pitch: ")
+                drawString(matrices, "Pitch: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, p, pos.getAbsoluteX() + 1 + font.getWidth("Pitch: ")
                         , pos.getAbsoluteY() + 1, color2);
 
             }
-            public void renderDummy(DrawContext context, ScreenPosition pos) {
+            public void renderDummy(MatrixStack matrices, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
-                String str = "0.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
-                drawString(context, "Pitch: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, str+"\u00B0", pos.getAbsoluteX() + 1 + font.getWidth("Pitch: ")
+                String str = "0." + "0".repeat(Math.max(0, CyvClientConfig.getInt("df", 5)));
+                drawString(matrices, "Pitch: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, str +"\u00B0", pos.getAbsoluteX() + 1 + font.getWidth("Pitch: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });

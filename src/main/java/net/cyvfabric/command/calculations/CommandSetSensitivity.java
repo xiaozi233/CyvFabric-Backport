@@ -3,7 +3,7 @@ package net.cyvfabric.command.calculations;
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvCommand;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 
 import java.text.DecimalFormat;
@@ -32,7 +32,7 @@ public class CommandSetSensitivity extends CyvCommand {
 
             }
 
-            MinecraftClient.getInstance().options.getMouseSensitivity().setValue(sensitivity);
+            MinecraftClient.getInstance().options.mouseSensitivity = sensitivity;
             MinecraftClient.getInstance().options.write();
 
             double percentage = 200 * sensitivity;
@@ -43,7 +43,6 @@ public class CommandSetSensitivity extends CyvCommand {
 
         } catch (Exception e) {
             CyvFabric.sendChatMessage("Please input a valid sensitivity constant (100% = 0.5)");
-            return;
 
         }
     }

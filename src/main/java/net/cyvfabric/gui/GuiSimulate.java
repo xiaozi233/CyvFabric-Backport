@@ -6,10 +6,11 @@ import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 
 //gui for the in-game movement simulator
 public class GuiSimulate extends CyvGui {
-    public static ArrayList<String> chatHistory = new ArrayList<String>();
+    public static ArrayList<String> chatHistory = new ArrayList<>();
 
     public boolean repeatEventsEnabled;
     TextFieldWidget input;
@@ -31,18 +32,24 @@ public class GuiSimulate extends CyvGui {
 
     @Override
     protected void init() {
-        input = new TextFieldWidget(textRenderer, width/2-width*23/80, (int) (height*0.40-10), width*23/40, 20, Text.empty());
-        button = ButtonWidget.builder(Text.of("Calculate"), (widget) -> {})
-                .position(width/2-50, height*3/5-10)
-                .size(100, 20).build();
+        input = new TextFieldWidget(textRenderer, width/2-width*23/80, (int) (height*0.40-10), width*23/40, 20, Text.of(""));
+        button = new ButtonWidget(
+                width / 2 - 50,
+                height * 3 / 5 - 10,
+                100,
+                20,
+                Text.of("Calculate"),
+                (widget) -> {},
+                ButtonWidget.EMPTY
+        );
 
         input.setMaxLength(65536);
         this.chatHistoryIndex = 0;
-        this.input.setFocused(true);
+        this.input.setTextFieldFocused(true);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float tickDelta) {
         Window sr = MinecraftClient.getInstance().getWindow();
         int width = sr.getScaledWidth();
         int height = sr.getScaledHeight();
@@ -52,14 +59,14 @@ public class GuiSimulate extends CyvGui {
         int x2 = (int) (sr.getScaledWidth() * 0.80);
         int y2 = (int) (sr.getScaledHeight() * 0.50);
 
-        super.renderInGameBackground(context); //background tint
-        GuiUtils.drawRoundedRect(context, x1-2, y1-2, x2+2, y2+2, 9, 0x88000000);
-        GuiUtils.drawRoundedRect(context, x1, y1, x2, y2, 7, 0x11000000);
+        super.renderBackground(matrices); //background tint
+        GuiUtils.drawRoundedRect(matrices, x1-2, y1-2, x2+2, y2+2, 9, 0x88000000);
+        GuiUtils.drawRoundedRect(matrices, x1, y1, x2, y2, 7, 0x11000000);
 
-        input.render(context, mouseX, mouseY, partialTicks);
-        button.render(context, mouseX, mouseY, partialTicks);
+        input.render(matrices, mouseX, mouseY, tickDelta);
+        button.render(matrices, mouseX, mouseY, tickDelta);
 
-        context.drawCenteredTextWithShadow(textRenderer, "Movement Simulator", x1+46, y1-15, 0xFFFFFFFF);
+        DrawableHelper.drawCenteredTextWithShadow(matrices, textRenderer, Text.of("Movement Simulator").asOrderedText(), x1+46, y1-15, 0xFFFFFFFF);
     }
 
     @Override
@@ -74,9 +81,9 @@ public class GuiSimulate extends CyvGui {
             this.close(); //close the gui
             String text = input.getText(); //parser shit
 
-            if (text.equals("") || text.equals(" ")) {}
+            if (text.isEmpty() || text.equals(" ")) {}
             else {
-                if (chatHistory.size() == 0) {
+                if (chatHistory.isEmpty()) {
                     chatHistory.add(text);
                 } else {
                     if (!chatHistory.get(chatHistory.size()-1).equals(text)) {
@@ -120,9 +127,9 @@ public class GuiSimulate extends CyvGui {
             this.close();
             String text = input.getText(); //parser shit
 
-            if (text.equals("") || text.equals(" ")) {}
+            if (text.isEmpty() || text.equals(" ")) {}
             else {
-                if (chatHistory.size() == 0) {
+                if (chatHistory.isEmpty()) {
                     chatHistory.add(text);
                 } else {
                     if (!chatHistory.get(chatHistory.size()-1).equals(text)) {
@@ -139,7 +146,7 @@ public class GuiSimulate extends CyvGui {
         new Thread(() -> {
             Player player = new Player();
             DecimalFormat df = CyvFabric.df;
-            player.df = (byte) df.getMaximumFractionDigits();
+            Player.df = (byte) df.getMaximumFractionDigits();
             Parser parser = new Parser();
 
             try {

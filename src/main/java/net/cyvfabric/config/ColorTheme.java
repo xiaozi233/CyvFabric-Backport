@@ -26,10 +26,10 @@ public enum ColorTheme {
             0, 0.8F, 1.0F, 0, 0.4F, 0.6F, 0.6F, 0.6F, 0.6F);
 
 
-    private ColorTheme(int background, int highlight, int shade1, int shade2,
-                       int border1, int border2, int main1, int main2,
-                       int accent1, int accent2, int secondary1, int secondary2,
-                       float mr, float mg, float mb, float br, float bg, float bb, float sr, float sg, float sb) {
+    ColorTheme(int background, int highlight, int shade1, int shade2,
+               int border1, int border2, int main1, int main2,
+               int accent1, int accent2, int secondary1, int secondary2,
+               float mr, float mg, float mb, float br, float bg, float bb, float sr, float sg, float sb) {
         this.background1 = background;
         this.highlight = highlight;
 

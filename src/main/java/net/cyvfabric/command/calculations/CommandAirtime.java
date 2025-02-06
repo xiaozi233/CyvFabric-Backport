@@ -3,7 +3,7 @@ package net.cyvfabric.command.calculations;
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvCommand;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 public class CommandAirtime extends CyvCommand {
     public CommandAirtime() {
@@ -51,7 +51,7 @@ public class CommandAirtime extends CyvCommand {
                 ticks++;
             }
 
-            CyvFabric.sendChatMessage("Airtime: " + Double.toString(ticks) + " ticks");
+            CyvFabric.sendChatMessage("Airtime: " + ticks + " ticks");
 
         } catch (Exception e) {
             CyvFabric.sendChatMessage("Please input a valid jump.");

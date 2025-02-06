@@ -1,8 +1,7 @@
 package net.cyvfabric.util;
 
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.server.command.ServerCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 import java.util.ArrayList;
 
@@ -12,9 +11,9 @@ public class CyvCommand {
     public String usage = "none";
     public String helpString = "WIP";
 
-    public ArrayList<CyvCommand> subCommands = new ArrayList<CyvCommand>();
+    public ArrayList<CyvCommand> subCommands = new ArrayList<>();
     public CyvCommand parent; //will be null if this is not a subcommand
-    public ArrayList<String> aliases = new ArrayList<String>();
+    public ArrayList<String> aliases = new ArrayList<>();
     public boolean hasArgs = false;
 
     public CyvCommand(String name) {

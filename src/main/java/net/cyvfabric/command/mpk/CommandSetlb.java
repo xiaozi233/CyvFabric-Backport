@@ -7,7 +7,7 @@ import net.cyvfabric.util.CyvCommand;
 import net.cyvfabric.util.parkour.LandingAxis;
 import net.cyvfabric.util.parkour.LandingBlock;
 import net.cyvfabric.util.parkour.LandingMode;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.hit.BlockHitResult;
@@ -38,14 +38,16 @@ public class CommandSetlb extends CyvCommand {
             boolean target = false;
             for (String s : args) {
                 s = s.toLowerCase();
-                if (s.equals("x")) axis = LandingAxis.x;
-                else if (s.equals("z")) axis = LandingAxis.z;
-                else if (s.equals("land") || s.equals("landing")) mode = LandingMode.landing;
-                else if (s.equals("hit")) mode = LandingMode.hit;
-                else if (s.equals("zneo") || s.equals("z-neo") || s.equals("neo") || s.equals("z_neo")) mode = LandingMode.z_neo;
-                else if (s.equals("enter")) mode = LandingMode.enter;
-                else if (s.equals("box")) box = true;
-                else if (s.equals("target")) target = true;
+                switch (s) {
+                    case "x" -> axis = LandingAxis.x;
+                    case "z" -> axis = LandingAxis.z;
+                    case "land", "landing" -> mode = LandingMode.landing;
+                    case "hit" -> mode = LandingMode.hit;
+                    case "zneo", "z-neo", "neo", "z_neo" -> mode = LandingMode.z_neo;
+                    case "enter" -> mode = LandingMode.enter;
+                    case "box" -> box = true;
+                    case "target" -> target = true;
+                }
             }
 
             if (target) {
@@ -56,7 +58,6 @@ public class CommandSetlb extends CyvCommand {
 
                         if (mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()) {
                             CyvFabric.sendChatMessage("Please look at a valid block.");
-                            return;
                         } else {
                             ParkourTickListener.landingBlock = new LandingBlock(pos, mode, axis, box);
                             CyvFabric.sendChatMessage("Successfully set landing block.");
@@ -66,7 +67,6 @@ public class CommandSetlb extends CyvCommand {
                     }
                 } else {
                     CyvFabric.sendChatMessage("Please look at a valid block.");
-                    return;
                 }
             }
             else {
@@ -79,7 +79,6 @@ public class CommandSetlb extends CyvCommand {
 
                     if (mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()) {
                         CyvFabric.sendChatMessage("Please stand on a valid block.");
-                        return;
                     } else {
                         ParkourTickListener.landingBlock = new LandingBlock(pos, mode, axis, box);
                         CyvFabric.sendChatMessage("Successfully set landing block.");
@@ -87,7 +86,6 @@ public class CommandSetlb extends CyvCommand {
 
                 } else {
                     CyvFabric.sendChatMessage("Please stand on a valid block.");
-                    return;
                 }
             }
         }, "Set landing block").start();

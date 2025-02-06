@@ -75,7 +75,6 @@ public class ParkourTickListener {
     //end of tick
     private static void onTick(MinecraftClient mc) {
         ClientPlayerEntity mcPlayer = mc.player;
-        GameOptions gameSettings = mc.options;
 
         if (mcPlayer == null) return;
 
@@ -258,15 +257,11 @@ public class ParkourTickListener {
 
         } else if (airtime == inertiaTick+1) {
 
-            int tick = inertiaTick;
-            double min = inertiaMin;
-            double max = inertiaMax;
-
-            int d = Integer.valueOf(CyvFabric.config.configFields.get("df").value.toString());
+            int d = Integer.parseInt(CyvFabric.config.configFields.get("df").value.toString());
             DecimalFormat df = new DecimalFormat("#");
             df.setMaximumFractionDigits(d);
 
-            if ((stored_v>=min && stored_v<=max) || (stored_v<=min && stored_v>=max)) {
+            if ((stored_v>= inertiaMin && stored_v<= inertiaMax) || (stored_v<= inertiaMin && stored_v>= inertiaMax)) {
 
                 if (Math.abs(stored_v)*0.91F*stored_slip < 0.003) {
                     CyvFabric.sendChatMessage("Hit inertia at tick " + (airtime-1) + ", previous v = " + df.format(stored_v));
@@ -510,15 +505,15 @@ public class ParkourTickListener {
 
         int strafe() {
             int i = 0;
-            if (keys[1] == true) i--;
-            if (keys[3] == true) i++;
+            if (keys[1]) i--;
+            if (keys[3]) i++;
             return i;
         }
 
         int forward() {
             int i = 0;
-            if (keys[0] == true) i++;
-            if (keys[3] == true) i--;
+            if (keys[0]) i++;
+            if (keys[3]) i--;
             return i;
         }
 

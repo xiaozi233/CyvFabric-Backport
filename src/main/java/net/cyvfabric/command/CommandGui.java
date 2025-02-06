@@ -4,7 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.event.events.GuiHandler;
 import net.cyvfabric.gui.GuiMPK;
 import net.cyvfabric.util.CyvCommand;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 public class CommandGui extends CyvCommand {
     public CommandGui() {

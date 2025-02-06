@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import mcpk.Player;
 import mcpk.functions.Function;
-import mcpk.functions.Function.InvalidKeypressException;
 import mcpk.utils.Arguments;
 
 public class FunctionSneakSprint45Air extends Function {
@@ -21,7 +20,7 @@ public class FunctionSneakSprint45Air extends Function {
 			throws InvalidKeypressException {
 		Arguments args = new Arguments();
 		args.replace("duration", Math.abs(duration));
-		args.replace("facing", (float) (facing + 45));
+		args.replace("facing", facing + 45);
 		if (duration > 0) args.replace("forward", 1);
 		else if (duration < 0) args.replace("forward", -1);
 

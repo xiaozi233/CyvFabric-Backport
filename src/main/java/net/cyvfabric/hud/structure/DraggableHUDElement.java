@@ -3,7 +3,9 @@ package net.cyvfabric.hud.structure;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 
 import java.util.LinkedHashMap;
 
@@ -33,12 +35,12 @@ public abstract class DraggableHUDElement implements IRenderer {
     public abstract ScreenPosition getDefaultPosition();
 
     public LinkedHashMap<String, CyvClientConfig.ConfigValue<?>> getConfigFields() {
-        LinkedHashMap<String, CyvClientConfig.ConfigValue<?>> fields = new LinkedHashMap<String, CyvClientConfig.ConfigValue<?>>();
+        LinkedHashMap<String, CyvClientConfig.ConfigValue<?>> fields = new LinkedHashMap<>();
 
-        fields.put("enabled", new CyvClientConfig.ConfigValue<Boolean>(this.enabledByDefault()));
-        fields.put("posx", new CyvClientConfig.ConfigValue<Integer>(this.getDefaultPosition().getAbsoluteX()));
-        fields.put("posy", new CyvClientConfig.ConfigValue<Integer>(this.getDefaultPosition().getAbsoluteY()));
-        fields.put("visible", new CyvClientConfig.ConfigValue<Boolean>(true));
+        fields.put("enabled", new CyvClientConfig.ConfigValue<>(this.enabledByDefault()));
+        fields.put("posx", new CyvClientConfig.ConfigValue<>(this.getDefaultPosition().getAbsoluteX()));
+        fields.put("posy", new CyvClientConfig.ConfigValue<>(this.getDefaultPosition().getAbsoluteY()));
+        fields.put("visible", new CyvClientConfig.ConfigValue<>(true));
 
         return fields;
     }
@@ -63,9 +65,6 @@ public abstract class DraggableHUDElement implements IRenderer {
         CyvClientConfig.set(this.getName()+"_visible", this.isVisible);
         CyvClientConfig.set(this.getName()+"_posx", this.position.getAbsoluteX());
         CyvClientConfig.set(this.getName()+"_posy", this.position.getAbsoluteY());
-
-        return;
-
     }
 
     public void setEnabled(boolean isEnabled) {
@@ -88,13 +87,27 @@ public abstract class DraggableHUDElement implements IRenderer {
         return true;
     }
 
-    protected void drawString(DrawContext context, Object string, int x, int y, long color) {
-        this.drawString(context, string, x, y, color, true);
+    protected void drawString(MatrixStack matrices, Object string, int x, int y, long color) {
+        this.drawString(matrices, string, x, y, color, true);
     }
 
-    protected void drawString(DrawContext context, Object string, int x, int y, long color, boolean shadow) {
+    protected void drawString(MatrixStack matrices, Object string, int x, int y, long color, boolean shadow) {
         long drawColor = (this.isVisible) ? color : 0xFFAAAAAA;
-        context.drawText(mc.textRenderer, string.toString(), x, y, ((Long) drawColor).intValue(), shadow);
+        if (shadow) {
+            DrawableHelper.drawTextWithShadow(matrices, mc.textRenderer, Text.of(string.toString()), x, y, ((Long) drawColor).intValue());
+        } else {
+            mc.textRenderer.draw(matrices, string.toString(), x, y, ((Long) drawColor).intValue());
+        }
     }
 
+
+    protected void drawVerticalLine(MatrixStack matrices, int x, int y1, int y2, int color) {
+        if (y2 < y1) {
+            int i = y1;
+            y1 = y2;
+            y2 = i;
+        }
+
+        DrawableHelper.fill(matrices, x, y1 + 1, x + 1, y2, color);
+    }
 }

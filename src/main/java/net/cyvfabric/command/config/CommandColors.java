@@ -4,7 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.util.CyvCommand;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 public class CommandColors extends CyvCommand {
     public CommandColors() {
@@ -14,11 +14,11 @@ public class CommandColors extends CyvCommand {
 
     @Override
     public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
-        String str = "List of colors usable:";
+        StringBuilder str = new StringBuilder("List of colors usable:");
         for (CyvClientColorHelper.CyvClientColor c : CyvClientColorHelper.colors) {
-            str += "\n" + c.chatColor + c.name;
+            str.append("\n").append(c.chatColor).append(c.name);
         }
 
-        CyvFabric.sendChatMessage(str);
+        CyvFabric.sendChatMessage(str.toString());
     }
 }

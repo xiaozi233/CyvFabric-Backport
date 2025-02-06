@@ -18,7 +18,6 @@ public class GuiHandler {
             if (screenAwaiting != null) {
                 MinecraftClient.getInstance().setScreen(screenAwaiting); //set the screen
                 screenAwaiting = null; //now that no screen is awaiting, clear it
-                return;
             }
 
         });

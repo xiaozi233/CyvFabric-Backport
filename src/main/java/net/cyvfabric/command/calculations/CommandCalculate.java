@@ -3,7 +3,7 @@ package net.cyvfabric.command.calculations;
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvCommand;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -57,16 +57,16 @@ public class CommandCalculate extends CyvCommand {
 
         public ArrayList<String> separate(String input) throws Exception {
             input = input.toLowerCase();
-            ArrayList<String> elements = new ArrayList<String>();
+            ArrayList<String> elements = new ArrayList<>();
 
             int state = 0;
-            String current_number = ""; //current number for current element
-            String current_function = ""; //current function if one exists
+            StringBuilder current_number = new StringBuilder(); //current number for current element
+            StringBuilder current_function = new StringBuilder(); //current function if one exists
 
-            ArrayList<Character> operands = new ArrayList<Character>(); //operators
+            ArrayList<Character> operands = new ArrayList<>(); //operators
             operands.add('+'); operands.add('-'); operands.add('*'); operands.add('/'); operands.add('^');
 
-            ArrayList<String> advFunctions = new ArrayList<String>(); //advanced functions
+            ArrayList<String> advFunctions = new ArrayList<>(); //advanced functions
             advFunctions.add("sin("); advFunctions.add("cos("); advFunctions.add("tan(");
             advFunctions.add("sec("); advFunctions.add("csc("); advFunctions.add("cot(");
             advFunctions.add("asin("); advFunctions.add("acos("); advFunctions.add("atan(");
@@ -84,7 +84,7 @@ public class CommandCalculate extends CyvCommand {
 
                     if (Character.isDigit(current) || current == '.') { //NUMBER START
 
-                        if (elements.size() != 0) { //check if last element was also a number
+                        if (!elements.isEmpty()) { //check if last element was also a number
                             String last_value = elements.get(elements.size()-1);
                             try {
                                 Double.parseDouble(last_value);
@@ -97,12 +97,10 @@ public class CommandCalculate extends CyvCommand {
                             }
                         }
 
-                        current_number = current_number + current; //start the number parsing
+                        current_number.append(current); //start the number parsing
                         state = 1;
 
                     } else if (current == ' ') { //space, nothing happens
-                        continue;
-
                     } else if (current == '!') { //FACTORIAL
                         char last_value = elements.get(elements.size()-1).toCharArray()[0];
                         if (operands.contains(last_value)) {
@@ -111,14 +109,14 @@ public class CommandCalculate extends CyvCommand {
                         elements.add("!");
 
                     } else if (operands.contains(current)) { //OPERAND
-                        if (elements.size() != 0) { //check if last element was also a number
+                        if (!elements.isEmpty()) { //check if last element was also a number
                             char last_value = elements.get(elements.size()-1).toCharArray()[0];
 
                             if (last_value == '(') {
                                 if (current != '-') {
                                     throw new Exception("Started with operand"); //starting the string with an operand. nice
                                 } else {
-                                    current_number = current_number + current; //first number negative
+                                    current_number.append(current); //first number negative
                                     state = 1;
                                     continue;
                                 }
@@ -128,7 +126,7 @@ public class CommandCalculate extends CyvCommand {
                                 if (current != '-') {
                                     throw new Exception("Two operands in a row"); //two operands in a row. nice
                                 } else {
-                                    current_number = current_number + current; //negative number
+                                    current_number.append(current); //negative number
                                     state = 1;
                                     continue;
                                 }
@@ -137,7 +135,7 @@ public class CommandCalculate extends CyvCommand {
                             if (current != '-') {
                                 throw new Exception("Started with operand"); //starting the string with an operand. nice
                             } else {
-                                current_number = current_number + current; //first number negative
+                                current_number.append(current); //first number negative
                                 state = 1;
                                 continue;
                             }
@@ -145,10 +143,9 @@ public class CommandCalculate extends CyvCommand {
 
                         //ok everything's fine, add the operand
                         elements.add(current + "");
-                        state = 0;
 
                     } else if (current == '(') { //PARENTHESIS OPENING
-                        if (elements.size() != 0) { //check if last element was also a number
+                        if (!elements.isEmpty()) { //check if last element was also a number
                             String last_value = elements.get(elements.size()-1);
                             try {
                                 Double.parseDouble(last_value);
@@ -162,10 +159,9 @@ public class CommandCalculate extends CyvCommand {
                         }
 
                         elements.add("(");
-                        state = 0;
 
                     } else if (current == ')') { //PARENTHESIS CLOSING
-                        if (elements.size() != 0) { //check if last element was also a number
+                        if (!elements.isEmpty()) { //check if last element was also a number
                             char last_value = elements.get(elements.size()-1).toCharArray()[0];
                             if (operands.contains(last_value)) { //two operands in a row. nice
                                 throw new Exception("Last element in parenthesis was an operand");
@@ -173,10 +169,9 @@ public class CommandCalculate extends CyvCommand {
                         } else { throw new Exception("Started with closing parenthesis"); } //starting the string with a ). nice
 
                         elements.add(")");
-                        state = 0;
 
                     } else { //start function
-                        if (elements.size() != 0) { //check if last element was also a number
+                        if (!elements.isEmpty()) { //check if last element was also a number
                             String last_value = elements.get(elements.size()-1);
                             try {
                                 Double.parseDouble(last_value);
@@ -189,45 +184,45 @@ public class CommandCalculate extends CyvCommand {
                             }
                         }
 
-                        current_function = current_function + current;
+                        current_function.append(current);
                         state = 2;
                     }
 
                 } else if (state == 1) { //looking for NUMBER END
                     if (Character.isDigit(current) || current == '.') { //continue number
-                        if (current == '.' && current_number.indexOf('.') != -1) {
+                        if (current == '.' && current_number.toString().indexOf('.') != -1) {
                             throw new Exception("You can't use two decimal places in one number."); //two decimals. nice
                         }
 
-                        current_number = current_number + current;
+                        current_number.append(current);
 
                     } else if (current == ' ') { //ending number, looking for number start
-                        if (current_number.equals("-")) {
+                        if (current_number.toString().equals("-")) {
                             throw new Exception("Invalid minus sign");
                         }
-                        elements.add(current_number); //save the number
-                        current_number = "";
+                        elements.add(current_number.toString()); //save the number
+                        current_number = new StringBuilder();
                         state = 0;
 
                     } else if (operands.contains(current)) { //operator found
-                        if (current_number.equals("-")) {
+                        if (current_number.toString().equals("-")) {
                             throw new Exception("Two operands in a row");
                         }
-                        elements.add(current_number); //save the number
-                        current_number = "";
+                        elements.add(current_number.toString()); //save the number
+                        current_number = new StringBuilder();
 
                         elements.add(current + ""); //and then save the operand as well
                         state = 0;
 
                     } else if (current == '(') { //PARENTEHSIS OPENING
-                        if (current_number.equals("-")) {
-                            current_number = "";
+                        if (current_number.toString().equals("-")) {
+                            current_number = new StringBuilder();
 
                             elements.add("-(");
                             state = 0;
                         } else {
-                            elements.add(current_number); //save the number
-                            current_number = "";
+                            elements.add(current_number.toString()); //save the number
+                            current_number = new StringBuilder();
 
                             elements.add("*");
                             elements.add("(");
@@ -235,35 +230,35 @@ public class CommandCalculate extends CyvCommand {
                         }
 
                     } else if (current == ')') { //PARENTEHSIS CLOSING
-                        if (current_number.equals("-")) {
+                        if (current_number.toString().equals("-")) {
                             throw new Exception("Invalid negative symbol");
                         }
-                        elements.add(current_number); //save the number
-                        current_number = "";
+                        elements.add(current_number.toString()); //save the number
+                        current_number = new StringBuilder();
 
                         elements.add(")");
                         state = 0;
 
                     } else if (current == '!') {
-                        if (current_number.equals("-")) {
+                        if (current_number.toString().equals("-")) {
                             throw new Exception("Invalid negative symbol");
                         }
-                        elements.add(current_number);
-                        current_number = "";
+                        elements.add(current_number.toString());
+                        current_number = new StringBuilder();
                         elements.add("!");
                         state = 0;
 
                     } else { //FUNCTION
-                        if (current_number.equals("-")) {
-                            current_function = current_function + current_number + current;
-                            current_number = "";
+                        if (current_number.toString().equals("-")) {
+                            current_function.append(current_number).append(current);
+                            current_number = new StringBuilder();
                             state = 2;
                         } else {
-                            elements.add(current_number); //save the number
-                            current_number = "";
+                            elements.add(current_number.toString()); //save the number
+                            current_number = new StringBuilder();
 
                             elements.add("*");
-                            current_function = current_function + current;
+                            current_function.append(current);
                             state = 2;
                         }
 
@@ -272,72 +267,64 @@ public class CommandCalculate extends CyvCommand {
                 } else if (state == 2) { //curently parsing function
 
                     if (current == ' ') {
-                        if (current_function.equals("pi")) {
-                            elements.add(Math.PI + "");
-                        } else if (current_function.equals("e")) {
-                            elements.add(Math.E + "");
-                        } else if (current_function.equals("-pi")) {
-                            elements.add(-Math.PI + "");
-                        } else if (current_function.equals("-e")) {
-                            elements.add(-Math.E + "");
-                        } else throw new Exception("Invalid special number");
-                        current_function = "";
+                        switch (current_function.toString()) {
+                            case "pi" -> elements.add(Math.PI + "");
+                            case "e" -> elements.add(Math.E + "");
+                            case "-pi" -> elements.add(-Math.PI + "");
+                            case "-e" -> elements.add(-Math.E + "");
+                            default -> throw new Exception("Invalid special number");
+                        }
+                        current_function = new StringBuilder();
                         state = 0;
 
                     } else if (operands.contains(current)) {
-                        if (current_function.equals("pi")) {
-                            elements.add(Math.PI + "");
-                        } else if (current_function.equals("e")) {
-                            elements.add(Math.E + "");
-                        } else if (current_function.equals("-pi")) {
-                            elements.add(-Math.PI + "");
-                        } else if (current_function.equals("-e")) {
-                            elements.add(-Math.E + "");
-                        } else throw new Exception("Invalid special number");
+                        switch (current_function.toString()) {
+                            case "pi" -> elements.add(Math.PI + "");
+                            case "e" -> elements.add(Math.E + "");
+                            case "-pi" -> elements.add(-Math.PI + "");
+                            case "-e" -> elements.add(-Math.E + "");
+                            default -> throw new Exception("Invalid special number");
+                        }
                         elements.add(current + "");
-                        current_function = "";
+                        current_function = new StringBuilder();
                         state = 0;
 
                     } else if (current == '!') {
-                        if (current_function.equals("pi")) {
-                            elements.add(Math.PI + "");
-                        } else if (current_function.equals("e")) {
-                            elements.add(Math.E + "");
-                        } else if (current_function.equals("-pi")) {
-                            elements.add(-Math.PI + "");
-                        } else if (current_function.equals("-e")) {
-                            elements.add(-Math.E + "");
-                        } else throw new Exception("Invalid special number");
+                        switch (current_function.toString()) {
+                            case "pi" -> elements.add(Math.PI + "");
+                            case "e" -> elements.add(Math.E + "");
+                            case "-pi" -> elements.add(-Math.PI + "");
+                            case "-e" -> elements.add(-Math.E + "");
+                            default -> throw new Exception("Invalid special number");
+                        }
                         elements.add("!");
-                        current_function = "";
+                        current_function = new StringBuilder();
                         state = 0;
 
                     } else if (current == ')') {
-                        if (current_function.equals("pi")) {
-                            elements.add(Math.PI + "");
-                        } else if (current_function.equals("e")) {
-                            elements.add(Math.E + "");
-                        } else if (current_function.equals("-pi")) {
-                            elements.add(-Math.PI + "");
-                        } else if (current_function.equals("-e")) {
-                            elements.add(-Math.E + "");
-                        } else throw new Exception("Invalid special number");
+                        switch (current_function.toString()) {
+                            case "pi" -> elements.add(Math.PI + "");
+                            case "e" -> elements.add(Math.E + "");
+                            case "-pi" -> elements.add(-Math.PI + "");
+                            case "-e" -> elements.add(-Math.E + "");
+                            default -> throw new Exception("Invalid special number");
+                        }
 
                         elements.add(")");
-                        current_function = "";
+                        current_function = new StringBuilder();
                         state = 0;
 
                     } else if (current == '(') {
-                        current_function = current_function + current;
-                        if (advFunctions.contains(current_function) || advFunctions.contains(current_function.substring(1))) {
-                            elements.add(current_function);
+                        current_function.append(current);
+                        if (advFunctions.contains(current_function.toString()) || advFunctions.contains(current_function.substring(1))) {
+                            elements.add(current_function.toString());
 
                         } else throw new Exception("Invalid function");
-                        current_function = "";
+                        current_function = new StringBuilder();
                         state = 0;
 
                     } else {
-                        current_function = current_function + current;
+                        current_function.append(current);
 
                     }
 
@@ -346,21 +333,19 @@ public class CommandCalculate extends CyvCommand {
             } //end parsing
 
             if (state == 1) { //if NUMBER was in progress, add it
-                elements.add(current_number);
-                current_number = "";
+                elements.add(current_number.toString());
+                current_number = new StringBuilder();
                 state = 0;
             }
             if (state == 2) { //if NUMBER was in progress, add it
-                if (current_function.equals("pi")) {
-                    elements.add(Math.PI + "");
-                } else if (current_function.equals("e")) {
-                    elements.add(Math.E + "");
-                } else if (current_function.equals("-pi")) {
-                    elements.add(-Math.PI + "");
-                } else if (current_function.equals("-e")) {
-                    elements.add(-Math.E + "");
-                } else throw new Exception("Invalid special number");
-                current_function = "";
+                switch (current_function.toString()) {
+                    case "pi" -> elements.add(Math.PI + "");
+                    case "e" -> elements.add(Math.E + "");
+                    case "-pi" -> elements.add(-Math.PI + "");
+                    case "-e" -> elements.add(-Math.E + "");
+                    default -> throw new Exception("Invalid special number");
+                }
+                current_function = new StringBuilder();
                 state = 0;
             }
 
@@ -369,7 +354,7 @@ public class CommandCalculate extends CyvCommand {
 
         public double parse(ArrayList<String> elements, boolean isOriginal) throws Exception {
 
-            ArrayList<String> advFunctions = new ArrayList<String>(); //advanced functions
+            ArrayList<String> advFunctions = new ArrayList<>(); //advanced functions
             advFunctions.add("(");
             advFunctions.add("sin("); advFunctions.add("cos("); advFunctions.add("tan(");
             advFunctions.add("sec("); advFunctions.add("csc("); advFunctions.add("cot(");
@@ -438,41 +423,27 @@ public class CommandCalculate extends CyvCommand {
 
                         double value = this.parse(subElements, false);
 
-                        if (a.equals("sin(")) {
-                            value = Math.sin(value);
-                        } else if (a.equals("cos(")) {
-                            value = Math.cos(value);
-                        } else if (a.equals("tan(")) {
-                            value = Math.tan(value);
-                        } else if (a.equals("sec(")) {
-                            value = 1/Math.cos(value);
-                        } else if (a.equals("csc(")) {
-                            value = 1/Math.sin(value);
-                        } else if (a.equals("cot(")) {
-                            value = 1/Math.tan(value);
-                        } else if (a.equals("asin(") || a.equals("arcsin(")) {
-                            value = Math.asin(value);
-                        } else if (a.equals("acos(") || a.equals("arccos(")) {
-                            value = Math.acos(value);
-                        } else if (a.equals("atan(") || a.equals("arctan(")) {
-                            value = Math.atan(value);
-                        } else if (a.equals("acsc(") || a.equals("arccsc(")) {
-                            value = Math.asin(1/value);
-                        } else if (a.equals("asec(") || a.equals("arcsec(")) {
-                            value = Math.acos(1/value);
-                        } else if (a.equals("acot(") || a.equals("arccot(")) {
-                            value = Math.atan(1/value);
-                        } else if (a.equals("log(")) {
-                            value = Math.log(value) / Math.log(10); //log base 10
-                        } else if (a.equals("ln(")) {
-                            value = Math.log(value);
-                        } else if (a.equals("abs(")) {
-                            value = Math.abs(value);
-                        } else if (a.equals("sqrt(")) {
-                            value = Math.sqrt(value);
-                        } else if (a.equals("cbrt(")) {
-                            value = Math.cbrt(value);
-                        }
+                        value = switch (a) {
+                            case "sin(" -> Math.sin(value);
+                            case "cos(" -> Math.cos(value);
+                            case "tan(" -> Math.tan(value);
+                            case "sec(" -> 1 / Math.cos(value);
+                            case "csc(" -> 1 / Math.sin(value);
+                            case "cot(" -> 1 / Math.tan(value);
+                            case "asin(", "arcsin(" -> Math.asin(value);
+                            case "acos(", "arccos(" -> Math.acos(value);
+                            case "atan(", "arctan(" -> Math.atan(value);
+                            case "acsc(", "arccsc(" -> Math.asin(1 / value);
+                            case "asec(", "arcsec(" -> Math.acos(1 / value);
+                            case "acot(", "arccot(" -> Math.atan(1 / value);
+                            case "log(" -> Math.log(value) / Math.log(10); //log base 10
+
+                            case "ln(" -> Math.log(value);
+                            case "abs(" -> Math.abs(value);
+                            case "sqrt(" -> Math.sqrt(value);
+                            case "cbrt(" -> Math.cbrt(value);
+                            default -> value;
+                        };
 
                         if (elements.get(starting_index).charAt(0) == '-') {
                             value = -value;

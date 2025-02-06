@@ -6,10 +6,9 @@ import net.cyvfabric.config.CyvClientConfig;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.ArrayList;
@@ -17,8 +16,8 @@ import java.util.ArrayList;
 public class MacroListener {
     static boolean macroEnded = false;
 
-    static ArrayList<Float> partialYawChange = new ArrayList<Float>();
-    static ArrayList<Float> partialPitchChange = new ArrayList<Float>();
+    static ArrayList<Float> partialYawChange = new ArrayList<>();
+    static ArrayList<Float> partialPitchChange = new ArrayList<>();
 
     static double lastPartial = 0;
 
@@ -28,29 +27,27 @@ public class MacroListener {
 
     }
 
-    public static void onRender(DrawContext context, RenderTickCounter partialTicks) {
+    private static void onRender(MatrixStack matrices, float tickDelta) {
         if (!CyvClientConfig.getBoolean("smoothMacro", false)) return;
 
         MinecraftClient mc = MinecraftClient.getInstance();
         PlayerEntity mcPlayer = mc.player;
         GameOptions options = mc.options;
 
-        float renderTickTime = partialTicks.getTickDelta(false);
-
         if (CommandMacro.macroRunning > 1) {
             try {
-                if (renderTickTime - lastPartial < 0.1) return;
+                if (tickDelta - lastPartial < 0.1) return;
                 int index = CommandMacro.macro.size() - CommandMacro.macroRunning;
                 ArrayList<String> macro = CommandMacro.macro.get(index+1);
-                double yawChange = Double.parseDouble(macro.get(7)) * (renderTickTime - lastPartial);
-                double pitchChange = Double.parseDouble(macro.get(8)) * (renderTickTime - lastPartial);
+                double yawChange = Double.parseDouble(macro.get(7)) * (tickDelta - lastPartial);
+                double pitchChange = Double.parseDouble(macro.get(8)) * (tickDelta - lastPartial);
 
-                double smallestAngle = (float) (1.2 * Math.pow((0.6 * options.getMouseSensitivity().getValue() + 0.2), 3));
+                double smallestAngle = (float) (1.2 * Math.pow((0.6 * options.mouseSensitivity + 0.2), 3));
                 yawChange = smallestAngle * Math.round(yawChange/smallestAngle);
                 pitchChange = smallestAngle * Math.round(pitchChange/smallestAngle);
                 mcPlayer.setYaw(mcPlayer.getYaw() + (float) yawChange);
                 mcPlayer.setPitch(mcPlayer.getPitch() + (float) pitchChange);
-                lastPartial = renderTickTime;
+                lastPartial = tickDelta;
                 partialYawChange.add((float) yawChange);
                 partialPitchChange.add((float) pitchChange);
             } catch (Exception f) {
@@ -58,8 +55,6 @@ public class MacroListener {
             }
 
         }
-
-
     }
 
     public static void onTick(MinecraftClient mc) {

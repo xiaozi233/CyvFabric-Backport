@@ -5,8 +5,8 @@ import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.parkour.LandingAxis;
 import net.cyvfabric.util.parkour.LandingBlock;
 import net.cyvfabric.util.parkour.LandingMode;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class GuiLb extends CyvGui {
@@ -28,40 +28,77 @@ public class GuiLb extends CyvGui {
     public void init() {
         if (lb == null) this.close();
 
-        this.landingModeButton = ButtonWidget.builder(Text.of("Landing Mode: " + lb.mode.toString()), (widget) -> {
-                    landingModeButtonPressed();
-                }).dimensions(this.width - 155, 5, 150, 20)
-                .build();
+        this.landingModeButton = new ButtonWidget(
+                this.width - 155,
+                5,
+                150,
+                20,
+                Text.of("Landing Mode: " + lb.mode.toString()),
+                (button) -> landingModeButtonPressed(),
+                ButtonWidget.EMPTY
+        );
 
-        this.axisButton = ButtonWidget.builder(Text.of("Axis: " + lb.axis.toString()), (widget) -> {
-                    axisButtonPressed();
-                }).dimensions(this.width - 155, 30, 150, 20)
-                .build();
+        this.axisButton = new ButtonWidget(
+                this.width - 155,
+                30,
+                150,
+                20,
+                Text.of("Axis: " + lb.axis.toString()),
+                (button) -> axisButtonPressed(),
+                ButtonWidget.EMPTY
+        );
 
-        this.calculateWalls = ButtonWidget.builder(Text.of("Calculate Walls"), (widget) -> {
-                    lb.calculateWalls();
-                }).dimensions(this.width - 155, 105, 150, 20)
-                .build();
+// Calculate Walls Button
+        this.calculateWalls = new ButtonWidget(
+                this.width - 155,
+                105,
+                150,
+                20,
+                Text.of("Calculate Walls"),
+                (button) -> lb.calculateWalls(),
+                ButtonWidget.EMPTY
+        );
 
-        this.resetWalls = ButtonWidget.builder(Text.of("Reset Walls"), (widget) -> {
+        this.resetWalls = new ButtonWidget(
+                this.width - 155,
+                130,
+                150,
+                20,
+                Text.of("Reset Walls"),
+                (button) -> {
                     lb.xMinWall = null;
                     lb.xMaxWall = null;
                     lb.zMinWall = null;
                     lb.zMaxWall = null;
-                }).dimensions(this.width - 155, 130, 150, 20)
-                .build();
+                },
+                ButtonWidget.EMPTY
+        );
 
-        this.bbToggle = ButtonWidget.builder(Text.of("BB Visible: " + CyvClientConfig.getBoolean("highlightLanding", false)), (widget) -> {
+        this.bbToggle = new ButtonWidget(
+                this.width - 155,
+                55,
+                150,
+                20,
+                Text.of("BB Visible: " + CyvClientConfig.getBoolean("highlightLanding", false)), // 按钮文本
+                (button) -> {
                     CyvClientConfig.set("highlightLanding", !CyvClientConfig.getBoolean("highlightLanding", false));
                     bbToggle.setMessage(Text.of("BB Visible: " + CyvClientConfig.getBoolean("highlightLanding", false)));
-                }).dimensions(this.width - 155, 55, 150, 20)
-                .build();
+                },
+                ButtonWidget.EMPTY
+        );
 
-        this.condToggle = ButtonWidget.builder(Text.of("Cond Visible: " + CyvClientConfig.getBoolean("highlightLandingCond", false)), (widget) -> {
+        this.condToggle = new ButtonWidget(
+                this.width - 155,
+                80,
+                150,
+                20,
+                Text.of("Cond Visible: " + CyvClientConfig.getBoolean("highlightLandingCond", false)),
+                (button) -> {
                     CyvClientConfig.set("highlightLandingCond", !CyvClientConfig.getBoolean("highlightLandingCond", false));
-                    bbToggle.setMessage(Text.of("Cond Visible: " + CyvClientConfig.getBoolean("highlightLandingCond", false)));
-                }).dimensions(this.width - 155, 80, 150, 20)
-                .build();
+                    button.setMessage(Text.of("Cond Visible: " + CyvClientConfig.getBoolean("highlightLandingCond", false)));
+                },
+                ButtonWidget.EMPTY
+        );
 
         if (lb.axis.equals(LandingAxis.both)) {
             lb.axis = LandingAxis.both;
@@ -118,16 +155,16 @@ public class GuiLb extends CyvGui {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
-        this.renderInGameBackground(context);
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float tickDelta) {
+        this.renderBackground(matrices);
 
-        landingModeButton.render(context, mouseX, mouseY, partialTicks);
-        axisButton.render(context, mouseX, mouseY, partialTicks);
-        calculateWalls.render(context, mouseX, mouseY, partialTicks);
-        resetWalls.render(context, mouseX, mouseY, partialTicks);
+        landingModeButton.render(matrices, mouseX, mouseY, tickDelta);
+        axisButton.render(matrices, mouseX, mouseY, tickDelta);
+        calculateWalls.render(matrices, mouseX, mouseY, tickDelta);
+        resetWalls.render(matrices, mouseX, mouseY, tickDelta);
 
-        bbToggle.render(context, mouseX, mouseY, partialTicks);
-        condToggle.render(context, mouseX, mouseY, partialTicks);
+        bbToggle.render(matrices, mouseX, mouseY, tickDelta);
+        condToggle.render(matrices, mouseX, mouseY, tickDelta);
 
     }
 

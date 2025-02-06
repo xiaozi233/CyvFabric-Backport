@@ -51,29 +51,21 @@ import mcpk.functions.walk.FunctionWalkJump45;
 
 public class ParserFunctions {
 	public static ArrayList<Function> functionInit() {
-		ArrayList<Function> functions = new ArrayList<Function>();
-		functions.addAll(Arrays.asList(new Function[] {
-				new FunctionWalk(), new FunctionWalk45(), new FunctionWalkAir(),
-				new FunctionWalk45Air(), new FunctionWalkJump(), new FunctionWalkJump45(),
-				new FunctionSprint(), new FunctionSprint45(), new FunctionSprintAir(), new FunctionSprint45Air(),
-				new FunctionLSprintJump(), new FunctionRSprintJump(), new FunctionLSprintJump45(), new FunctionRSprintJump45(),
-				new FunctionSprintJump(), new FunctionSprintJump45(),
-				new FunctionSneak(), new FunctionSneak45(), new FunctionSneakAir(),
-				new FunctionSneak45Air(), new FunctionSneakJump(), new FunctionSneakJump45(),
-				new FunctionSneakSprint(), new FunctionSneakSprint45(), new FunctionSneakSprintAir(), new FunctionSneakSprint45Air(),
-				new FunctionLSneakSprintJump(), new FunctionRSneakSprintJump(), new FunctionLSneakSprintJump45(), new FunctionRSneakSprintJump45(),
-				new FunctionSneakSprintJump(), new FunctionSneakSprintJump45(),
-				new FunctionStop(), new FunctionStopAir(), new FunctionStopJump()
-		}));
-		return functions;
+        return new ArrayList<>(Arrays.asList(new FunctionWalk(), new FunctionWalk45(), new FunctionWalkAir(),
+                new FunctionWalk45Air(), new FunctionWalkJump(), new FunctionWalkJump45(),
+                new FunctionSprint(), new FunctionSprint45(), new FunctionSprintAir(), new FunctionSprint45Air(),
+                new FunctionLSprintJump(), new FunctionRSprintJump(), new FunctionLSprintJump45(), new FunctionRSprintJump45(),
+                new FunctionSprintJump(), new FunctionSprintJump45(),
+                new FunctionSneak(), new FunctionSneak45(), new FunctionSneakAir(),
+                new FunctionSneak45Air(), new FunctionSneakJump(), new FunctionSneakJump45(),
+                new FunctionSneakSprint(), new FunctionSneakSprint45(), new FunctionSneakSprintAir(), new FunctionSneakSprint45Air(),
+                new FunctionLSneakSprintJump(), new FunctionRSneakSprintJump(), new FunctionLSneakSprintJump45(), new FunctionRSneakSprintJump45(),
+                new FunctionSneakSprintJump(), new FunctionSneakSprintJump45(),
+                new FunctionStop(), new FunctionStopAir(), new FunctionStopJump()));
 	}
 	
 	public static ArrayList<SpecialFunction> specialFunctionInit() {
-		ArrayList<SpecialFunction> functions = new ArrayList<SpecialFunction>();
-		functions.addAll(Arrays.asList(new SpecialFunction[] {
-				new FunctionVx(), new FunctionVz(), new FunctionFacing(), new FunctionPosX(), new FunctionPosZ(),
-				new FunctionSwiftness(), new FunctionSlowness(), new FunctionSlip()
-		}));
-		return functions;
+        return new ArrayList<>(Arrays.asList(new FunctionVx(), new FunctionVz(), new FunctionFacing(), new FunctionPosX(), new FunctionPosZ(),
+                new FunctionSwiftness(), new FunctionSlowness(), new FunctionSlip()));
 	}
 }

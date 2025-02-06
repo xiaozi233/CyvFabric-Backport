@@ -15,7 +15,7 @@ public class SprintSneakHandler {
                     }
                 }
 
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
         });

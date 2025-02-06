@@ -4,7 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.util.CyvCommand;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 import java.text.DecimalFormatSymbols;
 
@@ -34,7 +34,7 @@ public class CommandDf extends CyvCommand {
 
                 DecimalFormatSymbols s = new DecimalFormatSymbols();
                 s.setDecimalSeparator('.');
-                CyvFabric.df.setDecimalFormatSymbols(s);;
+                CyvFabric.df.setDecimalFormatSymbols(s);
                 CyvFabric.sendChatMessage("Decimal precision set to " + df + ".");
             } else {
                 CyvFabric.sendChatMessage("Please enter a valid number from 0-16.");

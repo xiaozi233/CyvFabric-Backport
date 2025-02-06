@@ -11,19 +11,18 @@ import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HUDManager {
-    public static List<DraggableHUDElement> registeredRenderers = new ArrayList<DraggableHUDElement>();
-    private static MinecraftClient mc = MinecraftClient.getInstance();
+    public static final List<DraggableHUDElement> registeredRenderers = new ArrayList<>();
+    private static final MinecraftClient mc = MinecraftClient.getInstance();
 
     public static void init() { //initialize and create eventlistener
         HudRenderCallback.EVENT.register(HUDManager::render);
@@ -47,14 +46,14 @@ public class HUDManager {
 
     }
 
-    private static void render(DrawContext context, RenderTickCounter partialTicks) {
+    private static void render(MatrixStack matrices, float tickDelta) {
         if (mc.options.hudHidden) return;
 
         if (CommandMacro.macroRunning > 0) { //macrorunning
             Window sr = mc.getWindow();
-            context.drawText(mc.textRenderer, "MACRO",
-                    sr.getScaledWidth()/2 - mc.textRenderer.getWidth("MACRO") / 2,
-                    sr.getScaledHeight()/5, 0xFFFF0000, false);
+            mc.textRenderer.draw(matrices, "MACRO",
+                    (float) sr.getScaledWidth() /2 - (float) mc.textRenderer.getWidth("MACRO") / 2,
+                    (float) sr.getScaledHeight() /5, 0xFFFF0000);
         }
 
         if (mc.currentScreen == null || mc.currentScreen instanceof GenericContainerScreen ||
@@ -64,15 +63,16 @@ public class HUDManager {
                 if (mc.currentScreen instanceof GenericContainerScreen && !renderer.renderInGui()) continue;
                 if (mc.currentScreen instanceof ChatScreen && !renderer.renderInChat()) continue;
 
-                GameOptions gameSettings = mc.options;
-                if (mc.inGameHud.getDebugHud().shouldShowDebugHud() && !renderer.renderInOverlay()) continue;
+                GameOptions gameOptions = mc.options;
+//                if (mc.inGameHud.getDebugHud().shouldShowDebugHud() && !renderer.renderInOverlay()) continue;
+                if (gameOptions.debugEnabled && !gameOptions.hudHidden &&!renderer.renderInOverlay()) continue;
 
-                callRenderer(renderer, context, partialTicks);
+                callRenderer(renderer, matrices, tickDelta);
             }
         }
     }
 
-    private static void callRenderer(DraggableHUDElement renderer, DrawContext context, RenderTickCounter partialTicks) {
+    private static void callRenderer(DraggableHUDElement renderer, MatrixStack matrices, float tickDelta) {
         if (!renderer.isEnabled) return;
         if (!renderer.isVisible) return;
 
@@ -82,7 +82,7 @@ public class HUDManager {
             pos = renderer.getDefaultPosition();
         }
 
-        renderer.render(context, pos);
+        renderer.render(matrices, pos);
 
     }
 

@@ -1,23 +1,19 @@
 package net.cyvfabric.gui.config.panels;
 
-import net.cyvfabric.CyvFabric;
-import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.gui.GuiModConfig;
 import net.cyvfabric.gui.config.ConfigPanel;
-import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class ConfigPanelEmptySpace implements ConfigPanel {
     public final int index;
     public GuiModConfig screenIn;
 
-    private int xPosition;
-    private int yPosition;
-    private int sizeX;
-    private int sizeY;
+    private final int xPosition;
+    private final int yPosition;
+    private final int sizeX;
+    private final int sizeY;
 
     public ConfigPanelEmptySpace(int index, GuiModConfig screenIn) {
         this.index = index;
@@ -32,16 +28,16 @@ public class ConfigPanelEmptySpace implements ConfigPanel {
     }
 
     @Override
-    public void draw(DrawContext context, int mouseX, int mouseY, int scroll) {}
+    public void draw(MatrixStack matrices, int mouseX, int mouseY, int scroll){
+    }
 
     @Override
     public void mouseDragged(double mouseX, double mouseY) {}
 
     @Override
     public boolean mouseInBounds(double mouseX, double mouseY) {
-        if (mouseX > this.xPosition + this.sizeX / 2 && mouseY > this.yPosition
-                && mouseX < this.xPosition + this.sizeX && mouseY < this.yPosition + this.sizeY) return true;
-        return false;
+        return mouseX > this.xPosition + this.sizeX / 2 && mouseY > this.yPosition
+                && mouseX < this.xPosition + this.sizeX && mouseY < this.yPosition + this.sizeY;
     }
 
     @Override

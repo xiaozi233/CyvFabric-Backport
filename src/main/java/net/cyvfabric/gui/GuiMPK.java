@@ -1,5 +1,6 @@
 package net.cyvfabric.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.ColorTheme;
 import net.cyvfabric.event.ConfigLoader;
@@ -8,21 +9,19 @@ import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.util.CyvGui;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 
 public class GuiMPK extends CyvGui {
-    MinecraftClient mc = MinecraftClient.getInstance();
-    Window sr = mc.getWindow();
     int sizeX = 100;
     int sizeY = 200;
 
-    public ArrayList<LabelLine> labelLines = new ArrayList<LabelLine>();
+    public ArrayList<LabelLine> labelLines = new ArrayList<>();
     int selectedIndex = -1;
 
     float vScroll = 0;
@@ -49,7 +48,7 @@ public class GuiMPK extends CyvGui {
 
         this.updateLabels(false);
 
-        maxScroll = (int) Math.max(0, mc.textRenderer.fontHeight * 2 * Math.ceil(labelLines.size()) - (sizeY-20));
+        maxScroll = Math.max(0, mc.textRenderer.fontHeight * 2 * labelLines.size() - (sizeY-20));
         if (scroll > maxScroll) scroll = maxScroll;
         if (scroll < 0) scroll = 0;
 
@@ -57,7 +56,7 @@ public class GuiMPK extends CyvGui {
                 sr.getScaledWidth()/2-sizeX/2 - 12,
                 sr.getScaledHeight()/2-sizeY/2 - 10 - mc.textRenderer.fontHeight,
                 75,
-                mc.textRenderer.fontHeight, Text.empty()) {
+                mc.textRenderer.fontHeight, Text.of("")) {
             @Override
             public boolean charTyped(char p_146201_1_, int p_146201_2_) {
                 if (super.charTyped(p_146201_1_, p_146201_2_)) {
@@ -75,7 +74,7 @@ public class GuiMPK extends CyvGui {
     @Override
     public boolean charTyped(char typedChar, int keyCode) {
         {
-            if (!this.searchBar.isFocused()) this.searchBar.setFocused(true);
+            if (!this.searchBar.isFocused()) this.searchBar.setTextFieldFocused(true);
             this.searchBar.charTyped(typedChar, keyCode);
         }
         return true;
@@ -85,7 +84,7 @@ public class GuiMPK extends CyvGui {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE) { //exit the gui
             if (this.searchBar.isFocused()) {
-                this.searchBar.setFocused(false);
+                this.searchBar.setTextFieldFocused(false);
                 this.searchBar.setText("");
                 updateLabels(true);
                 return true;
@@ -108,78 +107,78 @@ public class GuiMPK extends CyvGui {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
-        this.renderInGameBackground(context);
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float tickDelta) {
+        this.renderBackground(matrices);
 
-        maxScroll = (int) Math.max(0, mc.textRenderer.fontHeight * 2 * Math.ceil(labelLines.size()) - (sizeY-20));
+        maxScroll = Math.max(0, mc.textRenderer.fontHeight * 2 * labelLines.size() - (sizeY-20));
         if (scroll > maxScroll) scroll = maxScroll;
         if (scroll < 0) scroll = 0;
 
-        GuiUtils.drawRoundedRect(context, sr.getScaledWidth()/2 - sizeX/2 - 15, sr.getScaledHeight()/2 - sizeY/2 - 4,
+        GuiUtils.drawRoundedRect(matrices, sr.getScaledWidth()/2 - sizeX/2 - 15, sr.getScaledHeight()/2 - sizeY/2 - 4,
                 sr.getScaledWidth()/2 + sizeX/2 + 14, sr.getScaledHeight()/2 + sizeY/2 + 4, 5, CyvFabric.theme.background1);
 
         int centerx = sr.getScaledWidth() / 2;
         int centery = sr.getScaledHeight() / 2;
 
-        context.drawCenteredTextWithShadow(textRenderer, "MPK Gui:", sr.getScaledWidth()/2, 5 + sr.getScaledHeight()/2 - sizeY/2, 0xFFFFFFFF);
+        DrawableHelper.drawCenteredTextWithShadow(matrices, textRenderer, Text.of("MPK Gui:").asOrderedText(), sr.getScaledWidth()/2, 5 + sr.getScaledHeight()/2 - sizeY/2, 0xFFFFFFFF);
 
         //draw searchbar
         ColorTheme theme = CyvFabric.theme;
         boolean isHovered = this.searchBar.isFocused() ||
-                (mouseX > searchBar.getX() - 3 &&
-                        mouseX < searchBar.getX() + searchBar.getWidth() + 3 &&
-                        mouseY > searchBar.getY() - 3.5 &&
-                        mouseY < searchBar.getY() + searchBar.getHeight() + 2.5);
+                (mouseX > searchBar.x - 3 &&
+                        mouseX < searchBar.x + searchBar.getWidth() + 3 &&
+                        mouseY > searchBar.y - 3.5 &&
+                        mouseY < searchBar.y + searchBar.getHeight() + 2.5);
 
-        GuiUtils.drawRoundedRect(context, searchBar.getX() - 3,
-                (int) (searchBar.getY() - 3f),
-                searchBar.getX() + searchBar.getWidth() + 3,
-                (int) (searchBar.getY() + searchBar.getHeight() + 2f),
+        GuiUtils.drawRoundedRect(matrices, searchBar.x - 3,
+                (int) (searchBar.y - 3f),
+                searchBar.x + searchBar.getWidth() + 3,
+                (int) (searchBar.y + searchBar.getHeight() + 2f),
                 2, theme.background1);
-        GuiUtils.drawRoundedRect(context, (int) (searchBar.getX() - 1f),
-                searchBar.getY() - 1,
-                (int) (searchBar.getX() + searchBar.getWidth() + 1f),
-                (int) (searchBar.getY() + searchBar.getHeight()),
+        GuiUtils.drawRoundedRect(matrices, (int) (searchBar.x - 1f),
+                searchBar.y - 1,
+                (int) (searchBar.x + searchBar.getWidth() + 1f),
+                searchBar.y + searchBar.getHeight(),
                 2, isHovered ? theme.main2 : theme.secondary1);
-        GuiUtils.drawRoundedRect(context, (int) (searchBar.getX() - 1.5f),
-                searchBar.getY() - 2,
-                (int) (searchBar.getX() + searchBar.getWidth() + 1.5f),
-                searchBar.getY() + searchBar.getHeight() + 1,
+        GuiUtils.drawRoundedRect(matrices, (int) (searchBar.x - 1.5f),
+                searchBar.y - 2,
+                (int) (searchBar.x + searchBar.getWidth() + 1.5f),
+                searchBar.y + searchBar.getHeight() + 1,
                 2, theme.highlight);
-        if (!this.searchBar.isFocused() && this.searchBar.getText().length() == 0) {
-            context.drawText(textRenderer, "Search", searchBar.getX() + 16,
-                    (int) (searchBar.getY() + 0.5f),
-                    0xFFFFFFFF, true);
+        if (!this.searchBar.isFocused() && this.searchBar.getText().isEmpty()) {
+            DrawableHelper.drawTextWithShadow(matrices, textRenderer, Text.of("Search"), searchBar.x + 16,
+                    (int) (searchBar.y + 0.5f),
+                    0xFFFFFFFF);
 
             //icon
             /*
             GlStateManager.enableBlend();
             GlStateManager.color(theme.borderBaseR, theme.borderBaseG, theme.borderBaseB);
             mc.getTextureManager().bindTexture(this.searchIcon);
-            GuiUtils.drawModalRectWithCustomSizedTexture(searchBar.getX() + 1,
-                    searchBar.getY(),
+            GuiUtils.drawModalRectWithCustomSizedTexture(searchBar.x + 1,
+                    searchBar.y,
                     0, 0, 9, 9, 9, 9);
             GlStateManager.disableBlend();
              */
 
         } else {
         }
-        this.searchBar.render(context, mouseX, mouseY, partialTicks);
-        this.button.draw(context, mouseX, mouseY);
+        this.searchBar.render(matrices, mouseX, mouseY, tickDelta);
+        this.button.draw(matrices, mouseX, mouseY);
 
-        context.enableScissor(centerx - ((sizeX + 10)/2),
-                centery - (sizeY/2) + (textRenderer.fontHeight * 2),
-                centerx + ((sizeX + 10)/2), centery + sizeY/2);
+        enableScissor(centerx - ((sizeX + 10)/2),
+                centery - (sizeY/2),
+                centerx + ((sizeX + 10)/2), centery + sizeY/2 - (textRenderer.fontHeight * 2));
 
 
         int index = 0;
         for (LabelLine l : labelLines) {
             int yHeight = (int) ((index + 1) * textRenderer.fontHeight*2 - scroll + (sr.getScaledHeight()/2 - sizeY/2));
-            l.drawEntry(context, index, (int) scroll, mouseX, mouseY, index == this.selectedIndex);
+            l.drawEntry(matrices, index, (int) scroll, mouseX, mouseY, index == this.selectedIndex);
             index++;
         }
 
-        context.disableScissor();
+        RenderSystem.disableScissor();
 
         //draw scrollbar
         int scrollbarHeight = (int) ((sizeY - 8 - 15)/(0.01*maxScroll+1));
@@ -188,7 +187,7 @@ public class GuiMPK extends CyvGui {
 
         int top = sr.getScaledHeight()/2-sizeY/2+4+15;
         int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
-        int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
+        int amount = (int) (top + (bottom - top) * (scroll /maxScroll));
 
         if (maxScroll == 0) amount = top;
 
@@ -199,28 +198,26 @@ public class GuiMPK extends CyvGui {
             color = theme.border1;
         }
 
-        GuiUtils.drawRoundedRect(context, sr.getScaledWidth()/2+sizeX/2+2, amount,
+        GuiUtils.drawRoundedRect(matrices, sr.getScaledWidth()/2+sizeX/2+2, amount,
                 sr.getScaledWidth()/2+sizeX/2+8, amount+scrollbarHeight, 3, color);
 
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double mouseAmount) {
         int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
         if (scroll > maxScroll) scroll = maxScroll;
         if (scroll < 0) scroll = 0;
 
         int top = sr.getScaledHeight()/2-sizeY/2+4;
         int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
-        int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
+        int amount = (int) (top + (bottom - top) * (scroll /maxScroll));
         if (maxScroll == 0) amount = top;
-        if (mouseX > sr.getScaledWidth()/2+sizeX/2+2 && mouseX < sr.getScaledWidth()/2+sizeX/2+8 &&
-                mouseY > amount && mouseY < amount+scrollbarHeight) {
-            scrollClicked = true;
-        } else scrollClicked = false;
+        scrollClicked = mouseX > sr.getScaledWidth() / 2 + sizeX / 2 + 2 && mouseX < sr.getScaledWidth() / 2 + sizeX / 2 + 8 &&
+                mouseY > amount && mouseY < amount + scrollbarHeight;
 
-        if ((!scrollClicked) && verticalAmount != 0) {
-            vScroll -= verticalAmount * 3;
+        if ((!scrollClicked) && mouseAmount != 0) {
+            vScroll -= (float) (mouseAmount * 3);
 
             return true;
         }
@@ -233,7 +230,7 @@ public class GuiMPK extends CyvGui {
         int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
         int top = sr.getScaledHeight()/2-sizeY/2+4;
         int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
-        int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
+        int amount = (int) (top + (bottom - top) * (scroll /maxScroll));
 
         if (mouseX > sr.getScaledWidth()/2+sizeX/2+2 && mouseX < sr.getScaledWidth()/2+sizeX/2+8 &&
                 mouseY > amount && mouseY < amount+scrollbarHeight) {
@@ -249,11 +246,11 @@ public class GuiMPK extends CyvGui {
         }
 
         if (this.searchBar.mouseClicked(mouseX, mouseY, mouseButton)) {
-            this.searchBar.setFocused(true);
+            this.searchBar.setTextFieldFocused(true);
             updateLabels(true);
             return true;
         } else {
-            this.searchBar.setFocused(false);
+            this.searchBar.setTextFieldFocused(false);
             updateLabels(true);
         }
 
@@ -300,7 +297,7 @@ public class GuiMPK extends CyvGui {
 
         //smooth scrolling
         this.scroll += this.vScroll;
-        this.vScroll *= 0.75;
+        this.vScroll *= 0.75F;
 
     }
 
@@ -310,7 +307,7 @@ public class GuiMPK extends CyvGui {
         ConfigLoader.save(CyvFabric.config, false);
     }
 
-    class LabelLine {
+    public class LabelLine {
         DraggableHUDElement label;
         int xStart = sr.getScaledWidth()/2 - sizeX/2 - 5;
         int width = sizeX;
@@ -320,23 +317,19 @@ public class GuiMPK extends CyvGui {
             this.label = label;
         }
 
-        public void drawEntry(DrawContext context, int slotIndex, int scroll, int mouseX, int mouseY, boolean isSelected) {
+        public void drawEntry(MatrixStack matrices, int slotIndex, int scroll, int mouseX, int mouseY, boolean isSelected) {
             int yHeight = (slotIndex + 1) * textRenderer.fontHeight*2 - scroll + (sr.getScaledHeight()/2 - sizeY/2);
-            GuiUtils.drawRoundedRect(context, xStart, yHeight + 1,
+            GuiUtils.drawRoundedRect(matrices, xStart, yHeight + 1,
                     xStart + width, yHeight + height - 1,
                     3, label.isEnabled ? CyvFabric.theme.shade2 : CyvFabric.theme.secondary1);
 
-            context.drawTextWithShadow(textRenderer, label.getDisplayName(), xStart + 4, yHeight + height/3, 0xFFFFFFFF);
+            DrawableHelper.drawTextWithShadow(matrices, textRenderer, Text.of(label.getDisplayName()), xStart + 4, yHeight + height/3, 0xFFFFFFFF);
 
         }
 
         public boolean isPressed(int slotIndex, int mouseX, int mouseY, int mouseEvent) {
             float yHeight = (slotIndex + 1) * textRenderer.fontHeight*2 - scroll + (sr.getScaledHeight()/2 - sizeY/2);
-            if (mouseX > xStart && mouseX < xStart + width && mouseY > yHeight && mouseY < yHeight + height) {
-                return true;
-            }
-
-            return false;
+            return mouseX > xStart && mouseX < xStart + width && mouseY > yHeight && mouseY < yHeight + height;
         }
 
         public void mouseClicked(int slotIndex, int mouseX, int mouseY, int mouseEvent) {
@@ -357,16 +350,15 @@ public class GuiMPK extends CyvGui {
             this.y = y;
         }
 
-        void draw(DrawContext context, int mouseX, int mouseY) {
+        void draw(MatrixStack matrices, int mouseX, int mouseY) {
             ColorTheme theme = CyvFabric.theme;
             boolean mouseDown = (mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY);
-            GuiUtils.drawRoundedRect(context, x, y, x+sizeX, y+sizeY, 5, mouseDown ? theme.highlight : theme.background1);
-            context.drawCenteredTextWithShadow(textRenderer, this.text, x+sizeX/2, y+sizeY/2-textRenderer.fontHeight/2, 0xFFFFFFFF);
+            GuiUtils.drawRoundedRect(matrices, x, y, x+sizeX, y+sizeY, 5, mouseDown ? theme.highlight : theme.background1);
+            DrawableHelper.drawCenteredTextWithShadow(matrices, textRenderer, Text.of(this.text).asOrderedText(), x+sizeX/2, y+sizeY/2-textRenderer.fontHeight/2, 0xFFFFFFFF);
         }
 
         boolean clicked(double mouseX, double mouseY, int mouseButton) {
-            if (!(mouseX > x && mouseX < x+sizeX && mouseY > y && mouseY < y+sizeY && mouseButton == 0)) return false;
-            else return true;
+            return mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY && mouseButton == 0;
         }
 
     }

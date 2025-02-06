@@ -6,7 +6,7 @@ import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.CommandInitializer;
 import net.cyvfabric.util.CyvCommand;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class CommandHelp extends CyvCommand {
          }
 
          if (args.length == 0 && !subCommands.isEmpty()) { //no arguments and haven't reached top-level command
-             List<String> helpText = new ArrayList<String>();
+             List<String> helpText = new ArrayList<>();
              helpText.add(CyvClientColorHelper.color1.chatColor + commandName +  " help menu:\247r");
 
              String chatColor2 = CyvClientConfig.getBoolean("whiteChat", false) ? CyvClientColorHelper.colors.get(12).chatColor
@@ -55,7 +55,8 @@ public class CommandHelp extends CyvCommand {
              CyvCommand targetCommand = null; //target command
 
              if (args.length > 0) { //details for a specific command
-                 Outer: for (CyvCommand cmd : subCommands) { //loop through subcommands
+                 Outer:
+                 for (CyvCommand cmd : subCommands) { //loop through subcommands
                      if (!cmd.name.toLowerCase().equals(args[0])) {
                          for (String s : cmd.aliases) {
                              if (s.toLowerCase().equals(args[0])) {
@@ -65,7 +66,7 @@ public class CommandHelp extends CyvCommand {
                          }
                      } else {
                          targetCommand = cmd;
-                         break Outer;
+                         break;
                      }
                  }
 
@@ -75,10 +76,9 @@ public class CommandHelp extends CyvCommand {
 
              if (targetCommand == null) {
                  CyvFabric.sendChatMessage("Command not found. Use " + commandPath + " for a list of commands.");
-                 return;
 
              } else {
-                 List<String> commandNames = new ArrayList<String>();
+                 List<String> commandNames = new ArrayList<>();
                  commandNames.add(targetCommand.name);
                  if (targetCommand.aliases != null) commandNames.addAll(targetCommand.aliases);
 
@@ -90,7 +90,6 @@ public class CommandHelp extends CyvCommand {
                          "\247oNote: Use " + commandPath + " to list subcommands."
                  );
 
-                 return;
              }
 
          }

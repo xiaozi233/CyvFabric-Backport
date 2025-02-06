@@ -16,14 +16,12 @@ public abstract class Function {
 	
 	public abstract void run(Player player, int duration, float facing, ArrayList<Character> modifiers, HashMap<String,Double> effects) throws DurationException, InvalidKeypressException;
 	
-	@SuppressWarnings("serial")
 	public static class InvalidKeypressException extends ParserException {
 		public InvalidKeypressException() {
 			super("This function does not allow key modifiers.");
 		}
 	}
 	
-	@SuppressWarnings("serial")
 	public static class DurationException extends ParserException {
 		public DurationException() {
 			super("Duration cannot be negative when key modifiers are present.");

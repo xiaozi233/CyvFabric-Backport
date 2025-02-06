@@ -33,7 +33,7 @@ public class FunctionRSneakSprintJump45 extends Function {
 		args.replace("strafing", -1);
 		player.move(args);
 		
-		args.replace("facing", (float) (facing - 45));
+		args.replace("facing", facing - 45);
 		args.replace("duration", Math.abs(duration) - 1);
 		args.replace("jumping", false);
 		args.replace("airborne", true);

@@ -1,19 +1,19 @@
 package net.cyvfabric.hud.structure;
 
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 
 public interface IRenderer {
     int getWidth();
     int getHeight();
 
-    public void save(ScreenPosition pos);
+    void save(ScreenPosition pos);
 
-    public ScreenPosition load();
+    ScreenPosition load();
 
-    void render(DrawContext context, ScreenPosition pos);
+    void render(MatrixStack matrices, ScreenPosition pos);
 
-    default void renderDummy(DrawContext context, ScreenPosition pos) {
-        render(context, pos);
+    default void renderDummy(MatrixStack matrices, ScreenPosition pos) {
+        render(matrices, pos);
     }
 
     default boolean renderInChat() {

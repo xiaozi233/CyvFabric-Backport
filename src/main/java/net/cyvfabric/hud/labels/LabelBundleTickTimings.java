@@ -7,7 +7,7 @@ import net.cyvfabric.hud.LabelBundle;
 import net.cyvfabric.hud.structure.DraggableHUDElement;
 import net.cyvfabric.hud.structure.ScreenPosition;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class LabelBundleTickTimings extends LabelBundle {
 
@@ -21,25 +21,25 @@ public class LabelBundleTickTimings extends LabelBundle {
             }
             public int getHeight() {return getLabelHeight();}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 56);}
-            public void render(DrawContext context, ScreenPosition pos) {
+            public void render(MatrixStack matrices, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
 
                 String timing = ParkourTickListener.lastTiming;
-                drawString(context, "Last Timing: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1 + getHeight()*0, color1);
-                drawString(context, timing, pos.getAbsoluteX() + 1 + font.getWidth("Last Timing: ")
+                drawString(matrices, "Last Timing: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, timing, pos.getAbsoluteX() + 1 + font.getWidth("Last Timing: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(DrawContext context, ScreenPosition pos) {
+            public void renderDummy(MatrixStack matrices, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
 
-                drawString(context, "Last Timing: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(context, "[Timing]", pos.getAbsoluteX() + 1 + font.getWidth("Last Timing: ")
+                drawString(matrices, "Last Timing: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, "[Timing]", pos.getAbsoluteX() + 1 + font.getWidth("Last Timing: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
@@ -50,7 +50,7 @@ public class LabelBundleTickTimings extends LabelBundle {
             public int getWidth() {return getLabelWidth(getDisplayName());}
             public int getHeight() {return getLabelHeight();}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 65);}
-            public void render(DrawContext context, ScreenPosition pos) {
+            public void render(MatrixStack matrices, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -58,19 +58,19 @@ public class LabelBundleTickTimings extends LabelBundle {
 
                 int airtime = ParkourTickListener.lastAirtime;
 
-                drawString(context, "Airtime: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, airtime, pos.getAbsoluteX() + 1 + font.getWidth("Airtime: ")
-                        , (int) (pos.getAbsoluteY() + 1), color2);
+                drawString(matrices, "Airtime: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, airtime, pos.getAbsoluteX() + 1 + font.getWidth("Airtime: ")
+                        , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(DrawContext context, ScreenPosition pos) {
+            public void renderDummy(MatrixStack matrices, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
 
-                drawString(context, "Airtime: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, 0, pos.getAbsoluteX() + 1 + font.getWidth("Airtime: ")
-                        , (int) (pos.getAbsoluteY() + 1), color2);
+                drawString(matrices, "Airtime: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, 0, pos.getAbsoluteX() + 1 + font.getWidth("Airtime: ")
+                        , pos.getAbsoluteY() + 1, color2);
             }
         });
 
@@ -81,7 +81,7 @@ public class LabelBundleTickTimings extends LabelBundle {
             public int getHeight() {return getLabelHeight();}
             public boolean enabledByDefault() {return false;}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(177, 137);}
-            public void render(DrawContext context, ScreenPosition pos) {
+            public void render(MatrixStack matrices, ScreenPosition pos) {
                 if (!this.isVisible) return;
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
@@ -89,19 +89,19 @@ public class LabelBundleTickTimings extends LabelBundle {
 
                 int airtime = 12 - ParkourTickListener.lastAirtime;
 
-                drawString(context, "Tier: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, airtime, pos.getAbsoluteX() + 1 + font.getWidth("Tier: ")
-                        , (int) (pos.getAbsoluteY() + 1), color2);
+                drawString(matrices, "Tier: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, airtime, pos.getAbsoluteX() + 1 + font.getWidth("Tier: ")
+                        , pos.getAbsoluteY() + 1, color2);
             }
-            public void renderDummy(DrawContext context, ScreenPosition pos) {
+            public void renderDummy(MatrixStack matrices, ScreenPosition pos) {
                 int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 TextRenderer font = mc.textRenderer;
 
-                drawString(context, "Tier: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(context, 0, pos.getAbsoluteX() + 1 + font.getWidth("Tier: ")
-                        , (int) (pos.getAbsoluteY() + 1), color2);
+                drawString(matrices, "Tier: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(matrices, 0, pos.getAbsoluteX() + 1 + font.getWidth("Tier: ")
+                        , pos.getAbsoluteY() + 1, color2);
             }
         });
     }

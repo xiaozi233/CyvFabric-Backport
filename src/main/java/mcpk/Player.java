@@ -2,6 +2,7 @@ package mcpk;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import mcpk.utils.Arguments;
 import mcpk.utils.MathHelper;
@@ -17,8 +18,8 @@ public class Player {
 	public double highestZ = 0, lowestZ = 0;
 	public double highestX = 0, lowestX = 0;
 	public double finalX, finalZ;
-	public ArrayList<Double> xCoords = new ArrayList<Double>();
-	public ArrayList<Double> zCoords = new ArrayList<Double>();
+	public ArrayList<Double> xCoords = new ArrayList<>();
+	public ArrayList<Double> zCoords = new ArrayList<>();
 	
 	//coords
 	public double x = 0.0;
@@ -41,8 +42,8 @@ public class Player {
 		float facing = (float) args.get("facing");
 		
 		//modifiers
-		boolean blocking = ((double) args.get("blocking") == 1.0) ? true : false;
-		boolean soulsand = ((double) args.get("soulsand") == 1.0) ? true : false;
+		boolean blocking = (double) args.get("blocking") == 1.0;
+		boolean soulsand = (double) args.get("soulsand") == 1.0;
 		
 		//potions
 		int swiftness = (int) (double) args.get("swiftness");
@@ -61,106 +62,100 @@ public class Player {
 					zCoords.add(this.zOf);
 				}
 			}
-			
+
 			//start of tick
 			tick++;
 			multiplier = 1;
-			
+
 			//reset
 			float forward = (int) args.get("forward");
 			float strafing = (int) args.get("strafing");
 			float boost = 0.2F;
-			
+
 			//slipperiness
 			if (airborne) slip = 1F;
 			else slip = (float) ((double) args.get("slip"));
 			if (last_slip == 0F) last_slip = slip;
-			
+
 			if (forward < 0) {
 				//strafing *= -1F;
 				boost *= -1F;
 			}
-			
+
 			//move player
 			this.z += this.vz;
 			this.x += this.vx;
 			this.zOf += this.vz;
 			this.xOf += this.vx;
-			
+
 			//soulsand
-			
+
 			//drag
 			this.vx *= 0.91F * last_slip;
 			this.vz *= 0.91F * last_slip;
-			
+
 			//inertia threshold
 			if (Math.abs(this.vz) < 0.003D) this.vz = 0D;
 			if (Math.abs(this.vx) < 0.003D) this.vx = 0D;
-			
+
 			//movement multipliers
-			float accel = 0;
-			double drag = (float) (0.91F) * slip;
+			float accel;
+			double drag = 0.91F * slip;
 			if (airborne) {
 				accel = 0.02F;
 				if (sprinting) accel = (float) (accel + accel * 0.3);
 			} else {
 				accel = 0.1F;
-				accel *= 0.16277136F / (drag * drag * drag);
+				accel *= (float) (0.16277136F / (drag * drag * drag));
 				if (swiftness > 0) accel = (float) (accel * (1.0D + 0.2F * (float) (swiftness)));
 				if (slowness > 0) accel = (float) (accel * Math.max(1.0D + -0.15F * (float) (slowness), 0));
 				if (sprinting) accel = (float) (accel * (1.0D + 0.3F));
 			}
-			
+
 			//sprintjump boost
 			if (sprinting && jumping) {
-				float angle = (float) (facing * 0.017453292F);
-				
+				float angle = facing * 0.017453292F;
+
 				this.vz += (boost * MathHelper.cos(angle));
 				this.vx -= (boost * MathHelper.sin(angle));
 			}
-			
+
 			if (blocking) {
 				forward *= 0.2F;
 				strafing *= 0.2F;
 			}
-			
+
 			//sneaking
 			if (sneaking) {
-				forward = (float) (((float) forward) * 0.3D);
-				strafing = (float) (((float) strafing) * 0.3D);
+				forward = (float) (forward * 0.3D);
+				strafing = (float) (strafing * 0.3D);
 			}
-			
+
 			forward *= 0.98F;
 			strafing *= 0.98F;
-			
-			float distance = (float) (strafing * strafing + forward * forward);
-			
+
+			float distance = strafing * strafing + forward * forward;
+
 			if (distance >= 1.0E-4F) {
 				distance = (float) Math.sqrt(distance);
 				if (distance < 1.0F) distance = 1.0F;
-				
+
 				distance = accel / distance;
 				strafing = strafing * distance;
 				forward = forward * distance;
-				
-				float angle = (float) (facing * 3.14159265358979323846F / 180F);
-				
-				this.vx += (float) (strafing * MathHelper.cos(angle) - forward * MathHelper.sin(angle));
-				this.vz += (float) (forward * MathHelper.cos(angle) + strafing * MathHelper.sin(angle));
+
+				float angle = facing * 3.14159265358979323846F / 180F;
+
+				this.vx += strafing * MathHelper.cos(angle) - forward * MathHelper.sin(angle);
+				this.vz += forward * MathHelper.cos(angle) + strafing * MathHelper.sin(angle);
 			}
-			
+
 			last_slip = slip;
-			
+
 			if (!airborne) { //update momentum if airborne
 				this.updateMM();
 			}
-			
-			if (true) continue;
-			
-
-			
 		}
-		
 	}
 
 	void updateMM() {
@@ -169,8 +164,8 @@ public class Player {
 	}
 	
 	public void updateBounds() {
-		xCoords.sort((c1, c2) -> Double.compare(c1, c2));
-		zCoords.sort((c1, c2) -> Double.compare(c1, c2));
+		xCoords.sort(Double::compare);
+		zCoords.sort(Comparator.comparingDouble(c -> c));
 		
 		xCoords.remove(xCoords.size()-1);
 		zCoords.remove(zCoords.size()-1);
@@ -180,8 +175,8 @@ public class Player {
 		if (!xCoords.contains(finalX)) xCoords.add(finalX);
 		if (!zCoords.contains(finalZ)) zCoords.add(finalZ);
 		
-		xCoords.sort((c1, c2) -> Double.compare(c1, c2));
-		zCoords.sort((c1, c2) -> Double.compare(c1, c2));
+		xCoords.sort(Double::compare);
+		zCoords.sort(Double::compare);
 		lowestZ = zCoords.get(0);
 		highestZ = zCoords.get(zCoords.size()-1);
 		lowestX = xCoords.get(0);

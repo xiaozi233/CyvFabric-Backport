@@ -7,15 +7,10 @@ import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.MacroFileInit;
 import net.cyvfabric.event.events.GuiHandler;
-import net.cyvfabric.event.events.MacroListener;
 import net.cyvfabric.gui.GuiMacro;
 import net.cyvfabric.util.CyvCommand;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.CustomPayload;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -62,7 +57,7 @@ public class CommandMacro extends CyvCommand {
     }
 
     void addToArray(boolean w, boolean a, boolean s, boolean d, boolean space, boolean sprint, boolean sneak, float yaw, float pitch) {
-        ArrayList<String> params = new ArrayList<String>();
+        ArrayList<String> params = new ArrayList<>();
 
         params.add(w+"");
         params.add(a+"");

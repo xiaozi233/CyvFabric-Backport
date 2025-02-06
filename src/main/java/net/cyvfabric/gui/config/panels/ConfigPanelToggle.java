@@ -7,8 +7,10 @@ import net.cyvfabric.gui.config.ConfigPanel;
 import net.cyvfabric.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 
 public class ConfigPanelToggle implements ConfigPanel {
     public boolean sliderValue;
@@ -17,10 +19,10 @@ public class ConfigPanelToggle implements ConfigPanel {
     public final int index;
     public GuiModConfig screenIn;
 
-    private int xPosition;
-    private int yPosition;
-    private int sizeX;
-    private int sizeY;
+    private final int xPosition;
+    private final int yPosition;
+    private final int sizeX;
+    private final int sizeY;
 
     public ConfigPanelToggle(int index, String configOption, String displayString, GuiModConfig screenIn) {
         this.index = index;
@@ -38,17 +40,17 @@ public class ConfigPanelToggle implements ConfigPanel {
     }
 
     @Override
-    public void draw(DrawContext context, int mouseX, int mouseY, int scroll) {
+    public void draw(MatrixStack matrices, int mouseX, int mouseY, int scroll) {
         TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 
         //text label
-        context.drawTextWithShadow(textRenderer, this.displayString, this.xPosition, this.yPosition + this.sizeY / 2 - textRenderer.fontHeight / 2 + 1 - scroll, 0xFFFFFFFF);
+        DrawableHelper.drawTextWithShadow(matrices, textRenderer, Text.of(this.displayString), this.xPosition, this.yPosition + this.sizeY / 2 - textRenderer.fontHeight / 2 + 1 - scroll, 0xFFFFFFFF);
 
         //bg
-        GuiUtils.drawRoundedRect(context, this.xPosition + this.sizeX / 2, this.yPosition - scroll, this.xPosition + this.sizeX, this.yPosition + this.sizeY - scroll, 3, this.mouseInBounds(mouseX, mouseY) ? CyvFabric.theme.accent1 : CyvFabric.theme.accent2);
+        GuiUtils.drawRoundedRect(matrices, this.xPosition + this.sizeX / 2, this.yPosition - scroll, this.xPosition + this.sizeX, this.yPosition + this.sizeY - scroll, 3, this.mouseInBounds(mouseX, mouseY) ? CyvFabric.theme.accent1 : CyvFabric.theme.accent2);
 
         //amount
-        context.drawCenteredTextWithShadow(textRenderer, " " + this.sliderValue, this.xPosition + this.sizeX * 3 / 4, this.yPosition + this.sizeY / 2 - textRenderer.fontHeight / 2 + 1 - scroll, 0xFFFFFFFF);
+        DrawableHelper.drawCenteredTextWithShadow(matrices, textRenderer, Text.of(" " + this.sliderValue).asOrderedText(), this.xPosition + this.sizeX * 3 / 4, this.yPosition + this.sizeY / 2 - textRenderer.fontHeight / 2 + 1 - scroll, 0xFFFFFFFF);
 
     }
 
@@ -59,9 +61,8 @@ public class ConfigPanelToggle implements ConfigPanel {
 
     @Override
     public boolean mouseInBounds(double mouseX, double mouseY) {
-        if (mouseX > this.xPosition + this.sizeX / 2 && mouseY > this.yPosition
-                && mouseX < this.xPosition + this.sizeX && mouseY < this.yPosition + this.sizeY) return true;
-        return false;
+        return mouseX > this.xPosition + this.sizeX / 2 && mouseY > this.yPosition
+                && mouseX < this.xPosition + this.sizeX && mouseY < this.yPosition + this.sizeY;
     }
 
     @Override

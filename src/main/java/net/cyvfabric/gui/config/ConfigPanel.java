@@ -1,19 +1,19 @@
 package net.cyvfabric.gui.config;
 
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 
 public interface ConfigPanel {
-    public boolean mouseInBounds(double mouseX, double mouseY);
-    public void mouseClicked(double mouseX, double mouseY, int mouseButton);
-    public void keyTyped(char typedChar, int keyCode);
-    public default void keyPressed(int keyCode, int scanCode, int modifiers) {}
-    public void draw(DrawContext context, int mouseX, int mouseY, int scroll);
-    public default void update() {}
-    public void mouseDragged(double mouseX, double mouseY);
-    public void save();
-    public default void select() {}
-    public default void unselect() {}
+    boolean mouseInBounds(double mouseX, double mouseY);
+    void mouseClicked(double mouseX, double mouseY, int mouseButton);
+    void keyTyped(char typedChar, int keyCode);
+    default void keyPressed(int keyCode, int scanCode, int modifiers) {}
+    void draw(MatrixStack matrices, int mouseX, int mouseY, int scroll);
+    default void update() {}
+    void mouseDragged(double mouseX, double mouseY);
+    void save();
+    default void select() {}
+    default void unselect() {}
 
-    public default void onValueChange() {}
+    default void onValueChange() {}
 
 }

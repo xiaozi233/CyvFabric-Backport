@@ -5,7 +5,7 @@ import net.cyvfabric.CyvFabric;
 import net.cyvfabric.event.events.ParkourTickListener;
 import net.cyvfabric.util.CyvCommand;
 import net.cyvfabric.util.parkour.LandingBlock;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.Box;
 
@@ -20,12 +20,12 @@ public class CommandSetbox extends CyvCommand {
         try {
             Box player = MinecraftClient.getInstance().player.getBoundingBox();
 
-            double x1 = Double.parseDouble(args[0]) + player.getLengthX()/2;
-            double x2 = Double.parseDouble(args[1]) - player.getLengthX()/2;
+            double x1 = Double.parseDouble(args[0]) + player.getXLength()/2;
+            double x2 = Double.parseDouble(args[1]) - player.getXLength()/2;
             double y1 = Double.parseDouble(args[2]);
             double y2 = Double.parseDouble(args[3]);
-            double z1 = Double.parseDouble(args[4]) + player.getLengthZ()/2;
-            double z2 = Double.parseDouble(args[5]) - player.getLengthZ()/2;
+            double z1 = Double.parseDouble(args[4]) + player.getZLength()/2;
+            double z2 = Double.parseDouble(args[5]) - player.getZLength()/2;
             Box box = new Box(Math.min(x1, x2), Math.min(y1, y2), Math.min(z1, z2),
                     Math.max(x1, x2), Math.max(y1, y2), Math.max(z1, z2));
 

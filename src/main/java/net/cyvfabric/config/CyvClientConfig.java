@@ -12,41 +12,41 @@ public class CyvClientConfig {
 
     public void init() {
         //special globals
-        configFields.put("color1", new ConfigValue<String>("aqua"));
-        configFields.put("color2", new ConfigValue<String>("white"));
-        configFields.put("theme", new ConfigValue<String>("CYVISPIRIA"));
-        configFields.put("whiteChat", new ConfigValue<Boolean>(false));
+        configFields.put("color1", new ConfigValue<>("aqua"));
+        configFields.put("color2", new ConfigValue<>("white"));
+        configFields.put("theme", new ConfigValue<>("CYVISPIRIA"));
+        configFields.put("whiteChat", new ConfigValue<>(false));
 
-        configFields.put("df", new ConfigValue<Integer>(5));
-        configFields.put("trimZeroes", new ConfigValue<Boolean>(true));
+        configFields.put("df", new ConfigValue<>(5));
+        configFields.put("trimZeroes", new ConfigValue<>(true));
 
         //parkour
-        configFields.put("showMilliseconds", new ConfigValue<Boolean>(true));
+        configFields.put("showMilliseconds", new ConfigValue<>(true));
 
-        configFields.put("sendLbChatOffset", new ConfigValue<Boolean>(false));
-        configFields.put("sendMmChatOffset", new ConfigValue<Boolean>(false));
+        configFields.put("sendLbChatOffset", new ConfigValue<>(false));
+        configFields.put("sendMmChatOffset", new ConfigValue<>(false));
 
-        configFields.put("highlightLanding", new ConfigValue<Boolean>(false));
-        configFields.put("highlightLandingCond", new ConfigValue<Boolean>(false));
-        configFields.put("momentumPbCancelling", new ConfigValue<Boolean>(false));
+        configFields.put("highlightLanding", new ConfigValue<>(false));
+        configFields.put("highlightLandingCond", new ConfigValue<>(false));
+        configFields.put("momentumPbCancelling", new ConfigValue<>(false));
 
         //inertia listener
-        configFields.put("inertiaEnabled", new ConfigValue<Boolean>(false));
-        configFields.put("inertiaTick", new ConfigValue<Integer>(4));
-        configFields.put("inertiaMin", new ConfigValue<Double>(-0.02));
-        configFields.put("inertiaMax", new ConfigValue<Double>(0.02));
-        configFields.put("inertiaAxis", new ConfigValue<Character>('x'));
-        configFields.put("inertiaGroundType", new ConfigValue<String>("normal"));
+        configFields.put("inertiaEnabled", new ConfigValue<>(false));
+        configFields.put("inertiaTick", new ConfigValue<>(4));
+        configFields.put("inertiaMin", new ConfigValue<>(-0.02));
+        configFields.put("inertiaMax", new ConfigValue<>(0.02));
+        configFields.put("inertiaAxis", new ConfigValue<>('x'));
+        configFields.put("inertiaGroundType", new ConfigValue<>("normal"));
 
         //macros
-        configFields.put("currentMacro", new ConfigValue<String>("macro"));
-        configFields.put("smoothMacro", new ConfigValue<Boolean>(false));
+        configFields.put("currentMacro", new ConfigValue<>("macro"));
+        configFields.put("smoothMacro", new ConfigValue<>(false));
 
         for (DraggableHUDElement mod : HUDManager.registeredRenderers) {
             String name = mod.getName();
-            mod.getConfigFields().forEach((property, configField) -> {
-                configFields.put(name + "_" + property, configField);
-            });
+            mod.getConfigFields().forEach(
+                    (property, configField) -> configFields.put(name + "_" + property, configField)
+            );
         }
     }
 
@@ -84,7 +84,7 @@ public class CyvClientConfig {
         }
     }
 
-    public static enum Type {
+    public enum Type {
         UNKNOWN, INTEGER, LONG, DOUBLE, BOOLEAN, CHARACTER, STRING
     }
 
@@ -95,24 +95,24 @@ public class CyvClientConfig {
     }
 
     public static int getInt(String k, int defaultValue) {
-        try {return Integer.valueOf(CyvFabric.config.configFields.get(k).value.toString());
+        try {return Integer.parseInt(CyvFabric.config.configFields.get(k).value.toString());
         } catch (Exception e) {
             e.printStackTrace();
             return defaultValue;}
     }
 
     public static long getLong(String k, long defaultValue) {
-        try {return Long.valueOf(CyvFabric.config.configFields.get(k).value.toString());
+        try {return Long.parseLong(CyvFabric.config.configFields.get(k).value.toString());
         } catch (Exception e) {return defaultValue;}
     }
 
     public static double getDouble(String k, double defaultValue) {
-        try {return Double.valueOf(CyvFabric.config.configFields.get(k).value.toString());
+        try {return Double.parseDouble(CyvFabric.config.configFields.get(k).value.toString());
         } catch (Exception e) {return defaultValue;}
     }
 
     public static boolean getBoolean(String k, boolean defaultValue) {
-        try {return Boolean.valueOf(CyvFabric.config.configFields.get(k).value.toString());
+        try {return Boolean.parseBoolean(CyvFabric.config.configFields.get(k).value.toString());
         } catch (Exception e) {return defaultValue;}
     }
 

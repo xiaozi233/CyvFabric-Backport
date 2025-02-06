@@ -20,7 +20,7 @@ public class FunctionSprintJump45 extends Function {
 			throws InvalidKeypressException {
 		Arguments args = new Arguments();
 		args.replace("duration", 1);
-		args.replace("facing", (float) (facing));
+		args.replace("facing", facing);
 		if (duration > 0) args.replace("forward", 1);
 		else if (duration < 0) args.replace("forward", -1);
 		
@@ -31,7 +31,7 @@ public class FunctionSprintJump45 extends Function {
 		args.replace("sprinting", true);
 		player.move(args);
 		
-		args.replace("facing", (float) (facing + 45));
+		args.replace("facing", facing + 45);
 		args.replace("duration", Math.abs(duration) - 1);
 		args.replace("strafing", 1);
 		args.replace("jumping", false);
