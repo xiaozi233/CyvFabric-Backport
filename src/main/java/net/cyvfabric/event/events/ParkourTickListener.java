@@ -1,14 +1,25 @@
 package net.cyvfabric.event.events;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.util.parkour.LandingBlock;
 import net.cyvfabric.util.parkour.LandingBlockOffset;
 import net.cyvfabric.util.parkour.LandingMode;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.render.*;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 
 import java.text.DecimalFormat;
 
@@ -70,6 +81,7 @@ public class ParkourTickListener {
 
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(ParkourTickListener::onTick);
+        WorldRenderEvents.END.register(ParkourTickListener::onWorldRender);
     }
 
     //end of tick
@@ -526,8 +538,49 @@ public class ParkourTickListener {
         return facing;
     }
 
+
+    private static void onWorldRender(WorldRenderContext context) {
+        if (landingBlock == null) return;
+        if (CyvClientConfig.getBoolean("highlightLanding", false)) {
+            MinecraftClient mc = MinecraftClient.getInstance();
+
+            Vec3d cameraPos = context.camera().getPos();
+
+            float red = 0.0f;
+            float green = 192 / 255f;
+            float blue = 1.0f;
+            float alpha = 200 / 255f;
+
+            MatrixStack matrixStack = context.matrixStack();
+            VertexConsumerProvider.Immediate vertexConsumers = mc.getBufferBuilders().getEntityVertexConsumers();
+
+            matrixStack.push();
+            matrixStack.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+
+            for (Box box : landingBlock.bb){
+                WorldRenderer.drawBox(
+                        matrixStack,
+                        vertexConsumers.getBuffer(RenderLayer.getLines()),
+                        box,
+                        red, green, blue, alpha
+                );
+            }
+
+
+            matrixStack.pop();
+
+            vertexConsumers.draw();
+        }
+
+        
+    }
+
+//    public static void drawBox(BufferBuilder buffer, Box box, float red, float green, float blue, float alpha){
+//        WorldRenderer.drawBox(buffer, box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, red, green, blue, alpha);
+//    }
+
     /*
-    public void onRender(WorldRenderEvent e) {
+    public void onWorldRender(WorldRenderContext e) {
         if (e.phase != Phase.MID) return;
 
         Entity p = Minecraft.getMinecraft().getRenderViewEntity();
