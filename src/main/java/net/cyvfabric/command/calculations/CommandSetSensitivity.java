@@ -24,7 +24,7 @@ public class CommandSetSensitivity extends CyvCommand {
     public LiteralArgumentBuilder<FabricClientCommandSource> register(){
         return super.register()
                 .executes(commandContext -> {
-                    CyvFabric.sendChatMessage("Sensitivity : " +  CyvFabric.df.format(MinecraftClient.getInstance().options.mouseSensitivity * 200) + "%");
+                    CyvFabric.sendChatMessage("Sensitivity: " +  CyvFabric.df.format(MinecraftClient.getInstance().options.mouseSensitivity * 200) + "%");
                     return 1;
                 })
                 .then(ClientCommandManager.argument("sensitivity", DoubleArgumentType.doubleArg(0, 1))
