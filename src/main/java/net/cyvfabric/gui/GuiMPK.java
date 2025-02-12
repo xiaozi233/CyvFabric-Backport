@@ -261,7 +261,9 @@ public class GuiMPK extends CyvGui {
 
         int index=0;
         for (LabelLine l : labelLines) {
-            if (l.isPressed(index, (int) mouseX, (int) mouseY, mouseButton)) {
+            if (l.isPressed(index, (int) mouseX, (int) mouseY, mouseButton)
+                    && mouseY > sr.getScaledHeight()/2 - sizeY/2 + textRenderer.fontHeight * 2
+                    &&  mouseY < sr.getScaledHeight()/2 + sizeY/2 ) {
                 l.mouseClicked(index, (int) mouseX, (int) mouseY, mouseButton);
                 return true;
             }

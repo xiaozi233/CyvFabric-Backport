@@ -235,7 +235,6 @@ public class GuiMacro extends CyvGui {
         int index=0;
         for (MacroLine l : macroLines) {
             if (l.isPressed(index, mouseX, mouseY, mouseEvent)) {
-
                 if (this.selectedIndex == index) {
                     if (!l.pitchField.isFocused() && !l.yawField.isFocused()) {
                         if (mc.options.forwardKey.matchesMouse(mouseEvent)) {
@@ -254,9 +253,8 @@ public class GuiMacro extends CyvGui {
                             l.sneak = !l.sneak;
                         }
                     }
-                } else {
+                } else if (mouseY > sr.getScaledHeight()/2 - (sizeY/2) + 3 + (textRenderer.fontHeight * 2)&& mouseY < sr.getScaledHeight()/2 + sizeY/2 ){
                     this.selectedIndex = index;
-
                 }
                 l.mouseClicked(index, mouseX, mouseY, mouseEvent);
                 return true;
