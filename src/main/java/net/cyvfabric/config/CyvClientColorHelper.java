@@ -1,21 +1,14 @@
 package net.cyvfabric.config;
 
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class CyvClientColorHelper {
-    public static final SuggestionProvider<FabricClientCommandSource> COLORS_SUGGESTIONS = (context, builder) -> {
-        for (String tag : Arrays.asList(
+    public static final List<String> COLORS = Arrays.asList(
                 "dark_red", "red", "gold", "yellow", "dark_green", "green", "aqua", "dark_aqua",
                 "dark_blue", "blue", "light_purple", "dark_purple", "white", "gray", "dark_gray", "black"
-        )) {
-            builder.suggest(tag);
-        }
-        return builder.buildFuture();
-    };
+        );
     public static CyvClientColor color1;
     public static CyvClientColor color2;
     public static ArrayList<CyvClientColor> colors;

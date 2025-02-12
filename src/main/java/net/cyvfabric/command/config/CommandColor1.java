@@ -1,6 +1,5 @@
 package net.cyvfabric.command.config;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientColorHelper;
@@ -17,18 +16,15 @@ public class CommandColor1 extends CyvCommand {
     }
 
     @Override
-    public LiteralArgumentBuilder<FabricClientCommandSource> register(){
-        return super.register()
-                .then(ClientCommandManager.argument("color", StringArgumentType.string())
-                        .suggests(CyvClientColorHelper.COLORS_SUGGESTIONS)
-                        .executes(commandContext -> {
-                            if (CyvClientColorHelper.setColor1(StringArgumentType.getString(commandContext, "color"))) {
-                                CyvFabric.sendChatMessage("Successfully changed color 1.");
-                            } else {
-                                CyvFabric.sendChatMessage("Invalid color");
-                            }
-                            return 1;
-                        })
-                );
-        }
+    public LiteralArgumentBuilder<FabricClientCommandSource> register() {
+        LiteralArgumentBuilder<FabricClientCommandSource> command = super.register();
+        CyvClientColorHelper.COLORS.forEach(color -> command.then(ClientCommandManager.literal(color)
+                .executes(commandContext -> {
+                    CyvClientColorHelper.setColor1(color);
+                    CyvFabric.sendChatMessage("Successfully changed color 1.");
+                    return 1;
+                })
+        ));
+        return command;
+    }
 }
