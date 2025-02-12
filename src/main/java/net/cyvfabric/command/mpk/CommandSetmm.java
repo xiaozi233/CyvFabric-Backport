@@ -53,24 +53,34 @@ public class CommandSetmm extends CyvCommand {private static final SuggestionPro
             LandingAxis landingAxis = LandingAxis.both;
             LandingMode landingMode = LandingMode.landing;
             boolean box = false;
+            boolean isTarget = false;
             if (axis){
                 switch (StringArgumentType.getString(context, "axis")){
                     case "x" -> landingAxis = LandingAxis.x;
                     case "z" -> landingAxis = LandingAxis.z;
                     case "both" -> landingAxis = LandingAxis.both;
-                }
-            }
-            if (mode){
-                switch (StringArgumentType.getString(context, "mode")){
                     case "land", "landing" -> landingMode = LandingMode.landing;
                     case "hit" -> landingMode = LandingMode.hit;
                     case "zneo", "z-neo", "neo", "z_neo" -> landingMode = LandingMode.z_neo;
                     case "enter" -> landingMode = LandingMode.enter;
                     case "box" -> box = true;
+                    case "target" -> isTarget = true;
                 }
             }
-
-            if (target) {
+            if (mode){
+                switch (StringArgumentType.getString(context, "mode")){
+                    case "x" -> landingAxis = LandingAxis.x;
+                    case "z" -> landingAxis = LandingAxis.z;
+                    case "both" -> landingAxis = LandingAxis.both;
+                    case "land", "landing" -> landingMode = LandingMode.landing;
+                    case "hit" -> landingMode = LandingMode.hit;
+                    case "zneo", "z-neo", "neo", "z_neo" -> landingMode = LandingMode.z_neo;
+                    case "enter" -> landingMode = LandingMode.enter;
+                    case "box" -> box = true;
+                    case "target" -> isTarget = true;
+                }
+            }
+            if (target || isTarget) {
                 HitResult hit = player.raycast(100, 0, false);
                 if (hit.getType().equals(HitResult.Type.BLOCK)) {
                     try {
@@ -118,7 +128,7 @@ public class CommandSetmm extends CyvCommand {private static final SuggestionPro
         return super.register()
                 .executes(this::run)
                 .then(ClientCommandManager.argument("axis", StringArgumentType.string())
-                .suggests(AXIS_SUGGESTIONS)
+                .suggests(AXIS_SUGGESTIONS).suggests(MODE_SUGGESTIONS).suggests(TARGET_SUGGESTIONS)
                 .executes(commandContext -> this.run(commandContext, true, false,false))
                 .then(ClientCommandManager.argument("mode", StringArgumentType.string())
                         .suggests(MODE_SUGGESTIONS)

@@ -386,8 +386,8 @@ public class CommandCalculate extends CyvCommand {
 
                     int term_count = 1;
                     int starting_index = i;
-                    ArrayList<String> subElements = new ArrayList<String>(); //create new mini-array
-                    String temp = "";
+                    ArrayList<String> subElements = new ArrayList<>(); //create new mini-array
+                    String temp;
                     boolean isSuccessful = true;
 
                     do { //add elements to mini-array
@@ -603,7 +603,7 @@ public class CommandCalculate extends CyvCommand {
         }
 
         public ArrayList<String> smallerList(ArrayList<String> original, int index) {
-            ArrayList<String> newList = new ArrayList<String>();
+            ArrayList<String> newList = new ArrayList<>();
 
             for (int i = index; i < original.size(); i++) {
                 newList.add(original.get(i));

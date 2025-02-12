@@ -3,7 +3,6 @@ package net.cyvfabric.command.mpk;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.MacroFileInit;
@@ -17,16 +16,8 @@ import net.minecraft.client.MinecraftClient;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class CommandMacro extends CyvCommand {
-    private static final SuggestionProvider<FabricClientCommandSource> SUGGESTIONS = (context, builder) -> {
-        for (String tag : Arrays.asList("run", "stop")) {
-            builder.suggest(tag);
-        }
-        return builder.buildFuture();
-    };
-
     public CommandMacro() {
         super("macro");
         this.helpString = "Open the parkour macro GUI.";

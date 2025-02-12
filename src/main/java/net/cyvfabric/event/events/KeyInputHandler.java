@@ -10,7 +10,7 @@ import net.minecraft.client.option.KeyBinding;
 import java.util.ArrayList;
 
 public class KeyInputHandler {
-    public static ArrayList<CyvKeybinding> cyvKeybindings = new ArrayList<CyvKeybinding>();
+    public static final ArrayList<CyvKeybinding> cyvKeybindings = new ArrayList<>();
 
     /**register all keybindings to Minecraft*/
     public static void register() {
@@ -19,6 +19,7 @@ public class KeyInputHandler {
         cyvKeybindings.add(new KeybindingTogglesprint());
         cyvKeybindings.add(new KeybindingRunMacro());
         cyvKeybindings.add(new KeybindingStopMacro());
+        cyvKeybindings.add(new KeybindingSetlb());
 
         for (KeyBinding k : cyvKeybindings) { //register each keybinding in the array
             KeyBindingHelper.registerKeyBinding(k);

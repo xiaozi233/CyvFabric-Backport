@@ -4,5 +4,6 @@
   "key.cyvfabric.openmpkgui": "Open MPK GUI",
   "key.cyvfabric.togglesprint": "Toggle Sprint",
   "key.cyvfabric.runmacro": "Run Macro",
-  "key.cyvfabric.stopmacro": "Stop Macro"
+  "key.cyvfabric.stopmacro": "Stop Macro",
+  "key.cyvfabric.setlb": "Set Landing Block"
 }

@@ -55,41 +55,36 @@ public class CommandSetlb extends CyvCommand {
             LandingAxis landingAxis = LandingAxis.both;
             LandingMode landingMode = LandingMode.landing;
             boolean box = false;
+            boolean isTarget = false;
             if (axis){
                 switch (StringArgumentType.getString(context, "axis")){
                     case "x" -> landingAxis = LandingAxis.x;
                     case "z" -> landingAxis = LandingAxis.z;
                     case "both" -> landingAxis = LandingAxis.both;
-                }
-            }
-            if (mode){
-                switch (StringArgumentType.getString(context, "mode")){
                     case "land", "landing" -> landingMode = LandingMode.landing;
                     case "hit" -> landingMode = LandingMode.hit;
                     case "zneo", "z-neo", "neo", "z_neo" -> landingMode = LandingMode.z_neo;
                     case "enter" -> landingMode = LandingMode.enter;
                     case "box" -> box = true;
+                    case "target" -> isTarget = true;
+                }
+            }
+            if (mode){
+                switch (StringArgumentType.getString(context, "mode")){
+                    case "x" -> landingAxis = LandingAxis.x;
+                    case "z" -> landingAxis = LandingAxis.z;
+                    case "both" -> landingAxis = LandingAxis.both;
+                    case "land", "landing" -> landingMode = LandingMode.landing;
+                    case "hit" -> landingMode = LandingMode.hit;
+                    case "zneo", "z-neo", "neo", "z_neo" -> landingMode = LandingMode.z_neo;
+                    case "enter" -> landingMode = LandingMode.enter;
+                    case "box" -> box = true;
+                    case "target" -> isTarget = true;
                 }
             }
 
-            if (target) {
-                HitResult hit = player.raycast(100, 0, false);
-                if (hit.getType().equals(HitResult.Type.BLOCK)) {
-                    try {
-                        BlockPos pos = ((BlockHitResult) hit).getBlockPos();
-
-                        if (mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()) {
-                            CyvFabric.sendChatMessage("Please look at a valid block.");
-                        } else {
-                            ParkourTickListener.landingBlock = new LandingBlock(pos, landingMode, landingAxis, box);
-                            CyvFabric.sendChatMessage("Successfully set landing block.");
-                        }
-                    } catch (Exception e) {
-                        CyvFabric.sendChatMessage("Please look at a valid block.");
-                    }
-                } else {
-                    CyvFabric.sendChatMessage("Please look at a valid block.");
-                }
+            if (target || isTarget) {
+                setlbTarget(mc, landingMode, landingAxis, box);
             }
             else {
                 if (player.isOnGround()) {
@@ -131,67 +126,27 @@ public class CommandSetlb extends CyvCommand {
                 )
         );
     }
-//    public static void run(String[] args) {
-//        MinecraftClient mc = MinecraftClient.getInstance();
-//        ClientPlayerEntity player = mc.player;
-//
-//        new Thread(() -> {
-//            LandingMode mode = LandingMode.landing;
-//            LandingAxis axis = LandingAxis.both;
-//            boolean box = false;
-//            boolean target = false;
-//            for (String s : args) {
-//                s = s.toLowerCase();
-//                switch (s) {
-//                    case "x" -> axis = LandingAxis.x;
-//                    case "z" -> axis = LandingAxis.z;
-//                    case "land", "landing" -> mode = LandingMode.landing;
-//                    case "hit" -> mode = LandingMode.hit;
-//                    case "zneo", "z-neo", "neo", "z_neo" -> mode = LandingMode.z_neo;
-//                    case "enter" -> mode = LandingMode.enter;
-//                    case "box" -> box = true;
-//                    case "target" -> target = true;
-//                }
-//            }
-//
-//            if (target) {
-//                HitResult hit = player.raycast(100, 0, false);
-//                if (hit.getType().equals(HitResult.Type.BLOCK)) {
-//                    try {
-//                        BlockPos pos = ((BlockHitResult) hit).getBlockPos();
-//
-//                        if (mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()) {
-//                            CyvFabric.sendChatMessage("Please look at a valid block.");
-//                        } else {
-//                            ParkourTickListener.landingBlock = new LandingBlock(pos, mode, axis, box);
-//                            CyvFabric.sendChatMessage("Successfully set landing block.");
-//                        }
-//                    } catch (Exception e) {
-//                        CyvFabric.sendChatMessage("Please look at a valid block.");
-//                    }
-//                } else {
-//                    CyvFabric.sendChatMessage("Please look at a valid block.");
-//                }
-//            }
-//            else {
-//                if (player.isOnGround()) {
-//
-//                    BlockPos pos = new BlockPos(player.getBlockX(),
-//                            player.getBlockY(), player.getBlockZ());
-//
-//                    if (mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()) pos = pos.down();
-//
-//                    if (mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()) {
-//                        CyvFabric.sendChatMessage("Please stand on a valid block.");
-//                    } else {
-//                        ParkourTickListener.landingBlock = new LandingBlock(pos, mode, axis, box);
-//                        CyvFabric.sendChatMessage("Successfully set landing block.");
-//                    }
-//
-//                } else {
-//                    CyvFabric.sendChatMessage("Please stand on a valid block.");
-//                }
-//            }
-//        }, "Set landing block").start();
-//    }
+    public static void setlbTarget(MinecraftClient mc, LandingMode landingMode, LandingAxis landingAxis, boolean box){
+        HitResult hit = mc.player.raycast(100, 0, false);
+        if (hit.getType().equals(HitResult.Type.BLOCK)) {
+            try {
+                BlockPos pos = ((BlockHitResult) hit).getBlockPos();
+
+                if (mc.world.getBlockState(pos).getCollisionShape(mc.world, pos).isEmpty()) {
+                    CyvFabric.sendChatMessage("Please look at a valid block.");
+                } else {
+                    ParkourTickListener.landingBlock = new LandingBlock(pos, landingMode, landingAxis, box);
+                    CyvFabric.sendChatMessage("Successfully set landing block.");
+                }
+            } catch (Exception e) {
+                CyvFabric.sendChatMessage("Please look at a valid block.");
+            }
+        } else {
+            CyvFabric.sendChatMessage("Please look at a valid block.");
+        }
+    }
+
+    public static void setlbTarget(){
+        setlbTarget(MinecraftClient.getInstance(), LandingMode.landing, LandingAxis.both, false);
+    }
 }
