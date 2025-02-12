@@ -1,12 +1,12 @@
 package net.cyvfabric.command.calculations;
 
-import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvCommand;
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
-
-import java.text.DecimalFormat;
 
 public class CommandSetSensitivity extends CyvCommand {
     public CommandSetSensitivity() {
@@ -21,29 +21,23 @@ public class CommandSetSensitivity extends CyvCommand {
     }
 
     @Override
-    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
-        try {
-            double sensitivity = Double.parseDouble(args[0]);
+    public LiteralArgumentBuilder<FabricClientCommandSource> register(){
+        return super.register()
+                .executes(commandContext -> {
+                    CyvFabric.sendChatMessage("Sensitivity : " +  CyvFabric.df.format(MinecraftClient.getInstance().options.mouseSensitivity * 200) + "%");
+                    return 1;
+                })
+                .then(ClientCommandManager.argument("sensitivity", DoubleArgumentType.doubleArg(0, 1))
+                        .executes(commandContext -> {
+                            double sensitivity = DoubleArgumentType.getDouble(commandContext, "sensitivity");
 
-            //check
-            if (sensitivity > 1 || sensitivity < 0) {
-                CyvFabric.sendChatMessage("Sensitivity cannot be greater than 1 (200%) or less than 0.");
-                return;
+                            MinecraftClient.getInstance().options.mouseSensitivity = sensitivity;
+                            MinecraftClient.getInstance().options.write();
 
-            }
-
-            MinecraftClient.getInstance().options.mouseSensitivity = sensitivity;
-            MinecraftClient.getInstance().options.write();
-
-            double percentage = 200 * sensitivity;
-            DecimalFormat df = CyvFabric.df;
-
-            CyvFabric.sendChatMessage("Sensitivity set to " + df.format(percentage) + "%");
-
-
-        } catch (Exception e) {
-            CyvFabric.sendChatMessage("Please input a valid sensitivity constant (100% = 0.5)");
-
-        }
+                            double percentage = 200 * sensitivity;
+                            CyvFabric.sendChatMessage("Sensitivity set to " + CyvFabric.df.format(percentage) + "%");
+                            return 1;
+                        })
+                );
     }
 }

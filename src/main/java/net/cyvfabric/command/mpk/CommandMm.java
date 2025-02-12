@@ -2,13 +2,13 @@ package net.cyvfabric.command.mpk;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.cyvfabric.CyvFabric;
+import net.cyvfabric.command.CommandWithoutArg;
 import net.cyvfabric.event.events.GuiHandler;
 import net.cyvfabric.event.events.ParkourTickListener;
 import net.cyvfabric.gui.GuiLb;
-import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-public class CommandMm extends CyvCommand {
+public class CommandMm extends CommandWithoutArg {
     public CommandMm() {
         super("mm");
         aliases.add("momentumblock");
@@ -17,7 +17,7 @@ public class CommandMm extends CyvCommand {
     }
 
     @Override
-    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
+    public void run(CommandContext<FabricClientCommandSource> context) {
         if (ParkourTickListener.momentumBlock != null) GuiHandler.setScreen(new GuiLb(ParkourTickListener.momentumBlock));
         else {
             CyvFabric.sendChatMessage("You must set a momentum block to use this command.");

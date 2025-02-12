@@ -1,9 +1,11 @@
 package net.cyvfabric.command.config;
 
-import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientColorHelper;
 import net.cyvfabric.util.CyvCommand;
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 public class CommandColor1 extends CyvCommand {
@@ -15,16 +17,18 @@ public class CommandColor1 extends CyvCommand {
     }
 
     @Override
-    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
-        if (args.length < 1) {
-            CyvFabric.sendChatMessage("Invalid color. For a list of colors use /cyv colors");
-            return;
+    public LiteralArgumentBuilder<FabricClientCommandSource> register(){
+        return super.register()
+                .then(ClientCommandManager.argument("color", StringArgumentType.string())
+                        .suggests(CyvClientColorHelper.COLORS_SUGGESTIONS)
+                        .executes(commandContext -> {
+                            if (CyvClientColorHelper.setColor1(StringArgumentType.getString(commandContext, "color"))) {
+                                CyvFabric.sendChatMessage("Successfully changed color 1.");
+                            } else {
+                                CyvFabric.sendChatMessage("Invalid color");
+                            }
+                            return 1;
+                        })
+                );
         }
-
-        if (CyvClientColorHelper.setColor1(args[0].toLowerCase())) {
-            CyvFabric.sendChatMessage("Successfully changed color 1.");
-        } else {
-            CyvFabric.sendChatMessage("Invalid color. For a list of colors use /cyv colors");
-        }
-    }
 }

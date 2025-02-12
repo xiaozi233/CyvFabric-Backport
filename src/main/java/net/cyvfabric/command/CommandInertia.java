@@ -1,9 +1,12 @@
 package net.cyvfabric.command;
 
-import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.util.CyvCommand;
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 public class CommandInertia extends CyvCommand {
@@ -15,83 +18,86 @@ public class CommandInertia extends CyvCommand {
     }
 
     @Override
-    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
-        boolean enabled = CyvClientConfig.getBoolean("inertiaEnabled", false);
-        String subcategory = "toggle";
-
-        //add a checker for no args to not toggle on/off inertia
-
-        if (args.length != 0) {
-            subcategory = args[0].toLowerCase();
-        }
-
-        switch (subcategory) {
-            case "toggle" -> {
-                if (enabled) {
-                    CyvClientConfig.set("inertiaEnabled", false);
-                    CyvFabric.sendChatMessage("Inertia listener toggled off");
-                } else {
-                    CyvClientConfig.set("inertiaEnabled", true);
-                    CyvFabric.sendChatMessage("Inertia listener toggled on");
-                }
-            }
-            case "min", "minimum" -> {
-                try {
-                    CyvClientConfig.set("inertiaMin", Double.parseDouble(args[1]));
-                    CyvFabric.sendChatMessage("Inertia minimum speed threshold set to " + args[1] + ".");
-                } catch (Exception e) {
-                    CyvFabric.sendChatMessage("Invalid minimum speed.");
-                }
-            }
-            case "max", "maximum" -> {
-                try {
-                    CyvClientConfig.set("inertiaMax", Double.parseDouble(args[1]));
-                    CyvFabric.sendChatMessage("Inertia maximum speed threshold set to " + args[1] + ".");
-                } catch (Exception e) {
-                    CyvFabric.sendChatMessage("Invalid maximum speed.");
-                }
-            }
-            case "mode", "axis" -> {
-                if (args[1].equalsIgnoreCase("x")) {
-                    CyvClientConfig.set("inertiaAxis", 'x');
-                    CyvFabric.sendChatMessage("Inertia axis set to x.");
-                } else if (args[1].equalsIgnoreCase("z")) {
-                    CyvClientConfig.set("inertiaAxis", 'z');
-                    CyvFabric.sendChatMessage("Inertia axis set to z.");
-                } else {
-                    CyvFabric.sendChatMessage("Invalid axis. Only x and z are allowed.");
-                }
-            }
-            case "tick", "t" -> {
-                try {
-                    if (Integer.parseInt(args[1]) > 12 || Integer.parseInt(args[1]) < 1) {
-                        CyvFabric.sendChatMessage("Inertia tick must be from 1 to 12.");
-                    } else {
-                        CyvClientConfig.set("inertiaTick", Integer.parseInt(args[1]));
-                        CyvFabric.sendChatMessage("Inertia tick set to " + args[1] + ".");
-                    }
-                } catch (Exception e) {
-                    CyvFabric.sendChatMessage("Invalid tick.");
-                }
-            }
-            case "ground", "groundmode", "groundtype" -> {
-                if (args[1].equalsIgnoreCase("normal")) {
-                    CyvClientConfig.set("inertiaGroundType", "normal");
-                    CyvFabric.sendChatMessage("Ground type set to normal.");
-                } else if (args[1].equalsIgnoreCase("ice")) {
-                    CyvClientConfig.set("inertiaGroundType", "ice");
-                    CyvFabric.sendChatMessage("Ground type set to ice.");
-                } else if (args[1].equalsIgnoreCase("slime")) {
-                    CyvClientConfig.set("inertiaGroundType", "slime");
-                    CyvFabric.sendChatMessage("Ground type set to slime.");
-                } else {
-                    CyvFabric.sendChatMessage("Invalid ground type. Only normal, ice, and slime are allowed.");
-                }
-            }
-            default -> CyvFabric.sendChatMessage("Unrecognized argument.");
-        }
+    public LiteralArgumentBuilder<FabricClientCommandSource> register(){
+        LiteralArgumentBuilder<FabricClientCommandSource> modeCommand = ClientCommandManager.literal("mode")
+                .then(ClientCommandManager.literal("x")
+                        .executes(commandContext -> {
+                            CyvClientConfig.set("inertiaAxis", 'x');
+                            CyvFabric.sendChatMessage("Inertia axis set to x.");
+                            return 1;
+                        })
+                ).then(ClientCommandManager.literal("z")
+                        .executes(commandContext -> {
+                            CyvClientConfig.set("inertiaAxis", 'z');
+                            CyvFabric.sendChatMessage("Inertia axis set to z.");
+                            return 1;
+                        })
+                );
+        return super.register()
+                .then(ClientCommandManager.literal("toggle")
+                        .executes(commandContext -> {
+                            if (CyvClientConfig.getBoolean("inertiaEnabled", false)) {
+                                CyvClientConfig.set("inertiaEnabled", false);
+                                CyvFabric.sendChatMessage("Inertia listener toggled off");
+                            } else {
+                                CyvClientConfig.set("inertiaEnabled", true);
+                                CyvFabric.sendChatMessage("Inertia listener toggled on");
+                            }
+                            return 1;
+                        })
+                ).then(ClientCommandManager.literal("min")
+                        .then(ClientCommandManager.argument("min", DoubleArgumentType.doubleArg())
+                                .executes(commandContext -> {
+                                    double min = DoubleArgumentType.getDouble(commandContext, "min");
+                                    CyvClientConfig.set("inertiaMin", min);
+                                    CyvFabric.sendChatMessage("Inertia minimum speed threshold set to " + min + ".");
+                                    return 1;
+                                })
+                        )
+                ).then(ClientCommandManager.literal("max")
+                        .then(ClientCommandManager.argument("max", DoubleArgumentType.doubleArg())
+                                .executes(commandContext -> {
+                                    double max = DoubleArgumentType.getDouble(commandContext, "max");
+                                    CyvClientConfig.set("inertiaMax", max);
+                                    CyvFabric.sendChatMessage("Inertia maximum speed threshold set to " + max + ".");
+                                    return 1;
+                                })
+                        )
+                ).then(modeCommand)
+                .then(ClientCommandManager.literal("axis").redirect(modeCommand.build())
+                ).then(ClientCommandManager.literal("tick")
+                        .then(ClientCommandManager.argument("ticks", IntegerArgumentType.integer(1, 12))
+                                .executes(commandContext -> {
+                                    int ticks = IntegerArgumentType.getInteger(commandContext, "ticks");
+                                    CyvClientConfig.set("inertiaTick", ticks);
+                                    CyvFabric.sendChatMessage("Inertia tick set to " + ticks + ".");
+                                    return 1;
+                                })
+                        )
+                ).then(ClientCommandManager.literal("ground")
+                        .then(ClientCommandManager.literal("normal")
+                                .executes(commandContext -> {
+                                    CyvClientConfig.set("inertiaGroundType", "normal");
+                                    CyvFabric.sendChatMessage("Ground type set to normal.");
+                                    return 1;
+                                })
+                        )
+                        .then(ClientCommandManager.literal("ice")
+                                .executes(commandContext -> {
+                                    CyvClientConfig.set("inertiaGroundType", "ice");
+                                    CyvFabric.sendChatMessage("Ground type set to ice.");
+                                    return 1;
+                                })
+                        )
+                        .then(ClientCommandManager.literal("slime")
+                                .executes(commandContext -> {
+                                    CyvClientConfig.set("inertiaGroundType", "slime");
+                                    CyvFabric.sendChatMessage("Ground type set to slime.");
+                                    return 1;
+                                })
+                        )
+                );
     }
-
     @Override
     public String getDetailedHelp() {
         return """

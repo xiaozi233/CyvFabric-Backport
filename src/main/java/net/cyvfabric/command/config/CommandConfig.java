@@ -1,12 +1,12 @@
 package net.cyvfabric.command.config;
 
 import com.mojang.brigadier.context.CommandContext;
+import net.cyvfabric.command.CommandWithoutArg;
 import net.cyvfabric.event.events.GuiHandler;
 import net.cyvfabric.gui.GuiModConfig;
-import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-public class CommandConfig extends CyvCommand {
+public class CommandConfig extends CommandWithoutArg {
     public CommandConfig() {
         super("config");
         this.helpString = "Opens the mod config GUI.";
@@ -16,7 +16,7 @@ public class CommandConfig extends CyvCommand {
     }
 
     @Override
-    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
+    public void run(CommandContext<FabricClientCommandSource> context) {
         GuiHandler.setScreen(new GuiModConfig());
     }
 }

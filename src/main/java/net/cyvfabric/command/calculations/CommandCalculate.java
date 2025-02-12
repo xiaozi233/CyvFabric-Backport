@@ -1,14 +1,18 @@
 package net.cyvfabric.command.calculations;
 
-import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.util.CyvCommand;
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.minecraft.command.argument.MessageArgumentType;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CommandCalculate extends CyvCommand {
     public CommandCalculate() {
@@ -24,14 +28,20 @@ public class CommandCalculate extends CyvCommand {
     }
 
     @Override
-    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
-        if (args.length == 0) {
-            CyvFabric.sendChatMessage("Please input something to calculate.");
-
-        } else {
-            String text = String.join(" ", args);
-            new Calculator(text).start();
-        }
+    public LiteralArgumentBuilder<FabricClientCommandSource> register(){
+        return super.register()
+                .then(ClientCommandManager.argument("math expression", MessageArgumentType.message())
+                        .executes(commandContext -> {
+                            List<String> argsList = new ArrayList<>(Arrays.stream(commandContext.getInput().split(" ")).toList());
+                            argsList.remove(0);
+                            argsList.remove(0);
+                            String[] args = argsList.toArray(String[]::new);
+                            String text = String.join(" ", args);
+                            System.out.println(text);
+                            new Calculator(text).start();
+                            return 1;
+                        })
+                );
     }
 
     static class Calculator extends Thread {

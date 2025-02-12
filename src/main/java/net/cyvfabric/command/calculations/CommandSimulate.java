@@ -1,12 +1,12 @@
 package net.cyvfabric.command.calculations;
 
 import com.mojang.brigadier.context.CommandContext;
+import net.cyvfabric.command.CommandWithoutArg;
 import net.cyvfabric.event.events.GuiHandler;
 import net.cyvfabric.gui.GuiSimulate;
-import net.cyvfabric.util.CyvCommand;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-public class CommandSimulate extends CyvCommand {
+public class CommandSimulate extends CommandWithoutArg {
     public CommandSimulate() {
         super("simulate");
         this.usage = "none";
@@ -19,7 +19,7 @@ public class CommandSimulate extends CyvCommand {
     }
 
     @Override
-    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
+    public void run(CommandContext<FabricClientCommandSource> context) {
         GuiHandler.setScreen(new GuiSimulate());
     }
 }

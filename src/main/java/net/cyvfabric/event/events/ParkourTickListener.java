@@ -1,6 +1,5 @@
 package net.cyvfabric.event.events;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.util.parkour.LandingBlock;
@@ -14,12 +13,8 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
 
 import java.text.DecimalFormat;
 
@@ -542,19 +537,16 @@ public class ParkourTickListener {
     private static void onWorldRender(WorldRenderContext context) {
         if (landingBlock == null) return;
         if (CyvClientConfig.getBoolean("highlightLanding", false)) {
-            MinecraftClient mc = MinecraftClient.getInstance();
-
-            Vec3d cameraPos = context.camera().getPos();
-
             float red = 0.0f;
             float green = 192 / 255f;
             float blue = 1.0f;
             float alpha = 200 / 255f;
 
             MatrixStack matrixStack = context.matrixStack();
-            VertexConsumerProvider.Immediate vertexConsumers = mc.getBufferBuilders().getEntityVertexConsumers();
+            VertexConsumerProvider.Immediate vertexConsumers = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
 
             matrixStack.push();
+            Vec3d cameraPos = context.camera().getPos();
             matrixStack.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
 
             for (Box box : landingBlock.bb){
@@ -566,13 +558,9 @@ public class ParkourTickListener {
                 );
             }
 
-
             matrixStack.pop();
-
             vertexConsumers.draw();
         }
-
-        
     }
 
 //    public static void drawBox(BufferBuilder buffer, Box box, float red, float green, float blue, float alpha){

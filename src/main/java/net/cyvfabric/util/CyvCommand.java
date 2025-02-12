@@ -1,12 +1,14 @@
 package net.cyvfabric.util;
 
-import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.cyvfabric.event.CommandInitializer;
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
 import java.util.ArrayList;
 
 /**Base subcommand of /cyv.*/
-public class CyvCommand {
+public abstract class CyvCommand {
     public final String name;
     public String usage = "none";
     public String helpString = "WIP";
@@ -18,16 +20,14 @@ public class CyvCommand {
 
     public CyvCommand(String name) {
         this.name = name;
+        CommandInitializer.TAGS.add(name);
     }
 
-    /**run the command*/
-    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
-
+    public LiteralArgumentBuilder<FabricClientCommandSource> register(){
+        return ClientCommandManager.literal(this.name);
     }
 
     public String getDetailedHelp() {
         return helpString;
     }
-
-
 }

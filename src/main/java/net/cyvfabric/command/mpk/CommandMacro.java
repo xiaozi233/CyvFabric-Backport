@@ -2,21 +2,31 @@ package net.cyvfabric.command.mpk;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.cyvfabric.CyvFabric;
 import net.cyvfabric.config.CyvClientConfig;
 import net.cyvfabric.event.MacroFileInit;
 import net.cyvfabric.event.events.GuiHandler;
 import net.cyvfabric.gui.GuiMacro;
 import net.cyvfabric.util.CyvCommand;
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CommandMacro extends CyvCommand {
+    private static final SuggestionProvider<FabricClientCommandSource> SUGGESTIONS = (context, builder) -> {
+        for (String tag : Arrays.asList("run", "stop")) {
+            builder.suggest(tag);
+        }
+        return builder.buildFuture();
+    };
+
     public CommandMacro() {
         super("macro");
         this.helpString = "Open the parkour macro GUI.";
@@ -27,14 +37,23 @@ public class CommandMacro extends CyvCommand {
     //[w][a][s][d][space][sprint][sneak][yaw][pitch]
 
     @Override
-    public void run(CommandContext<FabricClientCommandSource> context, String[] args) {
-        if (args.length > 0 && args[0].equalsIgnoreCase("run")) runMacro(args);
-        else if (args.length > 0 && args[0].equalsIgnoreCase("stop")) macroRunning = 1;
-        else GuiHandler.setScreen(new GuiMacro());
-
+    public LiteralArgumentBuilder<FabricClientCommandSource> register(){
+        return super.register()
+                .executes(commandContext -> {
+                    GuiHandler.setScreen(new GuiMacro());
+                    return 1;
+                })
+                .then(ClientCommandManager.literal("run")
+                        .executes(commandContext -> {
+                            runMacro();
+                            return 1;
+                        })
+                ).then(ClientCommandManager.literal("stop")
+                        .executes(commandContext -> macroRunning = 1)
+                );
     }
 
-    public static void runMacro(String[] args) {
+    public static void runMacro() {
         MacroFileInit.swapFile(CyvClientConfig.getString("currentMacro", "macro"));
         if (!MinecraftClient.getInstance().isInSingleplayer()) {
             CyvFabric.sendChatMessage("No permission to run macro.");
